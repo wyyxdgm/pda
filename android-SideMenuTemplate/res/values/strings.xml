@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Navigation</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="bataan">
+        <item>Home</item>
+        <item>Events</item>
+        <item>Festivals</item>
+        <item>Historical Landmarks</item>
+        <item>Hotels</item>
+        <item>Restaurants</item>
+        <item>Resort/Beaches</item>
+        <item>Natural Wonders</item>
+    </string-array>
+
+    <string name="drawer_open">Open Navigation Drawer</string>
+    <string name="drawer_close">Close Navigation Drawer</string>
+    <string name="title_activity_login">Login</string>
+     <string name="signup_label">Sign Up</string>
+
+</resources>
