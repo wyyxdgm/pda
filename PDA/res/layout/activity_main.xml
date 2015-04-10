@@ -7,14 +7,13 @@
         android:id="@+id/mainContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-    
-    <ListView 
+
+    <ListView
         android:id="@+id/drawerList"
         android:layout_width="260dp"
-        android:background="#FFFFFF"
         android:layout_height="match_parent"
-        android:layout_gravity="left">
-        
+        android:layout_gravity="left"
+        android:background="#FFFFFF" >
     </ListView>
 
 </android.support.v4.widget.DrawerLayout>

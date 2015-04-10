@@ -19,6 +19,8 @@
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
     <string name="title_activity_login">Login</string>
-     <string name="signup_label">Sign Up</string>
+    <string name="signup_label">Sign Up</string>
+    <string name="welcome_image_desc">Welcoome Page</string>
+    <string name="main_head">User Head Picture</string>
 
 </resources>
