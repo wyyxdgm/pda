@@ -8,12 +8,49 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ListView
-        android:id="@+id/drawerList"
-        android:layout_width="260dp"
+    <LinearLayout
+        android:id="@+id/drawerLinear"
+        android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="#FFFFFF" >
-    </ListView>
+        android:background="#FFFFFF"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/main_image_userhead"
+            android:layout_width="240dp"
+            android:layout_height="200dp"
+            android:background="@drawable/main_head"
+            android:contentDescription="@string/main_head" >
+        </ImageView>
+
+        <ListView
+            android:id="@+id/drawerList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:background="#FFFFFF" >
+        </ListView>
+
+        <Button
+            android:id="@+id/main_btn1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="13dp"
+            android:text="do 1" />
+
+        <Button
+            android:id="@+id/main_btn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="13dp"
+            android:layout_marginTop="13dp"
+            android:text="do 2" >
+        </Button>
+    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

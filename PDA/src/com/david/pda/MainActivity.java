@@ -98,7 +98,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	public void selectItem(int position) {
-		Log.i(L.t, "" + position + " selected");
+		Log.i(L.t, position + " selected");
 		switch (position) {
 		case 0:
 			break;
