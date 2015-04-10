@@ -6,14 +6,13 @@
     <string name="action_settings">Settings</string>
 
     <string-array name="bataan">
-        <item>Home</item>
-        <item>Events</item>
-        <item>Festivals</item>
-        <item>Historical Landmarks</item>
-        <item>Hotels</item>
-        <item>Restaurants</item>
-        <item>Resort/Beaches</item>
-        <item>Natural Wonders</item>
+        <item>Target Manage</item>
+        <item>Affair Plan</item>
+        <item>TodaySchedule</item>
+        <item>Four Classes</item>
+        <item>Self Principle</item>
+        <item>Some Tools</item>
+        <item>System Setting</item>
     </string-array>
 
     <string name="drawer_open">Open Navigation Drawer</string>
@@ -22,5 +21,9 @@
     <string name="signup_label">Sign Up</string>
     <string name="welcome_image_desc">Welcoome Page</string>
     <string name="main_head">User Head Picture</string>
+    <string name="main_btn_login">Login</string>
+    <string name="main_btn_logout">Logout</string>
+    <string name="main_btn_register">Register</string>
+    <string name="main_btn_exit">Exit</string>
 
 </resources>

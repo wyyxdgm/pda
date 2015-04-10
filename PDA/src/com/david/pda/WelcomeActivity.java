@@ -8,7 +8,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.ViewDebug.FlagToString;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.david.pda.weather.model.util.L;
@@ -20,6 +21,9 @@ public class WelcomeActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_welcome);
 		welcomeImageView = (ImageView) findViewById(R.id.welcome_welcome_image);
 		welcomeImageView.setOnTouchListener(new OnTouchListener() {
@@ -35,10 +39,10 @@ public class WelcomeActivity extends Activity {
 			}
 		});
 		initHandler.postDelayed(initThread, 3000);
+		//initHandler.post(initThread);
 	}
 
 	Runnable initThread = new Runnable() {
-
 		@Override
 		public void run() {
 			Log.i(L.t, "has delay 3000 to init app,now start");

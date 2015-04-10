@@ -17,7 +17,7 @@ public class BataanAdapter extends BaseAdapter {
 	int[] images = { R.drawable.ic_home, R.drawable.ic_events,
 			R.drawable.ic_festival, R.drawable.ic_landmark,
 			R.drawable.ic_hotel, R.drawable.ic_resto,
-			R.drawable.ic_resortandbeaches, R.drawable.ic_landmark };
+			R.drawable.ic_resortandbeaches };
 
 	public BataanAdapter(Context context) {
 		this.context = context;

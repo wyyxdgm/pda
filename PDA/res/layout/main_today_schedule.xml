@@ -8,7 +8,9 @@
         android:id="@+id/imageView1"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_margin="4dp" />
+        android:layout_margin="4dp"
+        android:contentDescription="@string/abc_action_bar_up_description" >
+    </ImageView>
 
     <TextView
         android:id="@+id/textView1"
@@ -16,7 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:gravity="left"
+        android:text="@string/abc_action_mode_done"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="18sp" />
+        android:textSize="18sp" >
+    </TextView>
 
 </LinearLayout>
