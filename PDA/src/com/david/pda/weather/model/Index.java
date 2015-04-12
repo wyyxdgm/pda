@@ -14,7 +14,6 @@ public class Index {
 		sb.append("\t\t").append("des:").append(this.des).append('\n');
 		return sb.toString();
 	}
-
 	public String getTitle() {
 		return title;
 	}

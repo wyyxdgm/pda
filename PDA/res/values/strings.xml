@@ -26,4 +26,17 @@
     <string name="main_btn_register">Register</string>
     <string name="main_btn_exit">Exit</string>
 
+    <!-- main_some_tools -->
+    <string name="main_some_tools_weather">天气</string>
+    <string name="main_some_tools_note">便签</string>
+    <string name="main_some_tools_calendar">日历</string>
+    <string name="main_some_tools_countdown">倒计时</string>
+    <string name="main_some_tools_alarm">闹钟</string>
+
+    <!-- main_some_tools_weather -->
+    <string name="main_some_tools_weather_chuanyi">穿衣</string>
+    <string name="main_some_tools_weather_index">各种指标</string>
+    <string name="main_some_tools_weather_xiche">洗车</string>
+    <string name="main_some_tools_weather_lvyou">旅游</string>
+    <string name="main_some_tools_weather_ganmao">感冒</string>
 </resources>

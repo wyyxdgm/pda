@@ -38,13 +38,11 @@ public class BataanAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
 		View row = null;
 		if (convertView == null) {
 			// create the row for the first time

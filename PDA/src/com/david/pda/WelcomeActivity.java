@@ -38,8 +38,8 @@ public class WelcomeActivity extends Activity {
 				return false;
 			}
 		});
-		initHandler.postDelayed(initThread, 3000);
-		//initHandler.post(initThread);
+		//initHandler.postDelayed(initThread, 3000);
+		initHandler.post(initThread);
 	}
 
 	Runnable initThread = new Runnable() {
@@ -47,8 +47,9 @@ public class WelcomeActivity extends Activity {
 		public void run() {
 			Log.i(L.t, "has delay 3000 to init app,now start");
 			Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-			intent.setFlags(RESULT_OK);
+			intent.setFlags(5);
 			startActivity(intent);
+			WelcomeActivity.this.finish();
 		}
 	};
 }

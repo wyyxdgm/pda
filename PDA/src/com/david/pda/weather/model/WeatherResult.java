@@ -1,6 +1,9 @@
 package com.david.pda.weather.model;
 
-public class WeatherResult {
+import java.io.Serializable;
+
+public class WeatherResult implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private int error;
 	private String status;
 	private String date;

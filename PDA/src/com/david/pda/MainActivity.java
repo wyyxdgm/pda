@@ -18,13 +18,20 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.david.pda.adapter.BataanAdapter;
 import com.david.pda.weather.model.util.L;
 
 public class MainActivity extends ActionBarActivity {
-
+	public static final int POSTION_TARGET_MANAGE=0;
+	public static final int POSTION_AFFAIR_PLAN=1;
+	public static final int POSTION_TODAY_SCHEDULE=2;
+	public static final int POSTION_FOUR_CLASSES=3;
+	public static final int POSTION_SELF_PRINCIPLE=4;
+	public static final int POSTION_SOME_TOOLS=5;
+	public static final int POSTION_SYSTEM_SETTIONG=6;
 	private DrawerLayout drawerLayout;
 	private ListView listView;
 	private ActionBarDrawerToggle drawerListener;
@@ -42,9 +49,6 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Intent intent = getIntent();
-		Log.i(L.t, intent != null && intent.getFlags() == RESULT_OK ? "true"
-				: "false");
 		mainContentLayout = (FrameLayout) findViewById(R.id.mainContent);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 		listView = (ListView) findViewById(R.id.drawerList);
@@ -58,21 +62,9 @@ public class MainActivity extends ActionBarActivity {
 					int position, long id) {
 				listView.setItemChecked(position, true);
 				Log.i(L.t, position + " selected");
-				if (mainContentLayout.getChildCount() > 0) {//hash view already
-					if(mainContentLayout.getChildAt(0).getId() != mainViewIds[position]){
-						//current view is not witch selected
-						//should be replaced
-						mainContentLayout.removeViewAt(0);
-						LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-						mainContentLayout.addView( inflater.inflate(mainViewIds[position], parent, false));
-						drawerLayout.closeDrawer(GravityCompat.START);
-						Log.i(L.t,"view of "+mainViewIds[position]+" show");
-					}
-				}else{
-					mainContentLayout.addView(findViewById(mainViewIds[position]));
-					Log.i(L.t,"view of "+mainViewIds[position]+" show");
-				}
-				Log.i(L.t, "error position of navBar:" + position);
+				initMainView(position);
+				drawerLayout.closeDrawer(GravityCompat.START);
+				Log.i(L.t,"view of "+mainViewIds[position]+" show");
 			}
 		};
 		listView.setOnItemClickListener(menuItemCLickListener);
@@ -111,6 +103,45 @@ public class MainActivity extends ActionBarActivity {
 				Log.i(L.t, b.getText() + "");
 			}
 		});
+		Intent intent = getIntent();
+		if(intent.getFlags()!=0&&intent.getFlags()>=POSTION_TARGET_MANAGE&&intent.getFlags()<=POSTION_SYSTEM_SETTIONG){
+			initMainView(intent.getFlags());
+		}
+	}
+	public void initMainView(int position){
+		if (mainContentLayout.getChildCount() > 0) {//hash view already
+			if(mainContentLayout.getChildAt(0).getId() != mainViewIds[position]){
+				Log.i(L.t, "mainContentLayout.getChildAt(0).getId():"+mainContentLayout.getChildAt(0).getId());
+				Log.i(L.t, "mainViewIds["+position+"]"+mainViewIds[position]);
+				//current view is not witch selected
+				//should be replaced
+				LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				View currentView =  inflater.inflate(mainViewIds[position], null, false);
+				mainContentLayout.removeViewAt(0);
+				mainContentLayout.addView(currentView);
+				initMainView(position,currentView);
+			}
+		}
+	}
+	private void initMainView(int position,View v){
+		if(position==POSTION_SOME_TOOLS){
+			ImageButton alarm =(ImageButton) v.findViewById(R.id.main_some_tools_alarm);
+			ImageButton note =(ImageButton) v.findViewById(R.id.main_some_tools_note);
+			ImageButton weather =(ImageButton) v.findViewById(R.id.main_some_tools_weather);
+			ImageButton calendar =(ImageButton) v.findViewById(R.id.main_some_tools_calendar);
+			ImageButton countdown =(ImageButton) v.findViewById(R.id.main_some_tools_countdown);
+			weather.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					Log.i(L.t, "weather");
+					Intent intent = new Intent(MainActivity.this,SomeToolsWeatherActivity.class);
+					intent.setAction(LAYOUT_INFLATER_SERVICE);
+					startActivity(intent);
+					MainActivity.this.finish();
+				}
+			});
+		}
+		Log.i(L.t, "init view:"+v.getId()+" at "+position);
 	}
 	//for ActionBarDrawerToggle
 	@Override
@@ -134,9 +165,6 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		if (drawerListener.onOptionsItemSelected(item)) {
 			return true;
 		}
@@ -144,7 +172,6 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	
-
 	public void setTitle(String title) {
 		getSupportActionBar().setTitle(title);
 	}

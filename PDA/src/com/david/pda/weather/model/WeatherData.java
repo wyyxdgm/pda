@@ -1,6 +1,9 @@
 package com.david.pda.weather.model;
 
-public class WeatherData {
+import java.io.Serializable;
+
+public class WeatherData implements Serializable{
+	private static final long serialVersionUID = 992171994844783233L;
 	private String date;
 	private String dayPictureUrl;
 	private String nightPictureUrl;
