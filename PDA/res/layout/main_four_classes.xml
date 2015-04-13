@@ -4,21 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="horizontal" >
 
-    <me.everything.android.widget.OverScrollView
-        android:id="@+id/OverScroller"
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:gravity="left"
-            android:text="@string/abc_action_bar_home_description"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="18sp" >
-        </TextView>
-    </me.everything.android.widget.OverScrollView>
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="left"
+        android:text="@string/abc_action_bar_home_description"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="18sp" >
+    </TextView>
 
 </LinearLayout>

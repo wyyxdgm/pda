@@ -15,7 +15,7 @@ import com.david.pda.weather.model.WeatherResult;
 
 public class WeatherResultUtil {
 	private final static String AK = "FUXYMSrDjWT31lGBk8UIIZRP";
-	private final static String URL = "http://api.map.baidu.com/telematics/v3/weather?location=鍖椾含&output=json&ak=FUXYMSrDjWT31lGBk8UIIZRP";
+	private final static String URL = "http://api.map.baidu.com/telematics/v3/weather?location=上海&output=json&ak=FUXYMSrDjWT31lGBk8UIIZRP";
 
 	private static String getUrl(String cityName) {
 		String baiduUrl = URL;

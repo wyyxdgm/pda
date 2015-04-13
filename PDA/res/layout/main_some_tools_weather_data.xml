@@ -5,29 +5,29 @@
     android:background="#0000FF"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/main_some_tools_weather_topbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#5555FF"
-        android:textAlignment="center"
         android:orientation="horizontal" >
 
         <ImageButton
-            android:id="@+id/main_some_tools_weather_data_topbar_backward"
+            android:id="@+id/main_some_tools_weather_topbar_backward"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="18dp"
             android:background="@drawable/backward" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="18sp"
-            android:text="未来天气" />
-    </LinearLayout>
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="未来天气"
+            android:textSize="18sp" />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/main_some_tools_weather_data_list"

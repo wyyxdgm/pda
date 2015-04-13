@@ -14,11 +14,14 @@ import android.graphics.BitmapFactory;
 public class DownloadUtil {
 	public static String downloadAsString(String urlStr) {
 		StringBuffer sb = new StringBuffer();
+		BufferedReader in = null;
+		InputStream input = null;
+		HttpURLConnection conn;
 		try {
 			URL url = new URL(urlStr);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			InputStream input = conn.getInputStream();
-			BufferedReader in = new BufferedReader(new InputStreamReader(input));
+			conn = (HttpURLConnection) url.openConnection();
+			input = conn.getInputStream();
+			in = new BufferedReader(new InputStreamReader(input));
 			String line = null;
 			while ((line = in.readLine()) != null) {
 				sb.append(line);
@@ -27,13 +30,22 @@ public class DownloadUtil {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				if (in != null)
+					in.close();
+				if (input != null)
+					input.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return sb.toString();
 	}
 
 	public static Bitmap getBitmap(String uri) {
 		try {
-			URL url = new URL(uri); // path图片的网络地址
+			URL url = new URL(uri); 
 			HttpURLConnection httpURLConnection = (HttpURLConnection) url
 					.openConnection();
 			if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {

@@ -21,17 +21,25 @@ public class SyncDownload {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
+				InputStream inputStream = null;
 				try {
 					URL imageUrl = new URL(bitmapUrl);
 					HttpURLConnection conn = (HttpURLConnection) imageUrl
 							.openConnection();
-					InputStream inputStream = conn.getInputStream();
+					inputStream = conn.getInputStream();
 					Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 					Message msg = new Message();
 					msg.obj = bitmap;
 					handler.sendMessage(msg);
 				} catch (IOException e) {
 					e.printStackTrace();
+				} finally {
+					try {
+						if (inputStream != null)
+							inputStream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}).start();

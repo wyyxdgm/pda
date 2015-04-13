@@ -137,7 +137,6 @@ public class MainActivity extends ActionBarActivity {
 					Intent intent = new Intent(MainActivity.this,SomeToolsWeatherActivity.class);
 					intent.setAction(LAYOUT_INFLATER_SERVICE);
 					startActivity(intent);
-					MainActivity.this.finish();
 				}
 			});
 		}

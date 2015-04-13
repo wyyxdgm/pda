@@ -5,29 +5,58 @@
     android:background="#0000FF"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/main_some_tools_weather_topbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#5555FF"
-        android:orientation="horizontal"
-        android:textAlignment="center" >
+        android:orientation="horizontal" >
 
         <ImageButton
             android:id="@+id/main_some_tools_weather_topbar_backward"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="18dp"
             android:background="@drawable/backward" />
 
         <TextView
+            android:id="@+id/main_some_tools_weather_topbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             android:text="天气详情"
             android:textSize="18sp" />
-    </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/main_some_tools_weather_topbar_search_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/pencil_edit"
+            android:visibility="invisible" />
+
+        <AutoCompleteTextView
+            android:id="@+id/main_some_tools_weather_topbar_search_text"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/main_some_tools_weather_topbar_search_btn"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/main_some_tools_weather_topbar_refresh_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/refresh" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
