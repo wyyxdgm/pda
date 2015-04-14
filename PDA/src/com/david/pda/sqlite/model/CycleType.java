@@ -20,6 +20,10 @@ public class CycleType extends Model {
 	private String name;
 	private Integer delFlag;
 
+	public CycleType() {
+		super();
+	}
+
 	public CycleType(JSONObject jo) throws JSONException {
 		if (jo.has("_id"))
 			this._id = jo.getLong("_id");
@@ -30,7 +34,8 @@ public class CycleType extends Model {
 			this.name = jo.getString("name");
 	}
 
-	public static List<CycleType> getList(JSONArray ja) throws JSONException {
+	@SuppressWarnings("unchecked")
+	public List getList(JSONArray ja) throws JSONException {
 		List<CycleType> li = new ArrayList<CycleType>();
 		for (Integer i = 0; i < ja.length(); i++) {
 			JSONObject jo = ja.getJSONObject(i);

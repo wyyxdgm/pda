@@ -1,19 +1,48 @@
 package com.david.pda.sqlite.model;
 
-public class Model {
-	public static final Integer IS_YES = 1;
-	public static final Integer IS_NO = 0;
-	public static final Integer FLAG_DELETED = 0;
-	public static final Integer FLAG_EXISTS = 1;
-	public static final String DELFLAG = "delFlag";
-	private Integer delFlag = 0;
+import java.util.List;
 
-	public Integer getDelFlag() {
-		return delFlag;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+
+public class Model implements IModel<Model> {
+	public static final String _ID = "_id";
+
+	public Model(Cursor c) {
+		super();
 	}
 
+	public Model() {
+		super();
+	}
+
+	@Override
+	public Model getInstance(Cursor c) {
+		return null;
+	}
+
+	@Override
+	public List<Model> getList(JSONArray ja) throws JSONException {
+		return null;
+	}
+
+	public ContentValues toContentValues() {
+		return null;
+	}
+
+	public Long get_id() {
+		return Long.valueOf(0);
+	}
+
+	@Override
 	public void setDelFlag(Integer delFlag) {
-		this.delFlag = delFlag;
 	}
 
+	@Override
+	public Integer getDelFlag() {
+		return 0;
+	}
 }

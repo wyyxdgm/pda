@@ -34,7 +34,8 @@ public class Target extends Model {
 			this.scale = jo.getInt("scale");
 	}
 
-	public static List<Target> getList(JSONArray ja) throws JSONException {
+	@SuppressWarnings("unchecked")
+	public List getList(JSONArray ja) throws JSONException {
 		List<Target> li = new ArrayList<Target>();
 		for (Integer i = 0; i < ja.length(); i++) {
 			JSONObject jo = ja.getJSONObject(i);
