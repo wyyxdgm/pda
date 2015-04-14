@@ -1,0 +1,154 @@
+一、  数据库初始化接口
+数据库初始化之前我们需要建立表的对应字段，需使用KeyValueMap
+类，该类解决了Java 中HashMap不能有相同建的问题，致使我们可以对数据库表中相同字段的存储。
+对应的字段创建完后只需调用DBManager.InitDB(String DB_name,int DB_version,StringTableName,KeyValueMap<String, String> CreateSql);数据库和表所需的创建信息。
+参数描述
+参数名称
+类型
+意义
+注释
+DB_name
+String
+数据库名字
+ 
+DB_version
+int
+数据库版本
+ 
+TableName
+String
+表名
+ 
+createSql
+KeyValueMap<K,V>
+表字段
+ 
+ 
+调用示例:
+// 建表参数
+         KeyValueMap<String,String> parmas = new KeyValueMap<String,String>();
+parmas.put("TEXT", "NAME");
+parmas.put("TEXT", "SCORE");
+// 初始化建库建表信息
+DBManager.InitDB("Student_db", 1, "PersonTab",parmas);
+二、     增、删、改、查接口使用
+DBManager类封装了增删改查四个接口。
+(1)添加数据
+数据库的数据插入接口,
+AddDate(String TabelName, KeyValueMap<String,String>hashmap)
+参数描述
+参数名称
+类型
+意义
+注释
+TableName
+String
+表名
+ 
+hashmap
+KeyValueMap<String,String>
+参数值
+ 
+         调用示例；
+         sqliteDatebase= helper.getWritableDatabase();
+ContentValuesvalues = new ContentValues();
+for(int index = 0; index < hashmap.getSize(); index++) {
+values.put(hashmap.getKey(index),hashmap.getValue(index));
+}
+sqliteDatebase.insert(TabelName,null, values);;
+(2)  删除数据
+数据库的删除接口，DelDate(StringTabelName,String arg0,String[] arg1)
+参数描述
+参数名称
+类型
+意义
+注释
+TabelName
+Stirng
+表名
+ 
+arg0
+string
+查询条件
+ 
+arg1
+String[]
+查询条件的参数
+ 
+调用示例:
+DBManager.getIntance(IfreeDemo.this).DelDate("PersonTab","SCORE=?", new String[] { "90" });
+(3)  修改数据
+数据库的修改接口，Update(StringTabelName,KeyValueMap<String, String> map,String arg1,String[] arg2)；
+参数描述
+参数名称
+类型
+意义
+注释
+TabelName
+String
+ 
+ 
+map
+KeyValueMap<K,V>
+更新的数据集
+ 
+arg1
+String
+查询条件
+ 
+arg2
+String[]
+查询条件的参数
+ 
+ 
+调用示例
+sqliteDatebase =helper.getWritableDatabase();
+ContentValuesvalues = new ContentValues();
+for (int index =0; index < map.getSize(); index++) {
+values.put(map.getKey(index), map.getValue(index));
+}
+  sqliteDatebase.update(TabelName, values, arg1,arg2);
+(4)  查询数据
+数据库查询接口
+query(StringTableName, String[] arg0, String arg1, String[] arg2, String arg3, String arg4,String arg5);
+返回类型为Cursor，使用之后需要将该游标关闭。
+参数描述
+参数名称
+类型
+意义
+注释
+TableName
+String
+表名
+ 
+Arg0
+String[]
+要查询的列名
+ 
+Arg1
+string
+查询条件
+ 
+Arg2
+Stirng[]
+查询条件的参数
+ 
+Arg3
+string
+对查询的结果进行分组
+ 
+Arg4
+string
+对分组的结果进行限制
+ 
+Arg5
+string
+对查询的结果进行排序
+ 
+ 
+调用示例；
+     Cursor cursor = DBManager.getIntance(IfreeDemo.this).query"PersonTab",new String[] { "NAME", "SCORE"}, "NAME=?",new String[] { "WUWEIDONG" }, null,null, null);
+while(cursor.moveToNext()) {
+                                  System.out.println(cursor.getString(cursor.getColumnIndex("NAME")));      System.out.println(cursor.getString(cursor.getColumnIndex("SCORE")));
+}
+cursor.close();
