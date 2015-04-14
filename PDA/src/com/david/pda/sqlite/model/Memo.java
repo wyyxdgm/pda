@@ -2,10 +2,11 @@ package com.david.pda.sqlite.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.text.TextUtils;
 
 public class Memo extends Model {
-	public final static String CONTENT_URI = "plan";
+	public final static Uri CONTENT_URI = Uri.parse("memo");
 	public final static String _ID = "_id";
 	public final static String TITLE = "title";
 	public final static String CONTENT = "content";

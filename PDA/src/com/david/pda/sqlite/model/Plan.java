@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 public class Plan extends Model {
-	public final static Uri CONTENT_URI = Uri.parse("model");
+	public final static Uri CONTENT_URI = Uri.parse("plan");
 	public final static String _ID = "_id";
 	public final static String TITLE = "title";
 	public final static String URGENCYIMPORTANT = "urgencyimportant";

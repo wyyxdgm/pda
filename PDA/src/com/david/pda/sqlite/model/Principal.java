@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 public class Principal extends Model {
-	public final static Uri CONTENT_URI = Uri.parse("alarm");
+	public final static Uri CONTENT_URI = Uri.parse("principal");
 	public final static String _ID = "_id";
 	public final static String TITLE = "title";
 	public final static String REMARKS = "remarks";
