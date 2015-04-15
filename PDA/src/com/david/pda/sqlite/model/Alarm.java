@@ -1,5 +1,7 @@
 package com.david.pda.sqlite.model;
 
+import com.david.pda.sqlite.model.base.Model;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -7,7 +9,8 @@ import android.text.TextUtils;
 
 public class Alarm extends Model {
 	public final static String TABLE_NAME = "alarm";
-	public final static Uri CONTENT_URI = Uri.parse("alarm");
+	public final static Uri CONTENT_URI = Uri
+			.parse("content://com.david.pda.model.alarm");
 	public final static String _ID = "_id";
 	public final static String TITLE = "title";
 	public final static String REMARKS = "remarks";

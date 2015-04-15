@@ -12,8 +12,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.david.pda.sqlite.model.base.Model;
+
 public class Target extends Model {
-	public final static Uri CONTENT_URI = Uri.parse("target");
+	public static final String TABLE_NAME = "target";
+	public final static Uri CONTENT_URI = Uri
+			.parse("content://com.david.pda.model.target");
 	public final static String _ID = "_id";
 	public final static String NAME = "name";
 	public final static String SCALE = "scale";
@@ -34,7 +38,7 @@ public class Target extends Model {
 			this.scale = jo.getInt("scale");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List getList(JSONArray ja) throws JSONException {
 		List<Target> li = new ArrayList<Target>();
 		for (Integer i = 0; i < ja.length(); i++) {

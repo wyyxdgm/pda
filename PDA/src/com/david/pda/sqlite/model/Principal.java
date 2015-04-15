@@ -5,8 +5,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.david.pda.sqlite.model.base.Model;
+
 public class Principal extends Model {
-	public final static Uri CONTENT_URI = Uri.parse("principal");
+	public static final String TABLE_NAME = "principal";
+	public final static Uri CONTENT_URI = Uri
+			.parse("content://com.david.pda.model.principal");
 	public final static String _ID = "_id";
 	public final static String TITLE = "title";
 	public final static String REMARKS = "remarks";

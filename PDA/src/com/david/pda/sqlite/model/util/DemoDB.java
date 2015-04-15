@@ -9,17 +9,19 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 
-import com.david.pda.sqlite.model.Alarm;
-import com.david.pda.sqlite.model.Model;
+import com.david.pda.sqlite.model.base.Model;
 
 public class DemoDB<T extends Model> {
+	@SuppressWarnings("rawtypes")
 	Class tClass;
 
-	public DemoDB(Class<T> tz) {
-		this.tClass = tz.getClass();
+	public DemoDB(Class<T> tClass) {
+		this.tClass = tClass.getClass();
 	}
 
+	@SuppressWarnings("unchecked")
 	public T getModel(Cursor c) {
 		Object o = null;
 		try {
@@ -53,15 +55,29 @@ public class DemoDB<T extends Model> {
 		return count > 0;
 	}
 
+	public Uri insert(Model obj, Context context) throws JSONException {
+		return context.getContentResolver().insert(T.CONTENT_URI,
+				obj.toContentValues());
+	}
+
 	@SuppressWarnings("unchecked")
 	public T get(String id, Context context) {
 		Cursor c = context.getContentResolver().query(T.CONTENT_URI, null,
 				T._ID + " = ? ", new String[] { id }, null);
 		T item = null;
-		if (c != null) {
-			if (c.moveToNext()) {
-				item = (T) new Model(c);
+		try {
+			if (c != null) {
+				if (c.moveToNext()) {
+					Object o;
+					o = tClass.getClass().newInstance();
+					item = (T) ((T) o).getInstance(c);
+				}
 			}
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} finally {
 			c.close();
 		}
 		return item;
@@ -74,6 +90,13 @@ public class DemoDB<T extends Model> {
 		ContentValues values = item.toContentValues();
 		int count = context.getContentResolver().update(T.CONTENT_URI, values,
 				where, new String[] { T.DELFLAG });
+		return count > 0;
+	}
+
+	public boolean realRemove(String id, Context context) throws JSONException {
+		String where = T._ID + "= '" + id + "'";
+		int count = context.getContentResolver().delete(T.CONTENT_URI, where,
+				new String[] { T.DELFLAG });
 		return count > 0;
 	}
 

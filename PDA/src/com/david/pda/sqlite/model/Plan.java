@@ -1,12 +1,16 @@
 package com.david.pda.sqlite.model;
 
+import com.david.pda.sqlite.model.base.Model;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
 
 public class Plan extends Model {
-	public final static Uri CONTENT_URI = Uri.parse("plan");
+	public static final String TABLE_NAME = "plan";
+	public final static Uri CONTENT_URI = Uri
+			.parse("content://com.david.pda.model.plan");
 	public final static String _ID = "_id";
 	public final static String TITLE = "title";
 	public final static String URGENCYIMPORTANT = "urgencyimportant";

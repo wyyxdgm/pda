@@ -7,15 +7,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.david.pda.sqlite.model.base.Model;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
 
 public class CycleType extends Model {
-	public final static Uri CONTENT_URI = Uri.parse("cycleType");
+	public final static Uri CONTENT_URI = Uri.parse("content://com.david.pda.model.cycletype");
 	public final static String _ID = "_id";
 	public final static String NAME = "name";
+	public static final String TABLE_NAME = "cycletype";
 	private Long _id;
 	private String name;
 	private Integer delFlag;
@@ -34,7 +37,7 @@ public class CycleType extends Model {
 			this.name = jo.getString("name");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List getList(JSONArray ja) throws JSONException {
 		List<CycleType> li = new ArrayList<CycleType>();
 		for (Integer i = 0; i < ja.length(); i++) {

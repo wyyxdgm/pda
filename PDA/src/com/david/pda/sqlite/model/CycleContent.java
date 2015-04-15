@@ -1,12 +1,16 @@
 package com.david.pda.sqlite.model;
 
+import com.david.pda.sqlite.model.base.Model;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
 
 public class CycleContent extends Model {
-	public final static Uri CONTENT_URI = Uri.parse("cycleContent");
+	public static final String TABLE_NAME = "cyclecontent";
+	public final static Uri CONTENT_URI = Uri
+			.parse("content://com.david.pda.model.cyclecontent");
 	public final static String _ID = "_id";
 	public final static String ISAHEAD = "isAhead";
 	public final static String PRINCIPAL = "principal";

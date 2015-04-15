@@ -1,4 +1,4 @@
-package com.david.pda.sqlite.model;
+package com.david.pda.sqlite.model.base;
 
 import java.util.List;
 
@@ -7,8 +7,12 @@ import org.json.JSONException;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 
-public class Model implements IModel<Model> {
+public abstract class Model implements IModel<Model> {
+	public static final Uri CONTENT_URI = Uri
+			.parse("content://com.david.pda.model.model");
+
 	public static final String _ID = "_id";
 
 	public Model(Cursor c) {
@@ -29,9 +33,7 @@ public class Model implements IModel<Model> {
 		return null;
 	}
 
-	public ContentValues toContentValues() {
-		return null;
-	}
+	public abstract ContentValues toContentValues();
 
 	public Long get_id() {
 		return Long.valueOf(0);
