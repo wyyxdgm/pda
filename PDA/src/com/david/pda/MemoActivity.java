@@ -1,11 +1,10 @@
 package com.david.pda;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.json.JSONException;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,20 +12,19 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
+import com.david.pda.adapter.MemoGridAdapter;
 import com.david.pda.sqlite.model.Memo;
-import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
-import com.david.pda.util.other.DateUtil;
 
 public class MemoActivity extends Activity {
 	Button add;
-	Button query;
 	GridView memoGridView;
 	ImageButton backward;
 	List<Memo> memoList;
@@ -40,48 +38,46 @@ public class MemoActivity extends Activity {
 		backward = (ImageButton) findViewById(R.id.main_some_tools_memo_topbar_backward);
 		Bind.bindReturn(backward, this, MainActivity.class,
 				MainActivity.POSTION_SOME_TOOLS);
-		query = (Button) findViewById(R.id.queryMemo);
 		initGrid();
 		add.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Memo m = new Memo("test", "content", 1, new Date().getTime(),
-						Model.FLAG_EXISTS);
-				DemoDB<Memo> db = new DemoDB<Memo>(m);
-				db.insert(m, MemoActivity.this);
+				Intent intent = new Intent(MemoActivity.this,
+						MemoOptionActivity.class);
+				intent.setFlags(MemoOptionActivity.FLAG_ADD);
+				startActivity(intent);
 			}
 		});
-		query.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				initGrid();
+		resolveIntent();
+	}
+
+	@SuppressLint("ShowToast")
+	private void resolveIntent() {
+		Intent intent = getIntent();
+		String from = intent.getStringExtra("from");
+		if (from != null) {
+			if (from.equals(MemoOptionActivity.class.getName())) {
+				if (intent.getFlags() == MemoOptionActivity.ADD_SUCCESS) {
+					Toast.makeText(MemoActivity.this, "填加成功！",
+							Toast.LENGTH_SHORT).show();
+				} else if (intent.getFlags() == MemoOptionActivity.UPDATE_SUCCESS) {
+					Toast.makeText(MemoActivity.this, "更新成功！",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(MemoActivity.this, "操作失败！",
+							Toast.LENGTH_SHORT).show();
+				}
 			}
-		});
+		}
 	}
 
 	public void initGrid() {
 		DemoDB<Memo> db = new DemoDB<Memo>(new Memo());
 		memoList = db.getList(MemoActivity.this);
-		List<Map<String, Object>> arryList = new ArrayList<Map<String, Object>>();
-		Map<String, Object> item = null;
-		for (Memo memo : memoList) {
-			item = new HashMap<String, Object>();
-			item.put("title", memo.getTitle());
-			item.put("content", memo.getContent());
-			item.put("createTime",
-					DateUtil.formatYYYY_MM_DD(memo.getCreateTime()));
-			item.put("flag", memo.getFlag() == 1);
-			arryList.add(item);
-		}
-		SimpleAdapter memoGridItemAdapter = new SimpleAdapter(this, arryList,
-				R.layout.grid_item_memo, new String[] { "title", "content",
-						"createTime", "flag" }, new int[] {
-						R.id.some_tools_memo_item_title,
-						R.id.some_tools_memo_item_content,
-						R.id.some_tools_memo_item_createTime,
-						R.id.some_tools_memo_item_flag });
-		memoGridView.setAdapter(memoGridItemAdapter);
+		memoGridView.setAdapter(new MemoGridAdapter(MemoActivity.this));
 		memoGridView.setOnItemClickListener(new MemoGridItemClickListener());
+		memoGridView
+				.setOnItemLongClickListener(new MemoGridItemLongClickListener());
 	}
 
 	class MemoGridItemClickListener implements OnItemClickListener {
@@ -96,5 +92,33 @@ public class MemoActivity extends Activity {
 			startActivity(intent);
 		}
 
+	}
+
+	class MemoGridItemLongClickListener implements OnItemLongClickListener {
+
+		@SuppressLint("ShowToast")
+		@Override
+		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+				int index, long arg3) {
+			DemoDB<Memo> db = new DemoDB<Memo>(new Memo());
+			try {
+				db.realRemove(memoList.get(index).get_id() + "",
+						MemoActivity.this);
+				Toast.makeText(MemoActivity.this,
+						"删除《" + memoList.get(index).getTitle() + "》成功！",
+						Toast.LENGTH_SHORT).show();
+				memoList.remove(index);
+				initGrid();
+			} catch (JSONException e) {
+				e.printStackTrace();
+				Toast.makeText(MemoActivity.this, "删除失败！", Toast.LENGTH_SHORT)
+						.show();
+			}
+			return false;
+		}
+	}
+
+	public List<Memo> getData() {
+		return memoList;
 	}
 }

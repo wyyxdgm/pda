@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:padding="20dp" >
 
-
     <TextView
         android:id="@+id/some_tools_memo_item_title"
         android:layout_width="wrap_content"
@@ -21,8 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:checked="false"
-        android:text="红旗" />
+        android:checkMark="@drawable/flag_mark_red"
+        android:checked="false" />
 
     <TextView
         android:id="@+id/some_tools_memo_item_content"

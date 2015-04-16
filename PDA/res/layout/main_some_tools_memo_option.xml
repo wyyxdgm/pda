@@ -35,7 +35,7 @@
 
     <EditText
         android:id="@+id/main_some_tools_memo_option_title"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
     <TextView
@@ -45,24 +45,38 @@
 
     <EditText
         android:id="@+id/main_some_tools_memo_option_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:minLines="10" />
 
     <CheckedTextView
         android:id="@+id/main_some_tools_memo_option_flag_checkbox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/main_some_tools_memo_option_yes_button"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="取消" />
+        android:checkMark="@drawable/flag_mark_gray"
+        android:layout_margin="20dp"
+        android:text="取消该红旗:" />
 
-    <Button
-        android:id="@+id/main_some_tools_memo_option_cancle_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="確定" />
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/main_some_tools_memo_option_cancle_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="取消" />
+
+        <Button
+            android:id="@+id/main_some_tools_memo_option_yes_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="確定" />
+    </LinearLayout>
 
 </LinearLayout>

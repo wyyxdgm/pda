@@ -10,6 +10,12 @@ import android.database.Cursor;
 import android.net.Uri;
 
 public abstract class Model implements IModel<Model> {
+	public static final Integer IS_YES = 1;
+	public static final Integer IS_NO = 0;
+	public static final int FLAG_DELETED = 1;
+	public static final int FLAG_EXISTS = 2;
+	public static final String DELFLAG = "delFlag";
+
 	public abstract Uri CONTEN_URI();
 
 	public static final String _ID = "_id";

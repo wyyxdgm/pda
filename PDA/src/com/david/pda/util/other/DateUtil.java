@@ -11,6 +11,7 @@ public class DateUtil {
 	public final static String yyyy年MM月dd日 = "yyyy年MM月dd日";
 	public final static String yyyy年M月d日 = "yyyy年M月d日";
 	public final static String yyyy_MM_dd_hh_mm_ss = "yyyy-MM-dd hh:mm:ss";
+	public final static String MM_dd_hh_mm = "MM-dd hh:mm";
 	public final static String hh_mm_ss = "hh:mm:ss";
 	public final static String hh_mm = "hh:mm";
 	public final static String h时_m分 = "h时m分";
@@ -46,6 +47,11 @@ public class DateUtil {
 
 	public static boolean isDay() {
 		return !isNight();
+	}
+
+	@SuppressLint("SimpleDateFormat")
+	public static String formatMM_dd_hh_mm(Long createTime) {
+		return new SimpleDateFormat(MM_dd_hh_mm).format(new Date(createTime));
 	}
 
 }

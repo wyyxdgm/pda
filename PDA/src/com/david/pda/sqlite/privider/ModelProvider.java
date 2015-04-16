@@ -108,11 +108,7 @@ public class ModelProvider extends ContentProvider {
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		String table = getTableNameByUri(uri);
-		if (table != null) {
-			return updateOrInsert(db, uri, values, selection, selectionArgs);
-		}
-		return 0;
+		return updateOrInsert(db, uri, values, selection, selectionArgs);
 	}
 
 	private int updateOrInsert(SQLiteDatabase db, Uri uri,

@@ -26,18 +26,16 @@
             android:layout_centerVertical="true"
             android:text="更新便签"
             android:textSize="18sp" />
-    </RelativeLayout>
-    <Button
-        android:id="@+id/addMemo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="addMemo" />
 
-    <Button
-        android:id="@+id/queryMemo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="queryMemo" />
+        <Button
+            android:id="@+id/addMemo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/plus" />
+    </RelativeLayout>
+
 
     <GridView
         android:id="@+id/main_some_tools_memo_grid"

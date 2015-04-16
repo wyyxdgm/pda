@@ -15,12 +15,15 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.david.pda.sqlite.model.Memo;
+import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
 
 public class MemoOptionActivity extends Activity {
 	public static final int FLAG_UPDATE = 2;
 	public static final int FLAG_ADD = 3;
+	public static final int UPDATE_SUCCESS = 4;
+	public static final int ADD_SUCCESS = 5;
 	ImageButton backward;
 	private Memo memo;
 	EditText titleEditText;
@@ -41,13 +44,14 @@ public class MemoOptionActivity extends Activity {
 		flagCheckedTextView = (CheckedTextView) findViewById(R.id.main_some_tools_memo_option_flag_checkbox);
 		yesButton = (Button) findViewById(R.id.main_some_tools_memo_option_yes_button);
 		cancleButton = (Button) findViewById(R.id.main_some_tools_memo_option_cancle_button);
+		flagCheckedTextView
+				.setOnClickListener(new FlagCheckedClickedListener());
 		Intent intent = getIntent();
 		if (FLAG_UPDATE == intent.getFlags()) {// update
 			memo = new Memo(intent.getExtras());
 			showMemoToView();
 			yesButton.setOnClickListener(new UpdateListenr());
 		} else if (FLAG_ADD == intent.getFlags()) {// add
-			memo = new Memo();
 			showMemoToView();
 			yesButton.setOnClickListener(new AddListenr());
 		}
@@ -56,9 +60,15 @@ public class MemoOptionActivity extends Activity {
 	}
 
 	public void showMemoToView() {
-		titleEditText.setText(memo.getTitle());
-		contentEditText.setText(memo.getContent());
-		flagCheckedTextView.setChecked(memo.getFlag() == 1);
+		if (memo != null) {
+			titleEditText.setText(memo.getTitle());
+			contentEditText.setText(memo.getContent());
+			boolean checked = memo.getFlag() != null && memo.getFlag() == 1;
+			flagCheckedTextView.setChecked(checked);
+			flagCheckedTextView
+					.setCheckMarkDrawable(checked ? R.drawable.flag_mark_red
+							: R.drawable.flag_mark_gray);
+		}
 	}
 
 	public void FillMemoWidthView() {
@@ -68,6 +78,8 @@ public class MemoOptionActivity extends Activity {
 		memo.setContent(contentEditText.getText().toString());
 		memo.setTitle(titleEditText.getText().toString());
 		memo.setFlag(flagCheckedTextView.isChecked() ? 1 : 0);
+		memo.setDelFlag(Model.FLAG_EXISTS);
+		memo.setCreateTime(System.currentTimeMillis());
 	}
 
 	class UpdateListenr implements OnClickListener {
@@ -78,15 +90,28 @@ public class MemoOptionActivity extends Activity {
 			DemoDB<Memo> db = new DemoDB<Memo>(memo);
 			try {
 				db.update(memo, MemoOptionActivity.this);
-				Toast.makeText(MemoOptionActivity.this, "更新成功！",
-						Toast.LENGTH_SHORT);
+				goBack(UPDATE_SUCCESS);
 			} catch (JSONException e) {
-				Toast.makeText(MemoOptionActivity.this, "更新时出错！",
-						Toast.LENGTH_SHORT);
 				e.printStackTrace();
+				goBack(-1);
 			}
 		}
 
+	}
+
+	class FlagCheckedClickedListener implements OnClickListener {
+		@Override
+		public void onClick(View arg0) {
+			CheckedTextView cv = (CheckedTextView) arg0;
+			cv.toggle();
+			if (!cv.isChecked()) {
+				cv.setCheckMarkDrawable(R.drawable.flag_mark_gray);
+				cv.setText("取消该红旗:");
+			} else {
+				cv.setCheckMarkDrawable(R.drawable.flag_mark_red);
+				cv.setText("标记为红旗:");
+			}
+		}
 	}
 
 	class AddListenr implements OnClickListener {
@@ -97,8 +122,16 @@ public class MemoOptionActivity extends Activity {
 			FillMemoWidthView();
 			DemoDB<Memo> db = new DemoDB<Memo>(memo);
 			db.insert(memo, MemoOptionActivity.this);
-			Toast.makeText(MemoOptionActivity.this, "填加成功！", Toast.LENGTH_SHORT);
+			goBack(ADD_SUCCESS);
 		}
+	}
+
+	private void goBack(int result) {
+		Intent i = new Intent(MemoOptionActivity.this, MemoActivity.class);
+		i.setFlags(result);
+		i.putExtra("from", MemoOptionActivity.class.getName());
+		startActivity(i);
+		MemoOptionActivity.this.finish();
 	}
 
 }
