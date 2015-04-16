@@ -1,12 +1,13 @@
 package com.david.pda.sqlite.model;
 
-import com.david.pda.sqlite.model.base.Model;
-import com.david.pda.sqlite.privider.ModelProvider;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
+
+import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.sqlite.privider.ModelProvider;
 
 public class Memo extends Model {
 	public static final String TABLE_NAME = "memo";
@@ -78,6 +79,27 @@ public class Memo extends Model {
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
 	}
 
+	public Bundle toBundle() {
+		Bundle b = new Bundle();
+		b.putLong(_ID, this._id);
+		b.putString(TITLE, this.title);
+		b.putLong(CREATETIME, this.createTime);
+		b.putString(CONTENT, this.content);
+		b.putInt(FLAG, this.flag);
+		b.putInt(DELFLAG, this.delFlag);
+		return b;
+	}
+
+	public Memo(Bundle b) {
+		super();
+		this._id = b.getLong(_ID);
+		this.title = b.getString(TITLE);
+		this.createTime = b.getLong(CREATETIME);
+		this.content = b.getString(CONTENT);
+		this.flag = b.getInt(FLAG);
+		this.delFlag = b.getInt(DELFLAG);
+	}
+
 	public Long get_id() {
 		return _id;
 	}
@@ -130,6 +152,7 @@ public class Memo extends Model {
 	public Uri CONTEN_URI() {
 		return CONTENT_URI;
 	}
+
 	@Override
 	public Model getInstance(Cursor c) {
 		return new Memo(c);

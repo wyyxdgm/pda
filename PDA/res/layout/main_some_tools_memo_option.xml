@@ -28,4 +28,41 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="标题" />
+
+    <EditText
+        android:id="@+id/main_some_tools_memo_option_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="内容" />
+
+    <EditText
+        android:id="@+id/main_some_tools_memo_option_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <CheckedTextView
+        android:id="@+id/main_some_tools_memo_option_flag_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/main_some_tools_memo_option_yes_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="取消" />
+
+    <Button
+        android:id="@+id/main_some_tools_memo_option_cancle_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="確定" />
+
 </LinearLayout>

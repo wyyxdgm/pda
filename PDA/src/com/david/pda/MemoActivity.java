@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,7 @@ public class MemoActivity extends Activity {
 	Button query;
 	GridView memoGridView;
 	ImageButton backward;
+	List<Memo> memoList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +61,10 @@ public class MemoActivity extends Activity {
 
 	public void initGrid() {
 		DemoDB<Memo> db = new DemoDB<Memo>(new Memo());
-		List<Memo> mList = db.getList(MemoActivity.this);
+		memoList = db.getList(MemoActivity.this);
 		List<Map<String, Object>> arryList = new ArrayList<Map<String, Object>>();
 		Map<String, Object> item = null;
-		for (Memo memo : mList) {
+		for (Memo memo : memoList) {
 			item = new HashMap<String, Object>();
 			item.put("title", memo.getTitle());
 			item.put("content", memo.getContent());
@@ -82,10 +84,16 @@ public class MemoActivity extends Activity {
 		memoGridView.setOnItemClickListener(new MemoGridItemClickListener());
 	}
 
-	public class MemoGridItemClickListener implements OnItemClickListener {
+	class MemoGridItemClickListener implements OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View view, int index,
 				long rowIndex) {
+			Memo m = memoList.get(index);
+			Intent intent = new Intent(MemoActivity.this,
+					MemoOptionActivity.class);
+			intent.putExtras(m.toBundle());
+			intent.setFlags(MemoOptionActivity.FLAG_UPDATE);
+			startActivity(intent);
 		}
 
 	}
