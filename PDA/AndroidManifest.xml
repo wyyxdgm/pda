@@ -32,7 +32,11 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
-            android:name="com.david.pda.DbActivity"
+            android:name="com.david.pda.MemoActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.david.pda.MemoOptionActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity

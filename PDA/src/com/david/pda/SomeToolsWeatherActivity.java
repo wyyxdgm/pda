@@ -37,7 +37,7 @@ import com.david.pda.util.io.LocalUtil;
 import com.david.pda.util.net.OnLoadImageListener;
 import com.david.pda.util.net.SyncDownload;
 import com.david.pda.util.other.Bind;
-import com.david.pda.util.time.DateUtil;
+import com.david.pda.util.other.DateUtil;
 import com.david.pda.weather.model.Index;
 import com.david.pda.weather.model.WeatherData;
 import com.david.pda.weather.model.WeatherResult;
