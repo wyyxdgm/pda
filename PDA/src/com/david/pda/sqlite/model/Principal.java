@@ -6,16 +6,30 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.sqlite.privider.ModelProvider;
 
 public class Principal extends Model {
 	public static final String TABLE_NAME = "principal";
-	public final static Uri CONTENT_URI = Uri
-			.parse("content://com.david.pda.model.principal");
+	public final static Uri CONTENT_URI = Uri.parse("content://"
+			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
 	public final static String _ID = "_id";
 	public final static String TITLE = "title";
 	public final static String REMARKS = "remarks";
 	public final static String CYCLETYPE = "cycleType";
 	public final static String CYCLECONTENT = "cycleContent";
+
+	public static String CREATE_TABLE() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("CREATE TABLE ");
+		sb.append(TABLE_NAME).append("(");
+		sb.append(_ID).append(" INTEGER primary key autoincrement,");
+		sb.append(TITLE).append(" TEXT,");
+		sb.append(REMARKS).append(" TEXT,");
+		sb.append(CYCLETYPE).append(" LONG,");
+		sb.append(CYCLECONTENT).append(" LONG,");
+		sb.append(DELFLAG).append(" INT)");
+		return sb.toString();
+	}
 
 	private Long _id;
 	private String title;
@@ -100,4 +114,13 @@ public class Principal extends Model {
 		this.delFlag = delFlag;
 	}
 
+	@Override
+	public Uri CONTEN_URI() {
+		return CONTENT_URI;
+	}
+
+	@Override
+	public Model getInstance(Cursor c) {
+		return new Principal(c);
+	}
 }

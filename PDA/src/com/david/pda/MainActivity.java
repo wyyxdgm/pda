@@ -25,13 +25,13 @@ import com.david.pda.adapter.BataanAdapter;
 import com.david.pda.weather.model.util.L;
 
 public class MainActivity extends ActionBarActivity {
-	public static final int POSTION_TARGET_MANAGE=0;
-	public static final int POSTION_AFFAIR_PLAN=1;
-	public static final int POSTION_TODAY_SCHEDULE=2;
-	public static final int POSTION_FOUR_CLASSES=3;
-	public static final int POSTION_SELF_PRINCIPLE=4;
-	public static final int POSTION_SOME_TOOLS=5;
-	public static final int POSTION_SYSTEM_SETTIONG=6;
+	public static final int POSTION_TARGET_MANAGE = 0;
+	public static final int POSTION_AFFAIR_PLAN = 1;
+	public static final int POSTION_TODAY_SCHEDULE = 2;
+	public static final int POSTION_FOUR_CLASSES = 3;
+	public static final int POSTION_SELF_PRINCIPLE = 4;
+	public static final int POSTION_SOME_TOOLS = 5;
+	public static final int POSTION_SYSTEM_SETTIONG = 6;
 	private DrawerLayout drawerLayout;
 	private ListView listView;
 	private ActionBarDrawerToggle drawerListener;
@@ -64,7 +64,7 @@ public class MainActivity extends ActionBarActivity {
 				Log.i(L.t, position + " selected");
 				initMainView(position);
 				drawerLayout.closeDrawer(GravityCompat.START);
-				Log.i(L.t,"view of "+mainViewIds[position]+" show");
+				Log.i(L.t, "view of " + mainViewIds[position] + " show");
 			}
 		};
 		listView.setOnItemClickListener(menuItemCLickListener);
@@ -104,60 +104,84 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 		Intent intent = getIntent();
-		if(intent.getFlags()!=0&&intent.getFlags()>=POSTION_TARGET_MANAGE&&intent.getFlags()<=POSTION_SYSTEM_SETTIONG){
+		if (intent.getFlags() != 0
+				&& intent.getFlags() >= POSTION_TARGET_MANAGE
+				&& intent.getFlags() <= POSTION_SYSTEM_SETTIONG) {
 			initMainView(intent.getFlags());
 		}
 	}
-	public void initMainView(int position){
-		if (mainContentLayout.getChildCount() > 0) {//hash view already
-			if(mainContentLayout.getChildAt(0).getId() != mainViewIds[position]){
-				Log.i(L.t, "mainContentLayout.getChildAt(0).getId():"+mainContentLayout.getChildAt(0).getId());
-				Log.i(L.t, "mainViewIds["+position+"]"+mainViewIds[position]);
-				//current view is not witch selected
-				//should be replaced
+
+	public void initMainView(int position) {
+		if (mainContentLayout.getChildCount() > 0) {// hash view already
+			if (mainContentLayout.getChildAt(0).getId() != mainViewIds[position]) {
+				Log.i(L.t, "mainContentLayout.getChildAt(0).getId():"
+						+ mainContentLayout.getChildAt(0).getId());
+				Log.i(L.t, "mainViewIds[" + position + "]"
+						+ mainViewIds[position]);
+				// current view is not witch selected
+				// should be replaced
 				LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				View currentView =  inflater.inflate(mainViewIds[position], null, false);
+				View currentView = inflater.inflate(mainViewIds[position],
+						null, false);
 				mainContentLayout.removeViewAt(0);
 				mainContentLayout.addView(currentView);
-				initMainView(position,currentView);
+				initMainView(position, currentView);
 			}
 		}
 	}
-	private void initMainView(int position,View v){
-		if(position==POSTION_SOME_TOOLS){
-			ImageButton alarm =(ImageButton) v.findViewById(R.id.main_some_tools_alarm);
-			ImageButton note =(ImageButton) v.findViewById(R.id.main_some_tools_note);
-			ImageButton weather =(ImageButton) v.findViewById(R.id.main_some_tools_weather);
-			ImageButton calendar =(ImageButton) v.findViewById(R.id.main_some_tools_calendar);
-			ImageButton countdown =(ImageButton) v.findViewById(R.id.main_some_tools_countdown);
+
+	private void initMainView(int position, View v) {
+		if (position == POSTION_SOME_TOOLS) {
+			ImageButton alarm = (ImageButton) v
+					.findViewById(R.id.main_some_tools_alarm);
+			ImageButton note = (ImageButton) v
+					.findViewById(R.id.main_some_tools_note);
+			ImageButton weather = (ImageButton) v
+					.findViewById(R.id.main_some_tools_weather);
+			ImageButton calendar = (ImageButton) v
+					.findViewById(R.id.main_some_tools_calendar);
+			ImageButton countdown = (ImageButton) v
+					.findViewById(R.id.main_some_tools_countdown);
 			weather.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					Log.i(L.t, "weather");
-					Intent intent = new Intent(MainActivity.this,SomeToolsWeatherActivity.class);
+					Intent intent = new Intent(MainActivity.this,
+							SomeToolsWeatherActivity.class);
+					intent.setAction(LAYOUT_INFLATER_SERVICE);
+					startActivity(intent);
+				}
+			});
+			note.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					Log.i(L.t, "weather");
+					Intent intent = new Intent(MainActivity.this,
+							DbActivity.class);
 					intent.setAction(LAYOUT_INFLATER_SERVICE);
 					startActivity(intent);
 				}
 			});
 		}
-		Log.i(L.t, "init view:"+v.getId()+" at "+position);
+		Log.i(L.t, "init view:" + v.getId() + " at " + position);
 	}
-	//for ActionBarDrawerToggle
+
+	// for ActionBarDrawerToggle
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		drawerListener.syncState();
 	}
-	//for ActionBarDrawerToggle
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 
 		super.onConfigurationChanged(newConfig);
 		drawerListener.onConfigurationChanged(newConfig);
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
@@ -170,7 +194,6 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	
 	public void setTitle(String title) {
 		getSupportActionBar().setTitle(title);
 	}

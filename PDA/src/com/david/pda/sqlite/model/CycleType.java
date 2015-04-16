@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.sqlite.privider.ModelProvider;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -15,16 +16,27 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 public class CycleType extends Model {
-	public final static Uri CONTENT_URI = Uri.parse("content://com.david.pda.model.cycletype");
+	public static final String TABLE_NAME = "cycletype";
+	public final static Uri CONTENT_URI = Uri.parse("content://"
+			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
 	public final static String _ID = "_id";
 	public final static String NAME = "name";
-	public static final String TABLE_NAME = "cycletype";
 	private Long _id;
 	private String name;
 	private Integer delFlag;
 
 	public CycleType() {
 		super();
+	}
+
+	public static String CREATE_TABLE() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("CREATE TABLE ");
+		sb.append(TABLE_NAME).append("(");
+		sb.append(_ID).append(" INTEGER primary key autoincrement,");
+		sb.append(NAME).append(" TEXT,");
+		sb.append(DELFLAG).append(" INT)");
+		return sb.toString();
 	}
 
 	public CycleType(JSONObject jo) throws JSONException {
@@ -97,4 +109,12 @@ public class CycleType extends Model {
 		this.delFlag = delFlag;
 	}
 
+	@Override
+	public Uri CONTEN_URI() {
+		return CONTENT_URI;
+	}
+	@Override
+	public Model getInstance(Cursor c) {
+		return new CycleType(c);
+	}
 }

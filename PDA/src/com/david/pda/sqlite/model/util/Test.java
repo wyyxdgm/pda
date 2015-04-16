@@ -4,6 +4,6 @@ import com.david.pda.sqlite.model.Alarm;
 
 public class Test {
 	public static void main(String[] args) {
-		DemoDB<Alarm> a = new DemoDB<Alarm>(Alarm.class);
+		DemoDB<Alarm> a = new DemoDB<Alarm>(new Alarm());
 	}
 }

@@ -13,11 +13,12 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.sqlite.privider.ModelProvider;
 
 public class Target extends Model {
 	public static final String TABLE_NAME = "target";
-	public final static Uri CONTENT_URI = Uri
-			.parse("content://com.david.pda.model.target");
+	public final static Uri CONTENT_URI = Uri.parse("content://"
+			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
 	public final static String _ID = "_id";
 	public final static String NAME = "name";
 	public final static String SCALE = "scale";
@@ -25,6 +26,17 @@ public class Target extends Model {
 	private String name;
 	private Integer scale;
 	private Integer delFlag;
+
+	public static String CREATE_TABLE() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("CREATE TABLE ");
+		sb.append(TABLE_NAME).append("(");
+		sb.append(_ID).append(" INTEGER primary key autoincrement,");
+		sb.append(NAME).append(" TEXT,");
+		sb.append(SCALE).append(" INT,");
+		sb.append(DELFLAG).append(" INT)");
+		return sb.toString();
+	}
 
 	public Target(JSONObject jo) throws JSONException {
 		if (jo.has("_id"))
@@ -111,4 +123,13 @@ public class Target extends Model {
 		this.delFlag = delFlag;
 	}
 
+	@Override
+	public Uri CONTEN_URI() {
+		return CONTENT_URI;
+	}
+
+	@Override
+	public Model getInstance(Cursor c) {
+		return new Target(c);
+	}
 }

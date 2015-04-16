@@ -1,7 +1,9 @@
 package com.david.pda.sqlite.privider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -32,27 +34,36 @@ public class ModelProvider extends ContentProvider {
 	// private static final int PLAN = 5;
 	// private static final int PRINCIPAL = 6;
 	// private static final int TARGET = 7;
-	private static final List<String> tableNames = new ArrayList<String>();
+	private static final List<String> TABLES = new ArrayList<String>();
+	public static final Map<String, String> CREATE_TABLE = new HashMap<String, String>();
 	private static final UriMatcher URI_MATHER = new UriMatcher(
 			UriMatcher.NO_MATCH);
 	static {
-		tableNames.add(Alarm.TABLE_NAME);
-		tableNames.add(Countdown.TABLE_NAME);
-		tableNames.add(CycleContent.TABLE_NAME);
-		tableNames.add(CycleType.TABLE_NAME);
-		tableNames.add(Memo.TABLE_NAME);
-		tableNames.add(Plan.TABLE_NAME);
-		tableNames.add(Principal.TABLE_NAME);
-		tableNames.add(Target.TABLE_NAME);
+		TABLES.add(Alarm.TABLE_NAME);
+		TABLES.add(Countdown.TABLE_NAME);
+		TABLES.add(CycleContent.TABLE_NAME);
+		TABLES.add(CycleType.TABLE_NAME);
+		TABLES.add(Memo.TABLE_NAME);
+		TABLES.add(Plan.TABLE_NAME);
+		TABLES.add(Principal.TABLE_NAME);
+		TABLES.add(Target.TABLE_NAME);
 
-		for (int i = 0; i < tableNames.size(); i++) {
-			URI_MATHER.addURI(AUTHORITY, tableNames.get(i), i);
+		for (int i = 0; i < TABLES.size(); i++) {
+			URI_MATHER.addURI(AUTHORITY, TABLES.get(i), i);
 		}
+		CREATE_TABLE.put(Alarm.TABLE_NAME, Alarm.CREATE_TABLE());
+		CREATE_TABLE.put(Countdown.TABLE_NAME, Countdown.CREATE_TABLE());
+		CREATE_TABLE.put(CycleContent.TABLE_NAME, CycleContent.CREATE_TABLE());
+		CREATE_TABLE.put(CycleType.TABLE_NAME, CycleType.CREATE_TABLE());
+		CREATE_TABLE.put(Memo.TABLE_NAME, Memo.CREATE_TABLE());
+		CREATE_TABLE.put(Plan.TABLE_NAME, Plan.CREATE_TABLE());
+		CREATE_TABLE.put(Principal.TABLE_NAME, Principal.CREATE_TABLE());
+		CREATE_TABLE.put(Target.TABLE_NAME, Target.CREATE_TABLE());
 	}
 
 	public static void add(String table) {
-		tableNames.add(table);
-		URI_MATHER.addURI(AUTHORITY, table, tableNames.size() - 1);
+		TABLES.add(table);
+		URI_MATHER.addURI(AUTHORITY, table, TABLES.size() - 1);
 	}
 
 	@Override
@@ -120,8 +131,8 @@ public class ModelProvider extends ContentProvider {
 
 	private String getTableNameByUri(Uri uri) {
 		int match = URI_MATHER.match(uri);
-		if (match >= 0 && match < tableNames.size()) {
-			return tableNames.get(match);
+		if (match >= 0 && match < TABLES.size()) {
+			return TABLES.get(match);
 		}
 		return null;
 	}

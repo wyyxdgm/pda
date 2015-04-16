@@ -10,8 +10,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 public abstract class Model implements IModel<Model> {
-	public static final Uri CONTENT_URI = Uri
-			.parse("content://com.david.pda.model.model");
+	public abstract Uri CONTEN_URI();
 
 	public static final String _ID = "_id";
 
@@ -23,10 +22,7 @@ public abstract class Model implements IModel<Model> {
 		super();
 	}
 
-	@Override
-	public Model getInstance(Cursor c) {
-		return null;
-	}
+	public abstract Model getInstance(Cursor c);
 
 	@Override
 	public List<Model> getList(JSONArray ja) throws JSONException {

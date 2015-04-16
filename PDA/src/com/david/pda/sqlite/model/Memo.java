@@ -1,6 +1,7 @@
 package com.david.pda.sqlite.model;
 
 import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.sqlite.privider.ModelProvider;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -9,7 +10,8 @@ import android.text.TextUtils;
 
 public class Memo extends Model {
 	public static final String TABLE_NAME = "memo";
-	public final static Uri CONTENT_URI = Uri.parse("content://com.david.pda.model.memo");
+	public final static Uri CONTENT_URI = Uri.parse("content://"
+			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
 	public final static String _ID = "_id";
 	public final static String TITLE = "title";
 	public final static String CONTENT = "content";
@@ -22,6 +24,19 @@ public class Memo extends Model {
 	private Integer flag;
 	private Long createTime;
 	private Integer delFlag;
+
+	public static String CREATE_TABLE() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("CREATE TABLE ");
+		sb.append(TABLE_NAME).append("(");
+		sb.append(_ID).append(" INTEGER primary key autoincrement,");
+		sb.append(TITLE).append(" TEXT,");
+		sb.append(CONTENT).append(" TEXT,");
+		sb.append(FLAG).append(" INT,");
+		sb.append(CREATETIME).append(" LONG,");
+		sb.append(DELFLAG).append(" INT)");
+		return sb.toString();
+	}
 
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
@@ -40,6 +55,18 @@ public class Memo extends Model {
 			cv.put(CREATETIME, createTime);
 		}
 		return cv;
+	}
+
+	public Memo() {
+	}
+
+	public Memo(String title, String content, Integer flag, Long createTime,
+			Integer delFlag) {
+		this.title = title;
+		this.content = content;
+		this.flag = flag;
+		this.createTime = createTime;
+		this.delFlag = delFlag;
 	}
 
 	public Memo(Cursor c) {
@@ -99,4 +126,12 @@ public class Memo extends Model {
 		this.delFlag = delFlag;
 	}
 
+	@Override
+	public Uri CONTEN_URI() {
+		return CONTENT_URI;
+	}
+	@Override
+	public Model getInstance(Cursor c) {
+		return new Memo(c);
+	}
 }

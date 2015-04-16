@@ -1,6 +1,7 @@
 package com.david.pda.sqlite.model;
 
 import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.sqlite.privider.ModelProvider;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -9,8 +10,8 @@ import android.text.TextUtils;
 
 public class Plan extends Model {
 	public static final String TABLE_NAME = "plan";
-	public final static Uri CONTENT_URI = Uri
-			.parse("content://com.david.pda.model.plan");
+	public final static Uri CONTENT_URI = Uri.parse("content://"
+			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
 	public final static String _ID = "_id";
 	public final static String TITLE = "title";
 	public final static String URGENCYIMPORTANT = "urgencyimportant";
@@ -23,6 +24,26 @@ public class Plan extends Model {
 	public final static String STARTTIME = "startTime";
 	public final static String ENDTIME = "endTime";
 	public final static String DOAFTERSUCCESS = "doAfterSuccess";
+
+	public static String CREATE_TABLE() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("CREATE TABLE ");
+		sb.append(TABLE_NAME).append("(");
+		sb.append(_ID).append(" INTEGER primary key autoincrement,");
+		sb.append(TITLE).append(" TEXT,");
+		sb.append(URGENCYIMPORTANT).append(" INT,");
+		sb.append(CREATETIME).append(" LONG,");
+		sb.append(FIRSTTYPE).append(" INT,");
+		sb.append(SECONDTYPE).append(" INT,");
+		sb.append(WEATHERSENSITIVITY).append(" INT,");
+		sb.append(TOTALTIME).append(" LONG,");
+		sb.append(TOTALUSED).append(" LONG,");
+		sb.append(STARTTIME).append(" LONG,");
+		sb.append(ENDTIME).append(" LONG,");
+		sb.append(DOAFTERSUCCESS).append(" TEXT,");
+		sb.append(DELFLAG).append(" INT)");
+		return sb.toString();
+	}
 
 	private Long _id;
 	private String title;
@@ -197,4 +218,12 @@ public class Plan extends Model {
 		this.delFlag = delFlag;
 	}
 
+	@Override
+	public Uri CONTEN_URI() {
+		return CONTENT_URI;
+	}
+	@Override
+	public Model getInstance(Cursor c) {
+		return new Plan(c);
+	}
 }

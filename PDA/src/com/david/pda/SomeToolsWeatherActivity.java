@@ -101,6 +101,7 @@ public class SomeToolsWeatherActivity extends Activity {
 		defaultCity = sp.getString(DEFAULT_CITY, null);
 		defaultWeather = sp.getString(DEFAULT_WEATHER, null);
 		if (defaultCity == null) {
+			defaultCity = "北京";
 			Toast.makeText(SomeToolsWeatherActivity.this,
 					"您还没有设置城市，将默认" + defaultCity, Toast.LENGTH_SHORT).show();
 			Editor e = sp.edit();

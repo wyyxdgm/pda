@@ -1,6 +1,7 @@
 package com.david.pda.sqlite.model;
 
 import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.sqlite.privider.ModelProvider;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -9,18 +10,36 @@ import android.text.TextUtils;
 
 public class CycleContent extends Model {
 	public static final String TABLE_NAME = "cyclecontent";
-	public final static Uri CONTENT_URI = Uri
-			.parse("content://com.david.pda.model.cyclecontent");
+	public final static Uri CONTENT_URI = Uri.parse("content://"
+			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
 	public final static String _ID = "_id";
-	public final static String ISAHEAD = "isAhead";
 	public final static String PRINCIPAL = "principal";
+	public final static String STARTTIME = "startTime";
+	public final static String ENDTIME = "endTime";
 	public final static String ISON = "isOn";
 	public final static String ISTIP = "isTip";
 	public final static String WEATHERSENSITIVITY = "weatherSensitivity";
+	public final static String ISAHEAD = "isAhead";
 	public final static String AHEADTIME = "aheadTime";
-	public final static String STARTTIME = "startTime";
-	public final static String ENDTIME = "endTime";
 	public final static String DISCRIPTION = "discription";
+
+	public static String CREATE_TABLE() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("CREATE TABLE ");
+		sb.append(TABLE_NAME).append("(");
+		sb.append(_ID).append(" INTEGER primary key autoincrement,");
+		sb.append(PRINCIPAL).append(" LONG,");
+		sb.append(STARTTIME).append(" LONG,");
+		sb.append(ENDTIME).append(" LONG,");
+		sb.append(ISON).append(" INT,");
+		sb.append(ISTIP).append(" INT,");
+		sb.append(WEATHERSENSITIVITY).append(" INT,");
+		sb.append(ISAHEAD).append(" INT,");
+		sb.append(AHEADTIME).append(" LONG,");
+		sb.append(DISCRIPTION).append(" TEXT,");
+		sb.append(DELFLAG).append(" INT)");
+		return sb.toString();
+	}
 
 	private Long _id;
 	private Long principal;
@@ -169,5 +188,12 @@ public class CycleContent extends Model {
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}
-
+	@Override
+	public Uri CONTEN_URI() {
+		return CONTENT_URI;
+	}
+	@Override
+	public Model getInstance(Cursor c) {
+		return new CycleContent(c);
+	}
 }
