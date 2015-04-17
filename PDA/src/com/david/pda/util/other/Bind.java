@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 
-import com.david.pda.MemoActivity;
+import com.david.pda.SomeToolsMemoActivity;
 import com.david.pda.weather.model.util.L;
 
 public class Bind {
@@ -55,7 +55,7 @@ public class Bind {
 	}
 
 	public static void bindReturn(Button b, final Context context,
-			final Class<MemoActivity> target) {
+			final Class<SomeToolsMemoActivity> target) {
 		b.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {

@@ -12,14 +12,13 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.david.pda.sqlite.model.Memo;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
 
-public class MemoOptionActivity extends Activity {
+public class SomeToolsMemoOptionActivity extends Activity {
 	public static final int FLAG_UPDATE = 2;
 	public static final int FLAG_ADD = 3;
 	public static final int UPDATE_SUCCESS = 4;
@@ -37,7 +36,7 @@ public class MemoOptionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_some_tools_memo_option);
 		backward = (ImageButton) findViewById(R.id.main_some_tools_memo_option_topbar_backward);
-		Bind.bindReturn(backward, MemoOptionActivity.this, MainActivity.class,
+		Bind.bindReturn(backward, SomeToolsMemoOptionActivity.this, MainActivity.class,
 				MainActivity.POSTION_SOME_TOOLS);
 		titleEditText = (EditText) findViewById(R.id.main_some_tools_memo_option_title);
 		contentEditText = (EditText) findViewById(R.id.main_some_tools_memo_option_content);
@@ -55,8 +54,8 @@ public class MemoOptionActivity extends Activity {
 			showMemoToView();
 			yesButton.setOnClickListener(new AddListenr());
 		}
-		Bind.bindReturn(cancleButton, MemoOptionActivity.this,
-				MemoActivity.class);
+		Bind.bindReturn(cancleButton, SomeToolsMemoOptionActivity.this,
+				SomeToolsMemoActivity.class);
 	}
 
 	public void showMemoToView() {
@@ -89,7 +88,7 @@ public class MemoOptionActivity extends Activity {
 			FillMemoWidthView();
 			DemoDB<Memo> db = new DemoDB<Memo>(memo);
 			try {
-				db.update(memo, MemoOptionActivity.this);
+				db.update(memo, SomeToolsMemoOptionActivity.this);
 				goBack(UPDATE_SUCCESS);
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -121,17 +120,17 @@ public class MemoOptionActivity extends Activity {
 		public void onClick(View arg0) {
 			FillMemoWidthView();
 			DemoDB<Memo> db = new DemoDB<Memo>(memo);
-			db.insert(memo, MemoOptionActivity.this);
+			db.insert(memo, SomeToolsMemoOptionActivity.this);
 			goBack(ADD_SUCCESS);
 		}
 	}
 
 	private void goBack(int result) {
-		Intent i = new Intent(MemoOptionActivity.this, MemoActivity.class);
+		Intent i = new Intent(SomeToolsMemoOptionActivity.this, SomeToolsMemoActivity.class);
 		i.setFlags(result);
-		i.putExtra("from", MemoOptionActivity.class.getName());
+		i.putExtra("from", SomeToolsMemoOptionActivity.class.getName());
 		startActivity(i);
-		MemoOptionActivity.this.finish();
+		SomeToolsMemoOptionActivity.this.finish();
 	}
 
 }

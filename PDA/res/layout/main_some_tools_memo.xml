@@ -24,16 +24,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
-            android:text="更新便签"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/addMemo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/plus" />
+            android:text="我的便签"			android:textSize="18sp" />        <Button  android:id="@+id/addMemo"
+            android:layout_width="40dp"            android:layout_height="40dp"android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"            android:layout_marginRight="18dp"android:background="@drawable/plus" />
     </RelativeLayout>
 
 

@@ -157,7 +157,7 @@ public class MainActivity extends ActionBarActivity {
 				public void onClick(View arg0) {
 					Log.i(L.t, "weather");
 					Intent intent = new Intent(MainActivity.this,
-							MemoActivity.class);
+							SomeToolsMemoActivity.class);
 					intent.setAction(LAYOUT_INFLATER_SERVICE);
 					startActivity(intent);
 				}

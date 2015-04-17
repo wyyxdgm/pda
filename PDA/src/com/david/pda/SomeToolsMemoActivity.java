@@ -23,7 +23,7 @@ import com.david.pda.sqlite.model.Memo;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
 
-public class MemoActivity extends Activity {
+public class SomeToolsMemoActivity extends Activity {
 	Button add;
 	GridView memoGridView;
 	ImageButton backward;
@@ -42,9 +42,9 @@ public class MemoActivity extends Activity {
 		add.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Intent intent = new Intent(MemoActivity.this,
-						MemoOptionActivity.class);
-				intent.setFlags(MemoOptionActivity.FLAG_ADD);
+				Intent intent = new Intent(SomeToolsMemoActivity.this,
+						SomeToolsMemoOptionActivity.class);
+				intent.setFlags(SomeToolsMemoOptionActivity.FLAG_ADD);
 				startActivity(intent);
 			}
 		});
@@ -56,15 +56,15 @@ public class MemoActivity extends Activity {
 		Intent intent = getIntent();
 		String from = intent.getStringExtra("from");
 		if (from != null) {
-			if (from.equals(MemoOptionActivity.class.getName())) {
-				if (intent.getFlags() == MemoOptionActivity.ADD_SUCCESS) {
-					Toast.makeText(MemoActivity.this, "填加成功！",
+			if (from.equals(SomeToolsMemoOptionActivity.class.getName())) {
+				if (intent.getFlags() == SomeToolsMemoOptionActivity.ADD_SUCCESS) {
+					Toast.makeText(SomeToolsMemoActivity.this, "填加成功！",
 							Toast.LENGTH_SHORT).show();
-				} else if (intent.getFlags() == MemoOptionActivity.UPDATE_SUCCESS) {
-					Toast.makeText(MemoActivity.this, "更新成功！",
+				} else if (intent.getFlags() == SomeToolsMemoOptionActivity.UPDATE_SUCCESS) {
+					Toast.makeText(SomeToolsMemoActivity.this, "更新成功！",
 							Toast.LENGTH_SHORT).show();
 				} else {
-					Toast.makeText(MemoActivity.this, "操作失败！",
+					Toast.makeText(SomeToolsMemoActivity.this, "操作失败！",
 							Toast.LENGTH_SHORT).show();
 				}
 			}
@@ -73,8 +73,8 @@ public class MemoActivity extends Activity {
 
 	public void initGrid() {
 		DemoDB<Memo> db = new DemoDB<Memo>(new Memo());
-		memoList = db.getList(MemoActivity.this);
-		memoGridView.setAdapter(new MemoGridAdapter(MemoActivity.this));
+		memoList = db.getList(SomeToolsMemoActivity.this);
+		memoGridView.setAdapter(new MemoGridAdapter(SomeToolsMemoActivity.this));
 		memoGridView.setOnItemClickListener(new MemoGridItemClickListener());
 		memoGridView
 				.setOnItemLongClickListener(new MemoGridItemLongClickListener());
@@ -85,10 +85,10 @@ public class MemoActivity extends Activity {
 		public void onItemClick(AdapterView<?> arg0, View view, int index,
 				long rowIndex) {
 			Memo m = memoList.get(index);
-			Intent intent = new Intent(MemoActivity.this,
-					MemoOptionActivity.class);
+			Intent intent = new Intent(SomeToolsMemoActivity.this,
+					SomeToolsMemoOptionActivity.class);
 			intent.putExtras(m.toBundle());
-			intent.setFlags(MemoOptionActivity.FLAG_UPDATE);
+			intent.setFlags(SomeToolsMemoOptionActivity.FLAG_UPDATE);
 			startActivity(intent);
 		}
 
@@ -103,15 +103,15 @@ public class MemoActivity extends Activity {
 			DemoDB<Memo> db = new DemoDB<Memo>(new Memo());
 			try {
 				db.realRemove(memoList.get(index).get_id() + "",
-						MemoActivity.this);
-				Toast.makeText(MemoActivity.this,
+						SomeToolsMemoActivity.this);
+				Toast.makeText(SomeToolsMemoActivity.this,
 						"删除《" + memoList.get(index).getTitle() + "》成功！",
 						Toast.LENGTH_SHORT).show();
 				memoList.remove(index);
 				initGrid();
 			} catch (JSONException e) {
 				e.printStackTrace();
-				Toast.makeText(MemoActivity.this, "删除失败！", Toast.LENGTH_SHORT)
+				Toast.makeText(SomeToolsMemoActivity.this, "删除失败！", Toast.LENGTH_SHORT)
 						.show();
 			}
 			return false;
