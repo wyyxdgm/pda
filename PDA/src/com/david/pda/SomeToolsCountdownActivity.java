@@ -27,10 +27,19 @@ import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
 
 public class SomeToolsCountdownActivity extends Activity {
+	public final int COMPAREBY_YEAR = 3;
+	public final int COMPAREBY_MONTH = 2;
+	public final int COMPAREBY_WEEK = 1;
+	public final int COMPAREBY_DAY = 0;
+	// day,week,month,year
+	public final long[] compareBys = new long[] { 24 * 60 * 60 * 1000,
+			7 * 24 * 60 * 60 * 1000, 31 * 24 * 60 * 60 * 1000,
+			365 * 24 * 60 * 60 * 1000 };
 	Button add;
 	GridView countdownGridView;
 	ImageButton backward;
 	List<Countdown> countdownList;
+	private int compareBy = COMPAREBY_MONTH;// 默认
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +157,10 @@ public class SomeToolsCountdownActivity extends Activity {
 			builder.create().show();
 			return false;
 		}
+	}
+
+	public long getCompareBy() {
+		return compareBys[compareBy];
 	}
 
 	public List<Countdown> getData() {

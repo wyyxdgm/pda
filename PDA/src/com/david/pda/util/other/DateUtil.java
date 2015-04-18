@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 public class DateUtil {
 	public final static String yyyyMMdd = "yyyyMMdd";
@@ -54,4 +56,37 @@ public class DateUtil {
 		return new SimpleDateFormat(MM_dd_hh_mm).format(new Date(createTime));
 	}
 
+	// public static int getHoursFromNow(long mi) {
+	// return (int) ((mi - System.currentTimeMillis()) / (1000 * 60 * 60));
+	// }
+
+	public static int getSweepAngle(long endTime, long compareTime) {
+		return (int) (360 * ((endTime - System.currentTimeMillis()) / compareTime));
+	}
+	public static Paint getPaint(int angle) {
+		Paint p = new Paint();
+		if (angle > 360) {
+			p.setColor(Color.GRAY);
+			p.setStyle(Paint.Style.STROKE);
+		} else if (angle > 180) {
+			p.setColor(Color.YELLOW);
+			p.setStyle(Paint.Style.STROKE);
+		} else if (angle > 90) {
+			p.setARGB(50, 0, 0, 255);
+			p.setStyle(Paint.Style.FILL);
+		} else if (angle > 30) {
+			p.setARGB(50, 0, 0, 255);
+			p.setStyle(Paint.Style.FILL);
+		} else if (angle > 10) {
+			p.setARGB(100, 0, 255, 0);
+			p.setStyle(Paint.Style.FILL);
+		} else if (angle >= 0) {
+			p.setARGB(150, 255, 0, 0);
+			p.setStyle(Paint.Style.FILL);
+		} else {
+			p.setARGB(10, 0, 0, 0);
+			p.setStyle(Paint.Style.STROKE);
+		}
+		return p;
+	}
 }
