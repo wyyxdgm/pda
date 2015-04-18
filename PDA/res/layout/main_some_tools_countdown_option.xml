@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/main_some_tools_countdown_option_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#5555FF" >
+
+        <ImageButton
+            android:id="@+id/main_some_tools_countdown_option_topbar_backward"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="18dp"
+            android:background="@drawable/backward" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="更新便签"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="标题" />
+
+    <EditText
+        android:id="@+id/main_some_tools_countdown_option_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="备注" />
+
+    <EditText
+        android:id="@+id/main_some_tools_countdown_option_remarks"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:minLines="3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="倒计时时间" />
+
+    <DatePicker
+        android:id="@+id/main_some_tools_countdown_option_endTime"
+        android:layout_width="fill_parent"
+        android:layout_height="120dp" />
+
+    <ToggleButton
+        android:id="@+id/main_some_tools_countdown_option_isOn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/toggle_btn"
+        android:textOn=""
+        android:textOff=""
+        android:checked="true" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/main_some_tools_countdown_option_cancle_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="取消" />
+
+        <Button
+            android:id="@+id/main_some_tools_countdown_option_yes_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:text="確定" />
+    </LinearLayout>
+
+</LinearLayout>

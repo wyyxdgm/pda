@@ -15,6 +15,8 @@ public abstract class Model implements IModel<Model> {
 	public static final int FLAG_DELETED = 1;
 	public static final int FLAG_EXISTS = 2;
 	public static final String DELFLAG = "delFlag";
+	public static Integer IS_ON = 1;
+	public static final Integer IS_OFF = 0;
 
 	public abstract Uri CONTEN_URI();
 

@@ -1,12 +1,13 @@
 package com.david.pda.sqlite.model;
 
-import com.david.pda.sqlite.model.base.Model;
-import com.david.pda.sqlite.privider.ModelProvider;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
+
+import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.sqlite.privider.ModelProvider;
 
 public class Countdown extends Model {
 	public final static String TABLE_NAME = "countdown";
@@ -16,6 +17,15 @@ public class Countdown extends Model {
 	public final static String TITLE = "title";
 	public final static String REMARKS = "remarks";
 	public final static String ENDTIME = "endTime";
+	public final static String ISON = "isOn";
+
+	public Integer getIsOn() {
+		return null;
+	}
+
+	public void setIsOn(Integer isOn) {
+		this.isOn = isOn;
+	}
 
 	public static String CREATE_TABLE() {
 		StringBuffer sb = new StringBuffer();
@@ -34,6 +44,27 @@ public class Countdown extends Model {
 	private String remarks;
 	private Long endTime;
 	private Integer delFlag;
+	private Integer isOn;
+
+	public Countdown(Bundle b) {
+		this._id = b.getLong(_ID);
+		this.title = b.getString(TITLE);
+		this.remarks = b.getString(REMARKS);
+		this.endTime = b.getLong(ENDTIME);
+		this.delFlag = b.getInt(DELFLAG);
+		this.isOn = b.getInt(ISON);
+	}
+
+	public Bundle toBundle() {
+		Bundle b = new Bundle();
+		b.putLong(_ID, _id);
+		b.putString(TITLE, title);
+		b.putString(REMARKS, remarks);
+		b.putLong(ENDTIME, endTime);
+		b.putInt(DELFLAG, delFlag);
+		b.putInt(ISON, isOn);
+		return b;
+	}
 
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
@@ -57,6 +88,9 @@ public class Countdown extends Model {
 		this.remarks = c.getString(c.getColumnIndex(REMARKS));
 		this.endTime = c.getLong(c.getColumnIndex(ENDTIME));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
+	}
+
+	public Countdown() {
 	}
 
 	public Long get_id() {
@@ -103,8 +137,10 @@ public class Countdown extends Model {
 	public Uri CONTEN_URI() {
 		return CONTENT_URI;
 	}
+
 	@Override
 	public Model getInstance(Cursor c) {
 		return new Countdown(c);
 	}
+
 }

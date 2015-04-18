@@ -6,6 +6,9 @@ import org.json.JSONException;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -74,7 +77,8 @@ public class SomeToolsMemoActivity extends Activity {
 	public void initGrid() {
 		DemoDB<Memo> db = new DemoDB<Memo>(new Memo());
 		memoList = db.getList(SomeToolsMemoActivity.this);
-		memoGridView.setAdapter(new MemoGridAdapter(SomeToolsMemoActivity.this));
+		memoGridView
+				.setAdapter(new MemoGridAdapter(SomeToolsMemoActivity.this));
 		memoGridView.setOnItemClickListener(new MemoGridItemClickListener());
 		memoGridView
 				.setOnItemLongClickListener(new MemoGridItemLongClickListener());
@@ -95,25 +99,46 @@ public class SomeToolsMemoActivity extends Activity {
 	}
 
 	class MemoGridItemLongClickListener implements OnItemLongClickListener {
+		public int index;
 
 		@SuppressLint("ShowToast")
 		@Override
 		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-				int index, long arg3) {
-			DemoDB<Memo> db = new DemoDB<Memo>(new Memo());
-			try {
-				db.realRemove(memoList.get(index).get_id() + "",
-						SomeToolsMemoActivity.this);
-				Toast.makeText(SomeToolsMemoActivity.this,
-						"删除《" + memoList.get(index).getTitle() + "》成功！",
-						Toast.LENGTH_SHORT).show();
-				memoList.remove(index);
-				initGrid();
-			} catch (JSONException e) {
-				e.printStackTrace();
-				Toast.makeText(SomeToolsMemoActivity.this, "删除失败！", Toast.LENGTH_SHORT)
-						.show();
-			}
+				final int index, long arg3) {
+			AlertDialog.Builder builder = new Builder(
+					SomeToolsMemoActivity.this);
+			builder.setMessage("确认删除吗？");
+			builder.setTitle("提示");
+			builder.setPositiveButton("确认",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							DemoDB<Memo> db = new DemoDB<Memo>(new Memo());
+							try {
+								db.realRemove(
+										memoList.get(index).get_id() + "",
+										SomeToolsMemoActivity.this);
+								Toast.makeText(
+										SomeToolsMemoActivity.this,
+										"删除《" + memoList.get(index).getTitle()
+												+ "》成功！", Toast.LENGTH_SHORT)
+										.show();
+								memoList.remove(index);
+								initGrid();
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						}
+					});
+			builder.setNegativeButton("取消",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
+			builder.create().show();
 			return false;
 		}
 	}

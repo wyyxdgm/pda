@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="20dp"
+    android:background="@drawable/main_some_tools_memo_item_backgroud"
+    android:orientation="vertical"
+    android:padding="20dp" >
+
+    <TextView
+        android:id="@+id/some_tools_countdown_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp" />
+
+    <ToggleButton
+        android:id="@+id/some_tools_countdown_item_isOn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        android:button="@drawable/toggle_btn"
+        android:checked="false"
+        android:text=""
+        android:textOff=""
+        android:textOn="" />
+
+    <ImageView
+        android:id="@+id/some_tools_countdown_item_endTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+</RelativeLayout>

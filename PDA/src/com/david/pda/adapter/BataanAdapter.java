@@ -49,11 +49,9 @@ public class BataanAdapter extends BaseAdapter {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			row = inflater.inflate(R.layout.custom_row, parent, false);
-
 		} else {
 			row = convertView;
 		}
-
 		TextView titleTextView = (TextView) row.findViewById(R.id.textView1);
 		ImageView imageView = (ImageView) row.findViewById(R.id.imageView1);
 		titleTextView.setText(bataan[position]);

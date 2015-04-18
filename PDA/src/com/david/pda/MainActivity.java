@@ -134,7 +134,7 @@ public class MainActivity extends ActionBarActivity {
 		if (position == POSTION_SOME_TOOLS) {
 			ImageButton alarm = (ImageButton) v
 					.findViewById(R.id.main_some_tools_alarm);
-			ImageButton note = (ImageButton) v
+			ImageButton memo = (ImageButton) v
 					.findViewById(R.id.main_some_tools_note);
 			ImageButton weather = (ImageButton) v
 					.findViewById(R.id.main_some_tools_weather);
@@ -148,17 +148,24 @@ public class MainActivity extends ActionBarActivity {
 					Log.i(L.t, "weather");
 					Intent intent = new Intent(MainActivity.this,
 							SomeToolsWeatherActivity.class);
-					intent.setAction(LAYOUT_INFLATER_SERVICE);
 					startActivity(intent);
 				}
 			});
-			note.setOnClickListener(new OnClickListener() {
+			memo.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-					Log.i(L.t, "weather");
+					Log.i(L.t, "memo");
 					Intent intent = new Intent(MainActivity.this,
 							SomeToolsMemoActivity.class);
-					intent.setAction(LAYOUT_INFLATER_SERVICE);
+					startActivity(intent);
+				}
+			});
+			countdown.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					Log.i(L.t, "countdown");
+					Intent intent = new Intent(MainActivity.this,
+							SomeToolsCountdownActivity.class);
 					startActivity(intent);
 				}
 			});
@@ -175,7 +182,6 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-
 		super.onConfigurationChanged(newConfig);
 		drawerListener.onConfigurationChanged(newConfig);
 	}

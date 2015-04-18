@@ -28,7 +28,7 @@
             android:textSize="18sp" />
 
         <Button
-            android:id="@+id/addMemo"
+            android:id="@+id/addCountdown"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"

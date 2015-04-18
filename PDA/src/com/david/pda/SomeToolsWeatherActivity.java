@@ -104,9 +104,7 @@ public class SomeToolsWeatherActivity extends Activity {
 			defaultCity = "北京";
 			Toast.makeText(SomeToolsWeatherActivity.this,
 					"您还没有设置城市，将默认" + defaultCity, Toast.LENGTH_SHORT).show();
-			Editor e = sp.edit();
-			e.putString(DEFAULT_CITY, defaultCity);
-			e.commit();
+			sp.edit().putString(DEFAULT_CITY, defaultCity).commit();
 			getWeatherHandler.post(getWeatherTread);
 		} else {
 			if (defaultWeather == null) {
@@ -115,7 +113,11 @@ public class SomeToolsWeatherActivity extends Activity {
 				// 从文件读取
 				weatherResult = WeatherResultUtil.convertBean(defaultWeather);
 				showWeatherToView();
-				Toast.makeText(this, "刷新成功！", Toast.LENGTH_SHORT).show();
+				if (!DateUtil.formatYYYY_MM_DD(System.currentTimeMillis())
+						.equals(weatherResult.getDate())) {
+					Toast.makeText(this, "数据已经过时，请更新！", Toast.LENGTH_SHORT)
+							.show();
+				}
 			}
 		}
 	}
@@ -146,6 +148,11 @@ public class SomeToolsWeatherActivity extends Activity {
 			Log.i(L.t, "get city from remote");
 			defaultWeather = WeatherResultUtil.getWeatherStr(defaultCity);
 			Message m = getWeatherHandler.obtainMessage();
+			if (defaultWeather == null) {
+				m.arg1 = 0;
+			} else {
+				m.arg1 = 1;
+			}
 			getWeatherHandler.sendMessage(m);
 			getWeatherHandler.removeCallbacks(getWeatherTread);
 			refreshButton.clearAnimation();
@@ -158,9 +165,17 @@ public class SomeToolsWeatherActivity extends Activity {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			sp.edit().putString(DEFAULT_WEATHER, defaultWeather);
+			if (msg.arg1 == 0) {
+				Toast.makeText(SomeToolsWeatherActivity.this, "请确认网络是否已经连接！",
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
+			sp.edit().putString(DEFAULT_WEATHER, defaultWeather).commit();
+			sp.edit().putString(DEFAULT_CITY, defaultCity).commit();
 			weatherResult = WeatherResultUtil.convertBean(defaultWeather);
 			showWeatherToView();
+			Toast.makeText(SomeToolsWeatherActivity.this, "刷新成功！",
+					Toast.LENGTH_SHORT).show();
 		}
 	};
 
@@ -250,8 +265,6 @@ public class SomeToolsWeatherActivity extends Activity {
 			as.addAnimation(ra);
 			refreshButton.startAnimation(as);
 			getWeatherHandler.post(getWeatherTread);
-			Toast.makeText(SomeToolsWeatherActivity.this, "刷新成功！",
-					Toast.LENGTH_SHORT).show();
 		}
 	}
 
