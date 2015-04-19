@@ -1,8 +1,14 @@
 package com.david.pda;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.david.pda.adapter.BataanAdapter;
@@ -40,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
 	private Button firstBtn;
 	private Button secondBtn;
 	private FrameLayout mainContentLayout;
-	private int[] mainViewIds = new int[] { R.layout.activity_main,
+	private int[] mainViewIds = new int[] { R.layout.main_target_manage,
 			R.layout.main_affair_plan, R.layout.main_today_schedule,
 			R.layout.main_four_classes, R.layout.main_self_principle,
 			R.layout.main_some_tools, R.layout.main_system_setting };
@@ -104,8 +111,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 		Intent intent = getIntent();
-		if (intent.getFlags() != 0
-				&& intent.getFlags() >= POSTION_TARGET_MANAGE
+		if (intent.getFlags() >= POSTION_TARGET_MANAGE
 				&& intent.getFlags() <= POSTION_SYSTEM_SETTIONG) {
 			initMainView(intent.getFlags());
 		}
@@ -127,6 +133,12 @@ public class MainActivity extends ActionBarActivity {
 				mainContentLayout.addView(currentView);
 				initMainView(position, currentView);
 			}
+		} else {
+			LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View currentView = inflater.inflate(mainViewIds[position], null,
+					false);
+			mainContentLayout.addView(currentView);
+			initMainView(position, currentView);
 		}
 	}
 
@@ -178,19 +190,45 @@ public class MainActivity extends ActionBarActivity {
 				}
 			});
 		} else if (position == POSTION_AFFAIR_PLAN) {
-			
+
 		} else if (position == POSTION_FOUR_CLASSES) {
-			
+
 		} else if (position == POSTION_SELF_PRINCIPLE) {
-			
+
 		} else if (position == POSTION_SYSTEM_SETTIONG) {
-			
+
 		} else if (position == POSTION_TARGET_MANAGE) {
-			
+			initTargetManage(v);
 		} else if (position == POSTION_TODAY_SCHEDULE) {
-			
+
 		}
 		Log.i(L.t, "init view:" + v.getId() + " at " + position);
+	}
+
+	public void initTargetManage(View v) {
+		ActionBar bar = super.getActionBar();
+		bar.setIcon(R.drawable.ziwaixian);
+		ImageView imageView = (ImageView) v
+				.findViewById(R.id.main_target_imageView);
+		Bitmap bm = BitmapFactory.decodeResource(getResources(),
+				R.drawable.s400).copy(Bitmap.Config.ARGB_8888, true);
+		Canvas c = new Canvas(bm);
+		Paint p = new Paint();
+		p.setARGB(255, 255, 0, 255);
+		p.setStyle(Paint.Style.FILL_AND_STROKE);
+		c.drawArc(new RectF(10, 10, 390, 390), 100, 250, true, p);
+		p.setARGB(255, 0, 255, 0);
+		p.setStyle(Paint.Style.FILL_AND_STROKE);
+		c.drawArc(new RectF(10, 10, 390, 390), 260, 100, true, p);
+		imageView.setImageBitmap(bm);
+		imageView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(MainActivity.this,
+						TargetManageOptionActivity.class);
+				startActivity(intent);
+			}
+		});
 	}
 
 	// for ActionBarDrawerToggle

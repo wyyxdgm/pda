@@ -7,36 +7,6 @@
         android:id="@+id/mainContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-        <LinearLayout
-            android:id="@+id/drawerButtonGroup1"
-            style="?android:attr/buttonBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#FFFFFF"
-            android:orientation="horizontal" >
-
-            <Button
-                android:id="@+id/main_btn11"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:text="@string/main_btn_exit"
-                android:textSize="15sp" >
-            </Button>
-
-            <Button
-                android:id="@+id/main_btn21"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:text="@string/main_btn_login"
-                android:textSize="15sp" >
-            </Button>
-        </LinearLayout>
     </FrameLayout>
 
     <LinearLayout

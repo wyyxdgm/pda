@@ -28,6 +28,12 @@ public class Target extends Model {
 	private Integer scale;
 	private Integer delFlag;
 
+	public Target(String name, Integer scale) {
+		this.name = name;
+		this.scale = scale;
+		this.delFlag = Model.FLAG_EXISTS;
+	}
+
 	public static String CREATE_TABLE() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("CREATE TABLE ");

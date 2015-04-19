@@ -22,8 +22,8 @@ public class WelcomeActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_welcome);
 		welcomeImageView = (ImageView) findViewById(R.id.welcome_welcome_image);
 		welcomeImageView.setOnTouchListener(new OnTouchListener() {
@@ -38,7 +38,7 @@ public class WelcomeActivity extends Activity {
 				return false;
 			}
 		});
-		//initHandler.postDelayed(initThread, 3000);
+		// initHandler.postDelayed(initThread, 3000);
 		initHandler.post(initThread);
 	}
 
@@ -47,7 +47,7 @@ public class WelcomeActivity extends Activity {
 		public void run() {
 			Log.i(L.t, "has delay 3000 to init app,now start");
 			Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-			intent.setFlags(5);
+			intent.setFlags(MainActivity.POSTION_TARGET_MANAGE);
 			startActivity(intent);
 			WelcomeActivity.this.finish();
 		}
