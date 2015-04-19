@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 
 import com.david.pda.util.other.DateUtil;
+import com.david.pda.weather.model.util.L;
 
 public class DateTimePicker extends Activity {
 	public static final String TIME = "time";
@@ -60,8 +62,9 @@ public class DateTimePicker extends Activity {
 		timePicker.setIs24HourView(true);
 		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
 			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-				DateTimePicker.this.hour = hourOfDay;
+				hour = hourOfDay;
 				DateTimePicker.this.minute = minute;
+				Log.i(L.t, hour + "");
 				initTimeToView();
 			}
 		});

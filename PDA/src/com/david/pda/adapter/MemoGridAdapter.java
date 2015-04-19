@@ -70,7 +70,7 @@ public class MemoGridAdapter extends BaseAdapter {
 			contentView.setText(memo.getContent());
 		}
 		createTimeView
-				.setText(DateUtil.formatMM_dd_hh_mm(memo.getCreateTime()));
+				.setText(DateUtil.formatMM_dd_HH_mm(memo.getCreateTime()));
 		if (memo.getFlag() == 1) {
 			flagView.setCheckMarkDrawable(R.drawable.flag_mark_red);
 			flagView.setVisibility(View.VISIBLE);

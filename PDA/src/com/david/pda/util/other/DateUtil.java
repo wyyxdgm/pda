@@ -15,12 +15,12 @@ public class DateUtil {
 	public final static String yyyy_MM_dd = "yyyy-MM-dd";
 	public final static String yyyy年MM月dd日 = "yyyy年MM月dd日";
 	public final static String yyyy年M月d日 = "yyyy年M月d日";
-	public final static String yyyy_MM_dd_hh_mm_ss = "yyyy-MM-dd hh:mm:ss";
-	public final static String yyyy_MM_dd_hh_mm = "yyyy-MM-dd hh:mm";
-	public final static String MM_dd_hh_mm = "MM-dd hh:mm";
-	public final static String hh_mm_ss = "hh:mm:ss";
-	public final static String hh_mm = "hh:mm";
-	public final static String h时_m分 = "h时m分";
+	public final static String yyyy_MM_dd_HH_mm_ss = "yyyy-MM-dd HH:mm:ss";
+	public final static String yyyy_MM_dd_HH_mm = "yyyy-MM-dd HH:mm";
+	public final static String MM_dd_HH_mm = "MM-dd HH:mm";
+	public final static String HH_mm_ss = "HH:mm:ss";
+	public final static String HH_mm = "HH:mm";
+	public final static String H时_m分 = "H时m分";
 
 	@SuppressLint("SimpleDateFormat")
 	public static String formatYYYY_MM_DD(long mi) {
@@ -29,8 +29,8 @@ public class DateUtil {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static String formatyyyy_MM_dd_hh_mm_ss(long mi) {
-		SimpleDateFormat sdf = new SimpleDateFormat(yyyy_MM_dd_hh_mm_ss);
+	public static String formatyyyy_MM_dd_HH_mm_ss(long mi) {
+		SimpleDateFormat sdf = new SimpleDateFormat(yyyy_MM_dd_HH_mm_ss);
 		return sdf.format(new Date(mi));
 	}
 
@@ -56,13 +56,13 @@ public class DateUtil {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static String formatMM_dd_hh_mm(Long createTime) {
-		return new SimpleDateFormat(MM_dd_hh_mm).format(new Date(createTime));
+	public static String formatMM_dd_HH_mm(Long createTime) {
+		return new SimpleDateFormat(MM_dd_HH_mm).format(new Date(createTime));
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static String formatyyyy_MM_dd_hh_mm(Long createTime) {
-		return new SimpleDateFormat(yyyy_MM_dd_hh_mm).format(new Date(
+	public static String formatyyyy_MM_dd_HH_mm(Long createTime) {
+		return new SimpleDateFormat(yyyy_MM_dd_HH_mm).format(new Date(
 				createTime));
 	}
 
@@ -100,7 +100,7 @@ public class DateUtil {
 			p.setARGB(150, 205, 50, 50);
 			p.setStyle(Paint.Style.FILL);
 		} else if (angle > 20) {
-			p.setARGB(200, 230, 100, 100);
+			p.setARGB(200, 250, 10, 10);
 			p.setStyle(Paint.Style.FILL);
 		} else if (angle >= 0) {
 			p.setARGB(255, 255, 0, 0);
@@ -113,10 +113,10 @@ public class DateUtil {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static Long parse(String text, String yyyyMmDdHhMm) {
-		if (yyyyMmDdHhMm != null && !yyyyMmDdHhMm.equals("")) {
+	public static Long parse(String text, String yyyyMmDdHHMm) {
+		if (yyyyMmDdHHMm != null && !yyyyMmDdHHMm.equals("")) {
 			try {
-				return new SimpleDateFormat(yyyyMmDdHhMm).parse(text).getTime();
+				return new SimpleDateFormat(yyyyMmDdHHMm).parse(text).getTime();
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

@@ -9,6 +9,7 @@ import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.privider.ModelProvider;
 
 public class Alarm extends Model {
+	private static final long serialVersionUID = 1L;
 	public final static String TABLE_NAME = "alarm";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
 			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);

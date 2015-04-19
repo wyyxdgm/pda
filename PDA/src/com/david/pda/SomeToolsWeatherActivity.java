@@ -64,6 +64,9 @@ public class SomeToolsWeatherActivity extends Activity {
 	private String defaultWeather = "";
 	SharedPreferences sp;
 	TextView title;
+	private int[] imageIds = new int[] { R.drawable.chuanyi, R.drawable.xiche,
+			R.drawable.lvyou, R.drawable.ganmao, R.drawable.yundong,
+			R.drawable.ziwaixian };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -207,7 +210,7 @@ public class SomeToolsWeatherActivity extends Activity {
 		Map<String, Object> item = null;
 		for (int i = 0; i < indexs.length; i++) {
 			item = new HashMap<String, Object>();
-			item.put("image", R.drawable._main_some_tools_weather);
+			item.put("image", imageIds[i]);
 			item.put("text", indexs[i].getTitle() + ":" + indexs[i].getZs());
 			arryList.add(item);
 			Log.i(L.t, item.get("image") + ";" + item.get("text"));

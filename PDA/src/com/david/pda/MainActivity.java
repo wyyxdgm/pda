@@ -118,7 +118,7 @@ public class MainActivity extends ActionBarActivity {
 						+ mainContentLayout.getChildAt(0).getId());
 				Log.i(L.t, "mainViewIds[" + position + "]"
 						+ mainViewIds[position]);
-				// current view is not witch selected
+				// current view is not which is selected
 				// should be replaced
 				LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				View currentView = inflater.inflate(mainViewIds[position],
@@ -169,6 +169,26 @@ public class MainActivity extends ActionBarActivity {
 					startActivity(intent);
 				}
 			});
+			calendar.setOnClickListener(new OnClickListener() {
+				public void onClick(View arg0) {
+					Log.i(L.t, "calendar");
+					Intent intent = new Intent(MainActivity.this,
+							SomeToolsCalendarActivity.class);
+					startActivity(intent);
+				}
+			});
+		} else if (position == POSTION_AFFAIR_PLAN) {
+			
+		} else if (position == POSTION_FOUR_CLASSES) {
+			
+		} else if (position == POSTION_SELF_PRINCIPLE) {
+			
+		} else if (position == POSTION_SYSTEM_SETTIONG) {
+			
+		} else if (position == POSTION_TARGET_MANAGE) {
+			
+		} else if (position == POSTION_TODAY_SCHEDULE) {
+			
 		}
 		Log.i(L.t, "init view:" + v.getId() + " at " + position);
 	}

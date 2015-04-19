@@ -97,7 +97,7 @@ public class SomeToolsCountdownOptionActivity extends Activity {
 			Calendar c = Calendar.getInstance();
 			c.setTimeInMillis(countdown.getEndTime() != null ? countdown
 					.getEndTime() : System.currentTimeMillis());
-			endDate.setText(DateUtil.formatyyyy_MM_dd_hh_mm(countdown
+			endDate.setText(DateUtil.formatyyyy_MM_dd_HH_mm(countdown
 					.getEndTime()));
 		} else {
 			this.countdown = new Countdown();
@@ -115,7 +115,7 @@ public class SomeToolsCountdownOptionActivity extends Activity {
 		countdown.setDelFlag(Model.FLAG_EXISTS);
 		if (!endDate.getText().toString().equals(""))
 			countdown.setEndTime(DateUtil.parse(endDate.getText().toString(),
-					DateUtil.yyyy_MM_dd_hh_mm));
+					DateUtil.yyyy_MM_dd_HH_mm));
 	}
 
 	class UpdateListenr implements OnClickListener {
@@ -140,7 +140,7 @@ public class SomeToolsCountdownOptionActivity extends Activity {
 		public void onClick(View arg0) {
 			Intent i = DateTimePicker.buildIntentContainsBundle(
 					SomeToolsCountdownOptionActivity.this, true,
-					DateUtil.yyyy_MM_dd_hh_mm);
+					DateUtil.yyyy_MM_dd_HH_mm);
 			Bundle b = new Bundle();
 			FillCountdownWidthView();
 			b.putBundle("countdown",
