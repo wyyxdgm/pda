@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 public class CycleContent extends Model {
+	private static final long serialVersionUID = 36361417733489344L;
 	public static final String TABLE_NAME = "cyclecontent";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
 			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);

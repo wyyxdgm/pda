@@ -10,6 +10,7 @@ import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.privider.ModelProvider;
 
 public class Countdown extends Model {
+	private static final long serialVersionUID = 169597650930460847L;
 	public final static String TABLE_NAME = "countdown";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
 			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
@@ -47,22 +48,34 @@ public class Countdown extends Model {
 	private Integer isOn;
 
 	public Countdown(Bundle b) {
-		this._id = b.getLong(_ID);
-		this.title = b.getString(TITLE);
-		this.remarks = b.getString(REMARKS);
-		this.endTime = b.getLong(ENDTIME);
-		this.delFlag = b.getInt(DELFLAG);
-		this.isOn = b.getInt(ISON);
+		if (b.containsKey(_ID))
+			this._id = b.getLong(_ID);
+		if (b.containsKey(TITLE))
+			this.title = b.getString(TITLE);
+		if (b.containsKey(REMARKS))
+			this.remarks = b.getString(REMARKS);
+		if (b.containsKey(ENDTIME))
+			this.endTime = b.getLong(ENDTIME);
+		if (b.containsKey(DELFLAG))
+			this.delFlag = b.getInt(DELFLAG);
+		if (b.containsKey(ISON))
+			this.isOn = b.getInt(ISON);
 	}
 
 	public Bundle toBundle() {
 		Bundle b = new Bundle();
-		b.putLong(_ID, _id);
-		b.putString(TITLE, title);
-		b.putString(REMARKS, remarks);
-		b.putLong(ENDTIME, endTime);
-		b.putInt(DELFLAG, delFlag);
-		b.putInt(ISON, isOn);
+		if (_id != null)
+			b.putLong(_ID, _id);
+		if (title != null)
+			b.putString(TITLE, title);
+		if (remarks != null)
+			b.putString(REMARKS, remarks);
+		if (endTime != null)
+			b.putLong(ENDTIME, endTime);
+		if (delFlag != null)
+			b.putInt(DELFLAG, delFlag);
+		if (isOn != null)
+			b.putInt(ISON, isOn);
 		return b;
 	}
 
@@ -71,7 +84,7 @@ public class Countdown extends Model {
 		if (_id != null)
 			cv.put(_ID, _id);
 		if (delFlag != null)
-			cv.put(_ID, _id);
+			cv.put(DELFLAG, delFlag);
 		if (!TextUtils.isEmpty(title))
 			cv.put(TITLE, title);
 		if (!TextUtils.isEmpty(remarks))

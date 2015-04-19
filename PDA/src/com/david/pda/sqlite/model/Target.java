@@ -16,6 +16,7 @@ import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.privider.ModelProvider;
 
 public class Target extends Model {
+	private static final long serialVersionUID = 117894922636906754L;
 	public static final String TABLE_NAME = "target";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
 			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);

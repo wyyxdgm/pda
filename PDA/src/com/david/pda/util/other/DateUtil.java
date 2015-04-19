@@ -1,11 +1,15 @@
 package com.david.pda.util.other;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
+
+import com.david.pda.weather.model.util.L;
 
 public class DateUtil {
 	public final static String yyyyMMdd = "yyyyMMdd";
@@ -13,6 +17,7 @@ public class DateUtil {
 	public final static String yyyy年MM月dd日 = "yyyy年MM月dd日";
 	public final static String yyyy年M月d日 = "yyyy年M月d日";
 	public final static String yyyy_MM_dd_hh_mm_ss = "yyyy-MM-dd hh:mm:ss";
+	public final static String yyyy_MM_dd_hh_mm = "yyyy-MM-dd hh:mm";
 	public final static String MM_dd_hh_mm = "MM-dd hh:mm";
 	public final static String hh_mm_ss = "hh:mm:ss";
 	public final static String hh_mm = "hh:mm";
@@ -56,13 +61,27 @@ public class DateUtil {
 		return new SimpleDateFormat(MM_dd_hh_mm).format(new Date(createTime));
 	}
 
+	@SuppressLint("SimpleDateFormat")
+	public static String formatyyyy_MM_dd_hh_mm(Long createTime) {
+		return new SimpleDateFormat(yyyy_MM_dd_hh_mm).format(new Date(
+				createTime));
+	}
+
 	// public static int getHoursFromNow(long mi) {
 	// return (int) ((mi - System.currentTimeMillis()) / (1000 * 60 * 60));
-	// }
+	// }1471228928
 
 	public static int getSweepAngle(long endTime, long compareTime) {
-		return (int) (360 * ((endTime - System.currentTimeMillis()) / compareTime));
+		Log.i(L.t, "endTime:" + endTime);
+		Log.i(L.t, (endTime - System.currentTimeMillis()) / (1000 * 60 * 60)
+				+ "");
+		long gap = endTime - System.currentTimeMillis();
+		Log.i("gap:", gap + "");
+		Log.i("gap day:", gap / (1000 * 60 * 60 * 24) + "");
+		Log.i("compareTime / gap:", "" + (compareTime / gap));
+		return (int) (360 * (1.0 / (compareTime / gap)));
 	}
+
 	public static Paint getPaint(int angle) {
 		Paint p = new Paint();
 		if (angle > 360) {
@@ -88,5 +107,17 @@ public class DateUtil {
 			p.setStyle(Paint.Style.STROKE);
 		}
 		return p;
+	}
+
+	@SuppressLint("SimpleDateFormat")
+	public static Long parse(String text, String yyyyMmDdHhMm) {
+		if (yyyyMmDdHhMm != null && !yyyyMmDdHhMm.equals("")) {
+			try {
+				return new SimpleDateFormat(yyyyMmDdHhMm).parse(text).getTime();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return new Date().getTime();
 	}
 }

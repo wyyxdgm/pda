@@ -9,6 +9,10 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 public class Plan extends Model {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2583549883517195823L;
 	public static final String TABLE_NAME = "plan";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
 			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);

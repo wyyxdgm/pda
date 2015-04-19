@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 public class CycleType extends Model {
+	private static final long serialVersionUID = -9000521813963145217L;
 	public static final String TABLE_NAME = "cycletype";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
 			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);

@@ -47,7 +47,7 @@ public class Alarm extends Model {
 		if (_id != null)
 			cv.put(_ID, _id);
 		if (delFlag != null)
-			cv.put(_ID, _id);
+			cv.put(DELFLAG, delFlag);
 		if (!TextUtils.isEmpty(title))
 			cv.put(TITLE, title);
 		if (!TextUtils.isEmpty(remarks))

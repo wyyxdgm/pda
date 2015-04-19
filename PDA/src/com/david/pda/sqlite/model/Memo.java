@@ -10,6 +10,7 @@ import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.privider.ModelProvider;
 
 public class Memo extends Model {
+	private static final long serialVersionUID = -70014229282323330L;
 	public static final String TABLE_NAME = "memo";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
 			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
@@ -44,7 +45,7 @@ public class Memo extends Model {
 		if (_id != null)
 			cv.put(_ID, _id);
 		if (delFlag != null)
-			cv.put(_ID, _id);
+			cv.put(DELFLAG, delFlag);
 		if (!TextUtils.isEmpty(title))
 			cv.put(TITLE, title);
 		if (!TextUtils.isEmpty(content))

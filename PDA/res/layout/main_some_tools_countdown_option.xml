@@ -53,10 +53,11 @@
         android:layout_height="wrap_content"
         android:text="倒计时时间" />
 
-    <DatePicker
+    <EditText
         android:id="@+id/main_some_tools_countdown_option_endTime"
         android:layout_width="fill_parent"
-        android:layout_height="120dp" />
+        android:layout_height="wrap_content"
+        android:editable="false" />
 
     <ToggleButton
         android:id="@+id/main_some_tools_countdown_option_isOn"
@@ -64,9 +65,9 @@
         android:layout_height="40dp"
         android:layout_margin="20dp"
         android:background="@drawable/toggle_btn"
-        android:textOn=""
+        android:checked="true"
         android:textOff=""
-        android:checked="true" />
+        android:textOn="" />
 
     <LinearLayout
         android:layout_width="fill_parent"

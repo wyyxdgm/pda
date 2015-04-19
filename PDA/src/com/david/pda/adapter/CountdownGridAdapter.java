@@ -6,22 +6,22 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.david.pda.R;
 import com.david.pda.SomeToolsCountdownActivity;
 import com.david.pda.sqlite.model.Countdown;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.util.other.DateUtil;
+import com.david.pda.weather.model.util.L;
 
 public class CountdownGridAdapter extends BaseAdapter {
 	private Context context;
@@ -60,7 +60,7 @@ public class CountdownGridAdapter extends BaseAdapter {
 		}
 		TextView titleView = (TextView) row
 				.findViewById(R.id.some_tools_countdown_item_title);
-		ToggleButton flagView = (ToggleButton) row
+		ImageView flagView = (ImageView) row
 				.findViewById(R.id.some_tools_countdown_item_isOn);
 		ImageView endTime = (ImageView) row
 				.findViewById(R.id.some_tools_countdown_item_endTime);
@@ -71,14 +71,16 @@ public class CountdownGridAdapter extends BaseAdapter {
 		} else {
 			titleView.setText(countdown.getTitle());
 		}
-		flagView.setChecked(countdown.getIsOn() == Model.IS_NO);
+		flagView.setBackgroundResource(countdown.getIsOn() == Model.IS_NO ? R.drawable.radio_button_on
+				: R.drawable.radio_button_off);
 		Bitmap bm = BitmapFactory.decodeResource(context.getResources(),
 				R.drawable.s200).copy(Bitmap.Config.ARGB_8888, true);
 		Canvas c = new Canvas(bm);
 		int angle = DateUtil.getSweepAngle(countdown.getEndTime(),
 				((SomeToolsCountdownActivity) context).getCompareBy());
 		Paint p = DateUtil.getPaint(angle);
-		c.drawArc(new RectF(10, 10, 190, 190), 100, angle % 360, true, p);
+		Log.i(L.t, angle + "");
+		c.drawArc(new RectF(10, 10, 190, 190), 100, 360-angle, true, p);
 		c.save();
 		endTime.setImageBitmap(bm);
 		return row;

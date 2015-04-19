@@ -1,5 +1,6 @@
 package com.david.pda.sqlite.model.base;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -9,7 +10,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 
-public abstract class Model implements IModel<Model> {
+public abstract class Model implements IModel<Model>, Serializable {
+	private static final long serialVersionUID = 2911321711627520545L;
 	public static final Integer IS_YES = 1;
 	public static final Integer IS_NO = 0;
 	public static final int FLAG_DELETED = 1;

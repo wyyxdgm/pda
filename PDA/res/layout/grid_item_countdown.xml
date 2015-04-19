@@ -3,9 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:layout_margin="20dp"
-    android:background="@drawable/main_some_tools_memo_item_backgroud"
-    android:orientation="vertical"
-    android:padding="20dp" >
+    android:padding="20dp"
+    android:textDirection="ltr" >
 
     <TextView
         android:id="@+id/some_tools_countdown_item_title"
@@ -14,24 +13,19 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp" />
 
-    <ToggleButton
+    <ImageView
         android:id="@+id/some_tools_countdown_item_isOn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_gravity="center_horizontal"
-        android:background="@android:color/transparent"
-        android:button="@drawable/toggle_btn"
-        android:checked="false"
-        android:text=""
-        android:textOff=""
-        android:textOn="" />
+        android:layout_marginRight="0dp"
+        android:background="@drawable/radio_button_on" />
 
     <ImageView
         android:id="@+id/some_tools_countdown_item_endTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200px"
+        android:layout_height="200px"
         android:layout_centerInParent="true" />
 
 </RelativeLayout>

@@ -39,7 +39,7 @@ public class SomeToolsCountdownActivity extends Activity {
 	GridView countdownGridView;
 	ImageButton backward;
 	List<Countdown> countdownList;
-	private int compareBy = COMPAREBY_MONTH;// 默认
+	private int compareBy = COMPAREBY_YEAR;// 默认
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,7 @@ public class SomeToolsCountdownActivity extends Activity {
 		countdownGridView = (GridView) findViewById(R.id.main_some_tools_countdown_grid);
 		add = (Button) findViewById(R.id.addCountdown);
 		backward = (ImageButton) findViewById(R.id.main_some_tools_countdown_topbar_backward);
+		initGrid();
 		Bind.bindReturn(backward, this, MainActivity.class,
 				MainActivity.POSTION_SOME_TOOLS);
 		add.setOnClickListener(new OnClickListener() {
@@ -55,12 +56,14 @@ public class SomeToolsCountdownActivity extends Activity {
 			public void onClick(View arg0) {
 				Intent intent = new Intent(SomeToolsCountdownActivity.this,
 						SomeToolsCountdownOptionActivity.class);
+				intent.setAction(Intent.ACTION_EDIT);
+				intent.putExtra("from",
+						SomeToolsCountdownActivity.class.getName());
 				intent.setFlags(SomeToolsCountdownOptionActivity.FLAG_ADD);
 				startActivity(intent);
 			}
 		});
 		resolveIntent();
-		initGrid();
 	}
 
 	@SuppressLint("ShowToast")
@@ -107,6 +110,7 @@ public class SomeToolsCountdownActivity extends Activity {
 			Intent intent = new Intent(SomeToolsCountdownActivity.this,
 					SomeToolsCountdownOptionActivity.class);
 			intent.putExtras(m.toBundle());
+			intent.putExtra("from", SomeToolsCountdownActivity.class.getName());
 			intent.setFlags(SomeToolsCountdownOptionActivity.FLAG_UPDATE);
 			startActivity(intent);
 		}

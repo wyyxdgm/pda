@@ -9,6 +9,7 @@ import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.privider.ModelProvider;
 
 public class Principal extends Model {
+	private static final long serialVersionUID = 1034701550127380262L;
 	public static final String TABLE_NAME = "principal";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
 			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
@@ -43,7 +44,7 @@ public class Principal extends Model {
 		if (_id != null)
 			cv.put(_ID, _id);
 		if (delFlag != null)
-			cv.put(_ID, _id);
+			cv.put(DELFLAG, delFlag);
 		if (!TextUtils.isEmpty(title))
 			cv.put(TITLE, title);
 		if (!TextUtils.isEmpty(remarks))
