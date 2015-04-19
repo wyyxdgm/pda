@@ -22,6 +22,7 @@ import com.david.pda.sqlite.model.Memo;
 import com.david.pda.sqlite.model.Plan;
 import com.david.pda.sqlite.model.Principal;
 import com.david.pda.sqlite.model.Target;
+import com.david.pda.sqlite.model.util.DBHelper;
 
 public class ModelProvider extends ContentProvider {
 	public static final String AUTHORITY = "com.david.pda.model";
