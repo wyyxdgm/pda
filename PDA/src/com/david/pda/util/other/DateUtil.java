@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
@@ -76,6 +75,9 @@ public class DateUtil {
 		Log.i(L.t, (endTime - System.currentTimeMillis()) / (1000 * 60 * 60)
 				+ "");
 		long gap = endTime - System.currentTimeMillis();
+		if(gap<0){
+			return -360;
+		}
 		Log.i(L.t, "gap:" + gap);
 		Log.i(L.t, "compare day:" + (1.0 * compareTime / (1000 * 60 * 60 * 24)));
 		Log.i(L.t, "gap day:" + (1.0 * gap / (1000 * 60 * 60 * 24)));
@@ -86,24 +88,24 @@ public class DateUtil {
 	public static Paint getPaint(int angle) {
 		Paint p = new Paint();
 		if (angle > 360) {
-			p.setColor(Color.GRAY);
-			p.setStyle(Paint.Style.STROKE);
+			p.setARGB(30, 5, 55, 5);
+			p.setStyle(Paint.Style.FILL);
 		} else if (angle > 180) {
-			p.setColor(Color.YELLOW);
-			p.setStyle(Paint.Style.STROKE);
+			p.setARGB(50, 0, 50, 255);
+			p.setStyle(Paint.Style.FILL);
 		} else if (angle > 90) {
-			p.setARGB(50, 0, 0, 255);
+			p.setARGB(150, 250, 215, 0);
 			p.setStyle(Paint.Style.FILL);
-		} else if (angle > 30) {
-			p.setARGB(50, 0, 0, 255);
+		} else if (angle > 50) {
+			p.setARGB(150, 205, 50, 50);
 			p.setStyle(Paint.Style.FILL);
-		} else if (angle > 10) {
-			p.setARGB(100, 0, 255, 0);
+		} else if (angle > 20) {
+			p.setARGB(200, 230, 100, 100);
 			p.setStyle(Paint.Style.FILL);
 		} else if (angle >= 0) {
-			p.setARGB(150, 255, 0, 0);
+			p.setARGB(255, 255, 0, 0);
 			p.setStyle(Paint.Style.FILL);
-		} else {
+		} else {// 比当前早，kill it shuld be
 			p.setARGB(10, 0, 0, 0);
 			p.setStyle(Paint.Style.STROKE);
 		}

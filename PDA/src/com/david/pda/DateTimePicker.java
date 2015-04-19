@@ -62,6 +62,7 @@ public class DateTimePicker extends Activity {
 			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 				DateTimePicker.this.hour = hourOfDay;
 				DateTimePicker.this.minute = minute;
+				initTimeToView();
 			}
 		});
 		confirmBtn.setOnClickListener(new OnClickListener() {
