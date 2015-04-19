@@ -71,7 +71,9 @@ public class CountdownGridAdapter extends BaseAdapter {
 		} else {
 			titleView.setText(countdown.getTitle());
 		}
-		flagView.setBackgroundResource(countdown.getIsOn() == Model.IS_NO ? R.drawable.radio_button_on
+		Log.i(L.t, "isOn:" + countdown.getIsOn());
+		flagView.setBackgroundResource(countdown.getIsOn() != null
+				&& countdown.getIsOn() == Model.IS_ON ? R.drawable.radio_button_on
 				: R.drawable.radio_button_off);
 		Bitmap bm = BitmapFactory.decodeResource(context.getResources(),
 				R.drawable.s200).copy(Bitmap.Config.ARGB_8888, true);
@@ -80,7 +82,7 @@ public class CountdownGridAdapter extends BaseAdapter {
 				((SomeToolsCountdownActivity) context).getCompareBy());
 		Paint p = DateUtil.getPaint(angle);
 		Log.i(L.t, angle + "");
-		c.drawArc(new RectF(10, 10, 190, 190), 100, 360-angle, true, p);
+		c.drawArc(new RectF(10, 10, 190, 190), 100, 360 - angle, true, p);
 		c.save();
 		endTime.setImageBitmap(bm);
 		return row;

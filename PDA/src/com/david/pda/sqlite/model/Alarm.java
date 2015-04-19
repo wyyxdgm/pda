@@ -27,9 +27,9 @@ public class Alarm extends Model {
 		sb.append(" INTEGER primary key autoincrement,");
 		sb.append(TITLE).append(" TEXT,");
 		sb.append(REMARKS).append(" TEXT,");
-		sb.append(ENDTIME).append(" LONG,");
+		sb.append(ENDTIME).append(" TEXT,");
 		sb.append(CYCLETYPE).append(" INT,");
-		sb.append(CYCLECONTENT).append(" LONG,");
+		sb.append(CYCLECONTENT).append(" TEXT,");
 		sb.append(DELFLAG).append(" INT)");
 		return sb.toString();
 	}

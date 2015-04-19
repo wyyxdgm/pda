@@ -16,9 +16,12 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.david.pda.adapter.CountdownGridAdapter;
@@ -32,13 +35,15 @@ public class SomeToolsCountdownActivity extends Activity {
 	public final int COMPAREBY_WEEK = 1;
 	public final int COMPAREBY_DAY = 0;
 	// day,week,month,year
-	public final long[] compareBys = new long[] { 24 * 60 * 60 * 1000,
-			7 * 24 * 60 * 60 * 1000, 31 * 24 * 60 * 60 * 1000,
-			365 * 24 * 60 * 60 * 1000 };
+	public final long[] compareBys = new long[] { 24l * 60l * 60l * 1000l,
+			7l * 24l * 60l * 60l * 1000l, 31l * 24l * 60l * 60l * 1000l,
+			365l * 24l * 60l * 60l * 1000l };
+	private String[] desc = new String[] { "一天", "一周", "一个月", "一年" };
 	Button add;
 	GridView countdownGridView;
 	ImageButton backward;
 	List<Countdown> countdownList;
+	Spinner compareByListView;
 	private int compareBy = COMPAREBY_YEAR;// 默认
 
 	@Override
@@ -48,7 +53,30 @@ public class SomeToolsCountdownActivity extends Activity {
 		countdownGridView = (GridView) findViewById(R.id.main_some_tools_countdown_grid);
 		add = (Button) findViewById(R.id.addCountdown);
 		backward = (ImageButton) findViewById(R.id.main_some_tools_countdown_topbar_backward);
-		initGrid();
+		compareByListView = (Spinner) findViewById(R.id.main_some_tools_countdown_changeCompareBy);
+		ArrayAdapter<String> a = new ArrayAdapter<String>(
+				SomeToolsCountdownActivity.this,
+				android.R.layout.simple_spinner_item, desc);
+		a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		compareByListView.setAdapter(a);
+		compareByListView.setSelection(this.compareBy);
+		compareByListView
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+					@Override
+					public void onItemSelected(AdapterView<?> arg0, View arg1,
+							int childPosition, long arg3) {
+						SomeToolsCountdownActivity.this
+								.setCompareByAndRefresh(childPosition);
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+		;
+		refresh();
 		Bind.bindReturn(backward, this, MainActivity.class,
 				MainActivity.POSTION_SOME_TOOLS);
 		add.setOnClickListener(new OnClickListener() {
@@ -165,6 +193,15 @@ public class SomeToolsCountdownActivity extends Activity {
 
 	public long getCompareBy() {
 		return compareBys[compareBy];
+	}
+
+	public void refresh() {
+		initGrid();
+	}
+
+	public void setCompareByAndRefresh(int compareBy) {
+		this.compareBy = compareBy;
+		refresh();
 	}
 
 	public List<Countdown> getData() {

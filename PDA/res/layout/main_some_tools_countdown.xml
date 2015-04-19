@@ -35,8 +35,14 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="18dp"
             android:background="@drawable/plus" />
-    </RelativeLayout>
 
+        <Spinner
+            android:id="@+id/main_some_tools_countdown_changeCompareBy"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/addCountdown" />
+    </RelativeLayout>
 
     <GridView
         android:id="@+id/main_some_tools_countdown_grid"

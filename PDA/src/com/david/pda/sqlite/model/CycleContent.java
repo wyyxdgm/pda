@@ -189,10 +189,12 @@ public class CycleContent extends Model {
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}
+
 	@Override
 	public Uri CONTEN_URI() {
 		return CONTENT_URI;
 	}
+
 	@Override
 	public Model getInstance(Cursor c) {
 		return new CycleContent(c);

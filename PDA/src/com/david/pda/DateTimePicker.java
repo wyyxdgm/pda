@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 
-import com.david.pda.sqlite.model.Countdown;
 import com.david.pda.util.other.DateUtil;
 
 public class DateTimePicker extends Activity {
@@ -45,23 +44,24 @@ public class DateTimePicker extends Activity {
 		year = calendar.get(Calendar.YEAR);
 		month = calendar.get(Calendar.MONTH);
 		day = calendar.get(Calendar.DAY_OF_MONTH);
+		this.hour = calendar.get(Calendar.HOUR_OF_DAY);
+		this.minute = calendar.get(Calendar.MINUTE);
+		initTimeToView();
 		datePicker.init(year, month, day, new OnDateChangedListener() {
 			public void onDateChanged(DatePicker view, int year,
 					int monthOfYear, int dayOfMonth) {
 				DateTimePicker.this.year = year;
 				DateTimePicker.this.month = monthOfYear;
 				DateTimePicker.this.day = dayOfMonth;
-				dateTimeEt.setText(getStr());
+				initTimeToView();
 			}
 		});
 		oldBundle = getIntent().getExtras().getBundle("oldBundle");
-		Countdown c = new Countdown(oldBundle.getBundle("countdown"));
-
+		timePicker.setIs24HourView(true);
 		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
 			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 				DateTimePicker.this.hour = hourOfDay;
 				DateTimePicker.this.minute = minute;
-				dateTimeEt.setText(getStr());
 			}
 		});
 		confirmBtn.setOnClickListener(new OnClickListener() {
@@ -71,11 +71,12 @@ public class DateTimePicker extends Activity {
 				goBackWithResult();
 			}
 		});
+
 	}
 
-	public String getStr() {
-		return year + "年" + (month + 1) + "月" + day + "日 " + hour + "时"
-				+ minute + "分";
+	public void initTimeToView() {
+		dateTimeEt.setText(year + "年" + (month + 1) + "月" + day + "日 " + hour
+				+ "时" + minute + "分");
 	}
 
 	public static Intent buildIntentContainsBundle(Context context,

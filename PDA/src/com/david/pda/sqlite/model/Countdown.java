@@ -21,7 +21,7 @@ public class Countdown extends Model {
 	public final static String ISON = "isOn";
 
 	public Integer getIsOn() {
-		return null;
+		return this.isOn;
 	}
 
 	public void setIsOn(Integer isOn) {
@@ -35,7 +35,8 @@ public class Countdown extends Model {
 		sb.append(_ID).append(" INTEGER primary key autoincrement,");
 		sb.append(TITLE).append(" TEXT,");
 		sb.append(REMARKS).append(" TEXT,");
-		sb.append(ENDTIME).append(" LONG,");
+		sb.append(ENDTIME).append(" TEXT,");
+		sb.append(ISON).append(" INT,");
 		sb.append(DELFLAG).append(" INT)");
 		return sb.toString();
 	}
@@ -92,6 +93,9 @@ public class Countdown extends Model {
 		if (endTime != null) {
 			cv.put(ENDTIME, endTime);
 		}
+		if (isOn != null) {
+			cv.put(ISON, isOn);
+		}
 		return cv;
 	}
 
@@ -101,6 +105,7 @@ public class Countdown extends Model {
 		this.remarks = c.getString(c.getColumnIndex(REMARKS));
 		this.endTime = c.getLong(c.getColumnIndex(ENDTIME));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
+		this.isOn = c.getInt(c.getColumnIndex(ISON));
 	}
 
 	public Countdown() {

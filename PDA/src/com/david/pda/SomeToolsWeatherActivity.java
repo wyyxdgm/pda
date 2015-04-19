@@ -249,6 +249,8 @@ public class SomeToolsWeatherActivity extends Activity {
 					Toast.makeText(SomeToolsWeatherActivity.this,
 							"已将默认城市修改为：" + cityName, Toast.LENGTH_SHORT).show();
 					getWeatherHandler.post(getWeatherTread);
+					// append function as city click
+					changeViewWhenCityClick();
 				}
 			}
 			// 拿着city找到对应的提交请求内容
@@ -273,19 +275,23 @@ public class SomeToolsWeatherActivity extends Activity {
 		@Override
 		public void onClick(View view) {
 			Log.i(L.t, "dateTextView is clicked");
-			if (searchAutoText.getVisibility() == View.INVISIBLE) {
-				searchAutoText.setVisibility(View.VISIBLE);
-				searchButton.setVisibility(View.VISIBLE);
-				refreshButton.setVisibility(View.INVISIBLE);
-				searchAutoText.setFocusable(true);
-				searchAutoText.requestFocus();
-				title.setVisibility(View.INVISIBLE);
-			} else {
-				searchAutoText.setVisibility(View.INVISIBLE);
-				searchButton.setVisibility(View.INVISIBLE);
-				refreshButton.setVisibility(View.VISIBLE);
-				title.setVisibility(View.VISIBLE);
-			}
+			changeViewWhenCityClick();
+		}
+	}
+
+	public void changeViewWhenCityClick() {
+		if (searchAutoText.getVisibility() == View.INVISIBLE) {
+			searchAutoText.setVisibility(View.VISIBLE);
+			searchButton.setVisibility(View.VISIBLE);
+			refreshButton.setVisibility(View.INVISIBLE);
+			searchAutoText.setFocusable(true);
+			searchAutoText.requestFocus();
+			title.setVisibility(View.INVISIBLE);
+		} else {
+			searchAutoText.setVisibility(View.INVISIBLE);
+			searchButton.setVisibility(View.INVISIBLE);
+			refreshButton.setVisibility(View.VISIBLE);
+			title.setVisibility(View.VISIBLE);
 		}
 	}
 

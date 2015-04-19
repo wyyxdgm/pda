@@ -76,10 +76,11 @@ public class DateUtil {
 		Log.i(L.t, (endTime - System.currentTimeMillis()) / (1000 * 60 * 60)
 				+ "");
 		long gap = endTime - System.currentTimeMillis();
-		Log.i("gap:", gap + "");
-		Log.i("gap day:", gap / (1000 * 60 * 60 * 24) + "");
-		Log.i("compareTime / gap:", "" + (compareTime / gap));
-		return (int) (360 * (1.0 / (compareTime / gap)));
+		Log.i(L.t, "gap:" + gap);
+		Log.i(L.t, "compare day:" + (1.0 * compareTime / (1000 * 60 * 60 * 24)));
+		Log.i(L.t, "gap day:" + (1.0 * gap / (1000 * 60 * 60 * 24)));
+		Log.i(L.t, "compareTime / gap:" + (1.0 * compareTime / gap));
+		return (int) (360 * (1.0 / (1.0 * compareTime / gap)));
 	}
 
 	public static Paint getPaint(int angle) {
