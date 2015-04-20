@@ -28,6 +28,9 @@ public class Target extends Model {
 	private Integer scale;
 	private Integer delFlag;
 
+	public Target() {
+	}
+
 	public Target(String name, Integer scale) {
 		this.name = name;
 		this.scale = scale;
@@ -76,13 +79,14 @@ public class Target extends Model {
 
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
-		if (_id > 0)
+		if (_id != null)
 			cv.put(_ID, _id);
 		if (!TextUtils.isEmpty(name))
 			cv.put(NAME, name);
-		if (scale > 0)
+		if (scale != null)
 			cv.put(SCALE, scale);
-		cv.put(DELFLAG, delFlag);
+		if (delFlag != null)
+			cv.put(DELFLAG, delFlag);
 		return cv;
 	}
 

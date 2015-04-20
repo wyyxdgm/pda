@@ -131,7 +131,7 @@ public class TargetManageOptionActivity extends Activity {
 					showWindowForAdd();
 				} else {
 					Toast.makeText(this,
-							"想要通过'" + endTarget.getName() + "'分身？请长按",
+							"想要通过'" + startTarget.getName() + "'分身？请长按",
 							Toast.LENGTH_SHORT).show();
 				}
 			} else {
@@ -142,8 +142,6 @@ public class TargetManageOptionActivity extends Activity {
 			}
 		}
 		// 不管如何，都清零
-		startTarget = null;
-		endTarget = null;
 	}
 
 	private Target getBlockIndexByXY(float x, float y) {
@@ -199,12 +197,12 @@ public class TargetManageOptionActivity extends Activity {
 	}
 
 	private void loadData() {
-		if (targets == null) {
-			targets = new ArrayList<Target>();
+		DemoDB<Target> db = new DemoDB<Target>(new Target());
+		targets = db.getList(TargetManageOptionActivity.this);
+		if (targets.size() == 0) {// tianjiayigedemo
+			db.insert(new Target("我的储备精力", 360), this);
+			targets = db.getList(TargetManageOptionActivity.this);
 		}
-		targets.add(new Target("english", 200));
-		targets.add(new Target("computer", 100));
-		targets.add(new Target("math", 60));
 	}
 
 	private void drawDataToBitmap() {
@@ -241,7 +239,6 @@ public class TargetManageOptionActivity extends Activity {
 		initWindow();
 		popupAddLayout.setVisibility(View.VISIBLE);
 		popupUpdateLayout.setVisibility(View.INVISIBLE);
-		popupAddTitle.setText("adddddddddd");
 		popupAddTitle.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -310,8 +307,8 @@ public class TargetManageOptionActivity extends Activity {
 		popupUpdateSeekbar
 				.setMax(startTarget.getScale() + endTarget.getScale());
 		popupUpdateSeekbar.setProgress(startTarget.getScale());
-		popupUpdateSeekbarScaleLeft.setText(startTarget.getScale());
-		popupUpdateSeekbarScaleRight.setText(endTarget.getScale());
+		popupUpdateSeekbarScaleLeft.setText(startTarget.getScale() + "");
+		popupUpdateSeekbarScaleRight.setText(endTarget.getScale() + "");
 		popupUpdateSeekbar
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -323,9 +320,9 @@ public class TargetManageOptionActivity extends Activity {
 					@Override
 					public void onStartTrackingTouch(SeekBar seekBar) {
 						popupUpdateSeekbarScaleLeft.setText(seekBar
-								.getProgress());
+								.getProgress() + "");
 						popupUpdateSeekbarScaleRight.setText(seekBar.getMax()
-								- seekBar.getProgress());
+								- seekBar.getProgress() + "");
 					}
 
 					@Override
@@ -343,11 +340,15 @@ public class TargetManageOptionActivity extends Activity {
 		popupUpdateButtonConfirm.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				DemoDB<Target> db = new DemoDB<Target>(startTarget);
-				startTarget.setScale(popupUpdateSeekbar.getProgress());
-				endTarget.setScale(popupUpdateSeekbar.getMax()
-						- popupUpdateSeekbar.getProgress());
+				startTarget.setScale(Integer
+						.valueOf(popupUpdateSeekbarScaleLeft.getText()
+								.toString()));
+				endTarget.setScale(Integer.valueOf(popupUpdateSeekbarScaleRight
+						.getText().toString()));
+				Log.i(L.t, "left:" + startTarget.getScale());
+				Log.i(L.t, "right:" + endTarget.getScale());
 				try {// 修改后，如果比例为零，表示要删掉
+					DemoDB<Target> db = new DemoDB<Target>(new Target());
 					if (startTarget.getScale() > 0) {
 						db.update(startTarget, TargetManageOptionActivity.this);
 					} else {
@@ -379,27 +380,32 @@ public class TargetManageOptionActivity extends Activity {
 		popupAddEndTargetName.setText("请再次输入分身名称");
 		popupAddSeekbar.setMax(startTarget.getScale());
 		popupAddSeekbar.setProgress(startTarget.getScale());
-		popupAddSeekbarScaleLeft.setText(startTarget.getScale());
-		popupAddSeekbarScaleRight.setText(0);
+		popupAddSeekbarScaleLeft.setText(startTarget.getScale() + "");
+		popupAddSeekbarScaleRight.setText("0");
 		popupAddSeekbar
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
 					@Override
-					public void onStopTrackingTouch(SeekBar arg0) {
-
+					public void onStopTrackingTouch(SeekBar seekBar) {
+						popupAddSeekbarScaleLeft.setText(seekBar.getProgress()
+								+ "");
+						popupAddSeekbarScaleRight.setText(seekBar.getMax()
+								- seekBar.getProgress() + "");
 					}
 
 					@Override
 					public void onStartTrackingTouch(SeekBar seekBar) {
-						popupAddSeekbarScaleLeft.setText(seekBar.getProgress());
+						popupAddSeekbarScaleLeft.setText(seekBar.getProgress()
+								+ "");
 						popupAddSeekbarScaleRight.setText(seekBar.getMax()
-								- seekBar.getProgress());
+								- seekBar.getProgress() + "");
 					}
 
 					@Override
-					public void onProgressChanged(SeekBar arg0, int arg1,
-							boolean arg2) {
-
+					public void onProgressChanged(SeekBar seekBar,
+							int progress, boolean fromUser) {
+						popupAddSeekbarScaleLeft.setText(progress + "");
+						popupAddSeekbarScaleRight.setText(seekBar.getMax()
+								- progress + "");
 					}
 				});
 		popupAddButtonCancel.setOnClickListener(new OnClickListener() {
@@ -411,10 +417,10 @@ public class TargetManageOptionActivity extends Activity {
 		popupAddButtonConfirm.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				DemoDB<Target> db = new DemoDB<Target>(startTarget);
-				startTarget.setScale(popupAddSeekbar.getProgress());
-				endTarget.setScale(popupAddSeekbar.getMax()
-						- popupAddSeekbar.getProgress());
+				startTarget.setScale(Integer.valueOf(popupAddSeekbarScaleLeft
+						.getText().toString()));
+				endTarget.setScale(Integer.valueOf(popupAddSeekbarScaleRight
+						.getText().toString()));
 				endTarget.setDelFlag(Model.FLAG_EXISTS);
 				endTarget.setName(popupAddEndTargetName.getText().toString());
 				if (TextUtils.isEmpty(endTarget.getName())) {
@@ -423,14 +429,17 @@ public class TargetManageOptionActivity extends Activity {
 					return;
 				}
 				try {// 修改后，如果比例为零，表示要删掉
+					DemoDB<Target> db = new DemoDB<Target>(new Target());
 					if (startTarget.getScale() > 0) {
 						db.update(startTarget, TargetManageOptionActivity.this);
 					} else {
 						db.remove(startTarget.get_id() + "",
 								TargetManageOptionActivity.this);
 					}
+					DemoDB<Target> db2 = new DemoDB<Target>(new Target());
 					if (endTarget.getScale() > 0) {
-						db.insert(endTarget, TargetManageOptionActivity.this);
+						endTarget.set_id(null);
+						db2.insert(endTarget, TargetManageOptionActivity.this);
 					}
 					Toast.makeText(TargetManageOptionActivity.this, "操作成功！",
 							Toast.LENGTH_SHORT).show();

@@ -59,7 +59,7 @@
             android:id="@+id/main_target_manage_option_popup_update_seekbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/main_target_manage_option_popup_update_start_target"
+            android:layout_below="@id/main_target_manage_option_popup_update_seekbar_left"
             android:layout_centerHorizontal="true" >
         </SeekBar>
 
@@ -145,7 +145,7 @@
             android:id="@+id/main_target_manage_option_popup_add_seekbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/main_target_manage_option_popup_add_start_target"
+            android:layout_below="@id/main_target_manage_option_popup_add_seekbar_left"
             android:layout_centerHorizontal="true" >
         </SeekBar>
 

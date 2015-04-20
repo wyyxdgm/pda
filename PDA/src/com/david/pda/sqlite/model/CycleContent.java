@@ -56,34 +56,35 @@ public class CycleContent extends Model {
 
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
-		if (_id > 0)
+		if (_id != null)
 			cv.put(_ID, _id);
-		if (isAhead > 0)
+		if (isAhead != null)
 			cv.put(ISAHEAD, isAhead);
-		if (principal > 0) {
+		if (principal != null) {
 			cv.put(PRINCIPAL, principal);
 		}
-		if (isOn > 0) {
+		if (isOn != null) {
 			cv.put(ISON, isOn);
 		}
-		if (isTip > 0) {
+		if (isTip != null) {
 			cv.put(ISTIP, isTip);
 		}
-		if (weatherSensitivity > 0) {
+		if (weatherSensitivity != null) {
 			cv.put(WEATHERSENSITIVITY, weatherSensitivity);
 		}
-		if (aheadTime > 0) {
+		if (aheadTime != null) {
 			cv.put(AHEADTIME, aheadTime);
 		}
-		if (startTime > 0) {
+		if (startTime != null) {
 			cv.put(STARTTIME, startTime);
 		}
-		if (endTime > 0) {
+		if (endTime != null) {
 			cv.put(ENDTIME, endTime);
 		}
 		if (!TextUtils.isEmpty(discription))
 			cv.put(DISCRIPTION, discription);
-		cv.put(DELFLAG, delFlag);
+		if (delFlag != null)
+			cv.put(DELFLAG, delFlag);
 		return cv;
 	}
 

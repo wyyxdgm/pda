@@ -68,17 +68,18 @@ public class CycleType extends Model {
 
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
-		if (_id > 0)
+		if (_id != null)
 			cv.put(_ID, _id);
 		if (!TextUtils.isEmpty(name))
 			cv.put(NAME, name);
-		cv.put(DELFLAG, delFlag);
+		if (delFlag != null)
+			cv.put(DELFLAG, delFlag);
 		return cv;
 	}
 
 	public JSONObject toJSONObject() throws JSONException {
 		JSONObject jo = new JSONObject();
-		if (_id > 0)
+		if (_id != null)
 			jo.put(_ID, _id);
 		if (!TextUtils.isEmpty(name))
 			jo.put(NAME, name);
@@ -114,6 +115,7 @@ public class CycleType extends Model {
 	public Uri CONTEN_URI() {
 		return CONTENT_URI;
 	}
+
 	@Override
 	public Model getInstance(Cursor c) {
 		return new CycleType(c);

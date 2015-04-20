@@ -65,34 +65,34 @@ public class Plan extends Model {
 
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
-		if (_id > 0)
+		if (_id !=null)
 			cv.put(_ID, _id);
 		if (!TextUtils.isEmpty(title))
 			cv.put(TITLE, title);
-		if (urgencyimportant > 0)
+		if (urgencyimportant !=null)
 			cv.put(URGENCYIMPORTANT, urgencyimportant);
-		if (createTime > 0) {
+		if (createTime !=null) {
 			cv.put(CREATETIME, createTime);
 		}
-		if (firstType > 0) {
+		if (firstType !=null) {
 			cv.put(FIRSTTYPE, firstType);
 		}
-		if (secondType > 0) {
+		if (secondType !=null) {
 			cv.put(SECONDTYPE, secondType);
 		}
-		if (weatherSensitivity > 0) {
+		if (weatherSensitivity !=null) {
 			cv.put(WEATHERSENSITIVITY, weatherSensitivity);
 		}
-		if (totalTime > 0) {
+		if (totalTime !=null) {
 			cv.put(TOTALTIME, totalTime);
 		}
-		if (totalUsed > 0) {
+		if (totalUsed !=null) {
 			cv.put(TOTALUSED, totalUsed);
 		}
-		if (startTime > 0) {
+		if (startTime !=null) {
 			cv.put(STARTTIME, startTime);
 		}
-		if (endTime > 0) {
+		if (endTime !=null) {
 			cv.put(ENDTIME, endTime);
 		}
 		if (!TextUtils.isEmpty(doAfterSuccess))
