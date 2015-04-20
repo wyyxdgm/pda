@@ -18,7 +18,7 @@ public class DrawUtil {
 		paints[0].setStyle(Paint.Style.FILL_AND_STROKE);
 		paints[1].setARGB(a, 255, 255, 0);
 		paints[1].setStyle(Paint.Style.FILL_AND_STROKE);
-		paints[2].setARGB(a, 215, 33, 215);
+		paints[2].setARGB(a, 215, 33, 115);
 		paints[2].setStyle(Paint.Style.FILL_AND_STROKE);
 		paints[3].setARGB(a, 25, 66, 255);
 		paints[3].setStyle(Paint.Style.FILL_AND_STROKE);
@@ -38,5 +38,8 @@ public class DrawUtil {
 
 	public static Paint getBlank() {
 		return paints[5];
+	}
+	public static Paint getGap() {
+		return paints[4];
 	}
 }

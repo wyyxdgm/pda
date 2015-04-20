@@ -1,5 +1,6 @@
 package com.david.pda;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -44,7 +44,6 @@ import com.david.pda.weather.model.util.L;
 public class TargetManageOptionActivity extends Activity {
 	ImageView imageView;
 	ImageButton backward;
-	GridView gridView;
 	LinearLayout linearLayout;
 	RelativeLayout topBar;
 	Canvas c;
@@ -63,28 +62,21 @@ public class TargetManageOptionActivity extends Activity {
 		setContentView(R.layout.main_target_manage_option);
 		backward = (ImageButton) findViewById(R.id.main_target_manage_option_topbar_backward);
 		imageView = (ImageView) findViewById(R.id.main_target_manage_option_imageView);
-		gridView = (GridView) findViewById(R.id.main_target_manage_option_gridView);
 		topBar = (RelativeLayout) findViewById(R.id.main_target_manage_option_topbar);
 		linearLayout = (LinearLayout) findViewById(R.id.main_target_manage_option_linearLayout);
 		Bind.bindReturn(backward, TargetManageOptionActivity.this,
 				MainActivity.class, MainActivity.POSTION_TARGET_MANAGE);
-		currentBitmap = BitmapFactory.decodeResource(getResources(),
-				R.drawable.s400).copy(Bitmap.Config.ARGB_8888, true);
-		c = new Canvas(currentBitmap);
-		Log.i(L.t, "left" + imageView.getPivotX());
-		Log.i(L.t, "right" + imageView.getPivotX() + imageView.getWidth());
-		Log.i(L.t, "top" + imageView.getPivotY());
-		Log.i(L.t, "bottom" + imageView.getScaleY() + imageView.getHeight());
-		Log.i(L.t,
-				"center:" + "["
-						+ (imageView.getScaleX() + imageView.getWidth() / 2)
-						+ ","
-						+ (imageView.getScaleY() + imageView.getHeight() / 2)
-						+ "]");
+		refreshBitmap();
 		loadData();
 		drawDataToBitmap();// 利用数据 draw bitmap
-		imageView.setImageBitmap(currentBitmap);
 		imageView.setOnTouchListener(new ImageOnTouchListener());
+	}
+
+	private void refreshBitmap() {
+		currentBitmap = BitmapFactory.decodeResource(getResources(),
+				R.drawable.s400).copy(Bitmap.Config.ARGB_8888, true);
+		imageView.setImageBitmap(currentBitmap);
+		c = new Canvas(currentBitmap);
 	}
 
 	class ImageOnTouchListener implements OnTouchListener {
@@ -126,8 +118,9 @@ public class TargetManageOptionActivity extends Activity {
 	private void doAfterActionUp() {
 		if (startTarget != null && endTarget != null) {
 			if (startTarget.getName().equals(endTarget.getName())) {
+				endTarget = endTarget.clone();// 因为引用同一个对象
 				long gap = times[1] - times[0];
-				if (gap > 1500) {
+				if (gap > 1000) {
 					showWindowForAdd();
 				} else {
 					Toast.makeText(this,
@@ -183,9 +176,10 @@ public class TargetManageOptionActivity extends Activity {
 				} else
 					return -1;
 			}
-			double scalePi = Math.atan2(200 - y, x - 200);
+			double scalePi = Math.atan2(y - 200, x - 200);
 			Log.i(L.mo, "scalePi:" + scalePi);
-			return (int) (180 - scalePi / Math.PI * 180);
+			return (int) ((scalePi > 0 ? scalePi : (2 * Math.PI + scalePi))
+					/ Math.PI * 180);
 		} else {
 			Log.i(L.mo, "n");
 		}
@@ -206,27 +200,40 @@ public class TargetManageOptionActivity extends Activity {
 	}
 
 	private void drawDataToBitmap() {
-		Canvas cc = new Canvas();
-		for (int i = 0, startScale = 0; i < targets.size(); i++) {
-			Target t = targets.get(i);
-			Paint p = DrawUtil.getPaint(i, targets.size() - 1 == i);
-			c.drawArc(rectf, startScale, startScale + t.getScale(), true, p);
-			startScale += t.getScale();
-
+		refreshBitmap();
+		linearLayout.removeAllViewsInLayout();// 去除之前的数据
+		Canvas cc;
+		Bitmap bm;
+		TextView txt;
+		ImageView icon;
+		Paint p;
+		Target t;
+		for (int i = 0, startScale = 0; i < targets.size(); startScale += targets
+				.get(i).getScale(), i++) {
+			t = targets.get(i);
+			p = DrawUtil.getPaint(i, i + 1 == targets.size());
+			c.drawArc(rectf, startScale, t.getScale(), true, p);
 			LinearLayout l = new LinearLayout(this);
 			l.setOrientation(LinearLayout.HORIZONTAL);
-			Bitmap bm = BitmapFactory.decodeResource(getResources(),
-					R.drawable.s40).copy(Bitmap.Config.ARGB_8888, true);
-			cc.setBitmap(bm);
+
+			bm = BitmapFactory.decodeResource(getResources(), R.drawable.s40)
+					.copy(Bitmap.Config.ARGB_8888, true);
+			cc = new Canvas(bm);
 			cc.drawCircle(20, 20, 10, p);
-			ImageView imageView = new ImageView(this);
-			imageView.setImageBitmap(bm);
-			imageView.setScaleType(ScaleType.CENTER);
-			imageView.setMaxHeight(10);
-			imageView.setMaxWidth(10);
-			TextView txt = new TextView(this);
-			txt.setText(targets.get(i).getName());
-			l.addView(imageView);
+			icon = new ImageView(this);
+			icon.setImageBitmap(bm);
+			icon.setScaleType(ScaleType.CENTER);
+			icon.setMaxHeight(10);
+			icon.setMaxWidth(10);
+			txt = new TextView(this);
+			txt.setText(targets.get(i).getName()
+					+ "-"
+					+ targets.get(i).getScale()
+					+ "("
+					+ new BigDecimal(targets.get(i).getScale() * 100.0 / 360)
+							.setScale(2, BigDecimal.ROUND_HALF_EVEN).toString()
+					+ "%)");
+			l.addView(icon);
 			l.addView(txt);
 			linearLayout.addView(l);
 		}
@@ -277,7 +284,9 @@ public class TargetManageOptionActivity extends Activity {
 					.findViewById(R.id.main_target_manage_option_popup_update_layout);
 			popupAddLayout = (RelativeLayout) popupView
 					.findViewById(R.id.main_target_manage_option_popup_add_layout);
-			popupWindow = new PopupWindow(popupView, 300, 350);
+			Point size = new Point();
+			getWindowManager().getDefaultDisplay().getSize(size);
+			popupWindow = new PopupWindow(popupView, size.x - 20, 350);
 			initLayout();
 			popupAddTitle.setText("添加分身");
 			popupUpdateTitle.setText("分身传输");
@@ -311,10 +320,12 @@ public class TargetManageOptionActivity extends Activity {
 		popupUpdateSeekbarScaleRight.setText(endTarget.getScale() + "");
 		popupUpdateSeekbar
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
 					@Override
-					public void onStopTrackingTouch(SeekBar arg0) {
-
+					public void onStopTrackingTouch(SeekBar seekBar) {
+						popupUpdateSeekbarScaleLeft.setText(seekBar
+								.getProgress() + "");
+						popupUpdateSeekbarScaleRight.setText(seekBar.getMax()
+								- seekBar.getProgress() + "");
 					}
 
 					@Override
@@ -326,9 +337,11 @@ public class TargetManageOptionActivity extends Activity {
 					}
 
 					@Override
-					public void onProgressChanged(SeekBar arg0, int arg1,
-							boolean arg2) {
-
+					public void onProgressChanged(SeekBar seekBar,
+							int progress, boolean fromUser) {
+						popupUpdateSeekbarScaleLeft.setText(progress + "");
+						popupUpdateSeekbarScaleRight.setText(seekBar.getMax()
+								- progress + "");
 					}
 				});
 		popupUpdateButtonCancel.setOnClickListener(new OnClickListener() {
@@ -352,13 +365,15 @@ public class TargetManageOptionActivity extends Activity {
 					if (startTarget.getScale() > 0) {
 						db.update(startTarget, TargetManageOptionActivity.this);
 					} else {
-						db.remove(startTarget.get_id() + "",
+						db.realRemove(startTarget.get_id() + "",
 								TargetManageOptionActivity.this);
 					}
+
+					DemoDB<Target> db2 = new DemoDB<Target>(new Target());
 					if (endTarget.getScale() > 0) {
-						db.update(endTarget, TargetManageOptionActivity.this);
+						db2.update(endTarget, TargetManageOptionActivity.this);
 					} else {
-						db.remove(endTarget.get_id() + "",
+						db2.realRemove(endTarget.get_id() + "",
 								TargetManageOptionActivity.this);
 					}
 					Toast.makeText(TargetManageOptionActivity.this, "操作成功！",
@@ -377,7 +392,6 @@ public class TargetManageOptionActivity extends Activity {
 
 	private void initAddLayoutContent() {
 		popupAddStartTargetName.setText(startTarget.getName());
-		popupAddEndTargetName.setText("请再次输入分身名称");
 		popupAddSeekbar.setMax(startTarget.getScale());
 		popupAddSeekbar.setProgress(startTarget.getScale());
 		popupAddSeekbarScaleLeft.setText(startTarget.getScale() + "");
@@ -433,7 +447,7 @@ public class TargetManageOptionActivity extends Activity {
 					if (startTarget.getScale() > 0) {
 						db.update(startTarget, TargetManageOptionActivity.this);
 					} else {
-						db.remove(startTarget.get_id() + "",
+						db.realRemove(startTarget.get_id() + "",
 								TargetManageOptionActivity.this);
 					}
 					DemoDB<Target> db2 = new DemoDB<Target>(new Target());

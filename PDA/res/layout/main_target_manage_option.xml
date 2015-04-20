@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#FFFFFF"
     android:gravity="center_horizontal"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:scrollbars="vertical" >
 
     <RelativeLayout
         android:id="@+id/main_target_manage_option_topbar"
@@ -26,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
-            android:text="更新便签"
+            android:text="见风使舵"
             android:textSize="18sp" />
     </RelativeLayout>
 
@@ -35,21 +36,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="30dp" />
 
-    <GridView
-        android:id="@+id/main_target_manage_option_gridView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:numColumns="3"
-        android:stretchMode="columnWidth" >
-    </GridView>
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        
+        android:background="#EEEEEE"  >
 
-    <LinearLayout
-        android:id="@+id/main_target_manage_option_linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/main_target_manage_option_linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

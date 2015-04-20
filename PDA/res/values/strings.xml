@@ -41,5 +41,7 @@
     <string name="main_some_tools_weather_xiche">洗车</string>
     <string name="main_some_tools_weather_lvyou">旅游</string>
     <string name="main_some_tools_weather_ganmao">感冒</string>
+    <!-- main_target_manage -->
+    <string name="please_input_scryed">请输入分身</string>
 
 </resources>

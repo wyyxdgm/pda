@@ -37,6 +37,15 @@ public class Target extends Model {
 		this.delFlag = Model.FLAG_EXISTS;
 	}
 
+	public Target clone() {
+		Target t = new Target();
+		t.set_id(this._id);
+		t.setDelFlag(this.delFlag);
+		t.setName(this.name);
+		t.setScale(this.scale);
+		return t;
+	}
+
 	public static String CREATE_TABLE() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("CREATE TABLE ");

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:layout_height="450dp"
     android:background="@drawable/popup_bacikground"
     android:padding="30dp" >
 
@@ -120,7 +120,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@id/main_target_manage_option_popup_add_title"
-            android:layout_margin="10dp" >
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="0dp"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:maxLength="20"
+            android:hint="@string/please_input_scryed"
+            android:layout_toRightOf="@id/main_target_manage_option_popup_add_start_target" >
         </EditText>
 
         <TextView
@@ -138,7 +144,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@id/main_target_manage_option_popup_add_end_target"
-            android:layout_margin="10dp" >
+            android:layout_margin="10dp"
+            android:layout_toLeftOf="@id/main_target_manage_option_popup_add_seekbar_left" >
         </TextView>
 
         <SeekBar

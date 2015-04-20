@@ -1,5 +1,8 @@
 package com.david.pda;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
@@ -26,9 +29,15 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.david.pda.adapter.BataanAdapter;
+import com.david.pda.sqlite.model.Target;
+import com.david.pda.sqlite.model.util.DemoDB;
+import com.david.pda.util.other.DrawUtil;
 import com.david.pda.weather.model.util.L;
 
 public class MainActivity extends ActionBarActivity {
@@ -210,17 +219,47 @@ public class MainActivity extends ActionBarActivity {
 		bar.setIcon(R.drawable.ziwaixian);
 		ImageView imageView = (ImageView) v
 				.findViewById(R.id.main_target_imageView);
-		Bitmap bm = BitmapFactory.decodeResource(getResources(),
+		Bitmap bm400 = BitmapFactory.decodeResource(getResources(),
 				R.drawable.s400).copy(Bitmap.Config.ARGB_8888, true);
-		Canvas c = new Canvas(bm);
-		Paint p = new Paint();
-		p.setARGB(255, 255, 0, 255);
-		p.setStyle(Paint.Style.FILL_AND_STROKE);
-		c.drawArc(new RectF(10, 10, 390, 390), 100, 250, true, p);
-		p.setARGB(255, 0, 255, 0);
-		p.setStyle(Paint.Style.FILL_AND_STROKE);
-		c.drawArc(new RectF(10, 10, 390, 390), 260, 100, true, p);
-		imageView.setImageBitmap(bm);
+		Canvas c400 = new Canvas(bm400);
+		LinearLayout linearLayout = (LinearLayout) v
+				.findViewById(R.id.main_target_icon_group);
+		Canvas c40;
+		Bitmap bm40;
+		TextView txt;
+		ImageView icon;
+		Paint p;
+		Target t;
+		RectF rectf = new RectF(0, 0, 400, 400);
+		List<Target> targets = new DemoDB<Target>(new Target())
+				.getList(MainActivity.this);
+		for (int i = 0, startScale = 0; i < targets.size(); startScale += targets
+				.get(i).getScale(), i++) {
+			t = targets.get(i);
+			p = DrawUtil.getPaint(i, i + 1 == targets.size());
+			c400.drawArc(rectf, startScale, t.getScale(), true, p);
+			LinearLayout l = new LinearLayout(this);
+			l.setOrientation(LinearLayout.HORIZONTAL);
+			bm40 = BitmapFactory.decodeResource(getResources(), R.drawable.s40)
+					.copy(Bitmap.Config.ARGB_8888, true);
+			c40 = new Canvas(bm40);
+			c40.drawCircle(20, 20, 10, p);
+			icon = new ImageView(this);
+			icon.setImageBitmap(bm40);
+			icon.setScaleType(ScaleType.CENTER);
+			icon.setMaxHeight(10);
+			icon.setMaxWidth(10);
+			txt = new TextView(this);
+			txt.setText(targets.get(i).getName()
+					+ "("
+					+ new BigDecimal(targets.get(i).getScale() * 100.0 / 360)
+							.setScale(2, BigDecimal.ROUND_HALF_EVEN).toString()
+					+ "%)");
+			l.addView(icon);
+			l.addView(txt);
+			linearLayout.addView(l);
+		}
+		imageView.setImageBitmap(bm400);
 		imageView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
