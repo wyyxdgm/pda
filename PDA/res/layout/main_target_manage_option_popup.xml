@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/popup_bacikground"
+    android:padding="30dp" >
+
+    <RelativeLayout
+        android:id="@+id/main_target_manage_option_popup_update_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/main_target_manage_option_popup_update_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/main_target_manage_option_popup_update_start_target"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/main_target_manage_option_popup_update_title"
+            android:layout_margin="10dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/main_target_manage_option_popup_update_end_target"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/main_target_manage_option_popup_update_title"
+            android:layout_margin="10dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/main_target_manage_option_popup_update_seekbar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/main_target_manage_option_popup_update_start_target"
+            android:layout_margin="10dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/main_target_manage_option_popup_update_seekbar_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/main_target_manage_option_popup_update_end_target"
+            android:layout_margin="10dp" >
+        </TextView>
+
+        <SeekBar
+            android:id="@+id/main_target_manage_option_popup_update_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_target_manage_option_popup_update_start_target"
+            android:layout_centerHorizontal="true" >
+        </SeekBar>
+
+        <LinearLayout
+            android:id="@+id/main_target_manage_option_popup_update_button_group"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_target_manage_option_popup_update_seekbar"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/main_target_manage_option_popup_update_button_cancel"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cancel" />
+
+            <Button
+                android:id="@+id/main_target_manage_option_popup_update_button_confirm"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/confirm" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/main_target_manage_option_popup_add_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/main_target_manage_option_popup_add_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/main_target_manage_option_popup_add_start_target"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/main_target_manage_option_popup_add_title"
+            android:layout_margin="10dp" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/main_target_manage_option_popup_add_end_target"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/main_target_manage_option_popup_add_title"
+            android:layout_margin="10dp" >
+        </EditText>
+
+        <TextView
+            android:id="@+id/main_target_manage_option_popup_add_seekbar_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/main_target_manage_option_popup_add_start_target"
+            android:layout_margin="10dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/main_target_manage_option_popup_add_seekbar_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/main_target_manage_option_popup_add_end_target"
+            android:layout_margin="10dp" >
+        </TextView>
+
+        <SeekBar
+            android:id="@+id/main_target_manage_option_popup_add_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_target_manage_option_popup_add_start_target"
+            android:layout_centerHorizontal="true" >
+        </SeekBar>
+
+        <LinearLayout
+            android:id="@+id/main_target_manage_option_popup_add_button_group"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/main_target_manage_option_popup_add_seekbar"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/main_target_manage_option_popup_add_button_cancel"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cancel" />
+
+            <Button
+                android:id="@+id/main_target_manage_option_popup_add_button_confirm"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/confirm" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

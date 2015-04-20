@@ -21,6 +21,7 @@
             android:background="@drawable/backward" />
 
         <TextView
+            android:id="@+id/main_target_manage_option_topbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
