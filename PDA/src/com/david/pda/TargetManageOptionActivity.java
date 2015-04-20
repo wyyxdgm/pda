@@ -3,6 +3,8 @@ package com.david.pda;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,6 +25,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -31,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.david.pda.sqlite.model.Target;
+import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
 import com.david.pda.util.other.DrawUtil;
@@ -216,15 +221,13 @@ public class TargetManageOptionActivity extends Activity {
 					R.drawable.s40).copy(Bitmap.Config.ARGB_8888, true);
 			cc.setBitmap(bm);
 			cc.drawCircle(20, 20, 10, p);
-
 			ImageView imageView = new ImageView(this);
 			imageView.setImageBitmap(bm);
+			imageView.setScaleType(ScaleType.CENTER);
 			imageView.setMaxHeight(10);
 			imageView.setMaxWidth(10);
-
 			TextView txt = new TextView(this);
 			txt.setText(targets.get(i).getName());
-
 			l.addView(imageView);
 			l.addView(txt);
 			linearLayout.addView(l);
@@ -245,6 +248,7 @@ public class TargetManageOptionActivity extends Activity {
 				hideWindow();
 			}
 		});
+		initAddLayoutContent();
 		showWindow();
 	}
 
@@ -261,6 +265,7 @@ public class TargetManageOptionActivity extends Activity {
 				hideWindow();
 			}
 		});
+		initUpdateLayoutContent();
 		showWindow();
 	}
 
@@ -299,6 +304,146 @@ public class TargetManageOptionActivity extends Activity {
 		}
 	}
 
+	private void initUpdateLayoutContent() {
+		popupUpdateStartTargetName.setText(startTarget.getName());
+		popupUpdateEndTargetName.setText(endTarget.getName());
+		popupUpdateSeekbar
+				.setMax(startTarget.getScale() + endTarget.getScale());
+		popupUpdateSeekbar.setProgress(startTarget.getScale());
+		popupUpdateSeekbarScaleLeft.setText(startTarget.getScale());
+		popupUpdateSeekbarScaleRight.setText(endTarget.getScale());
+		popupUpdateSeekbar
+				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+					@Override
+					public void onStopTrackingTouch(SeekBar arg0) {
+
+					}
+
+					@Override
+					public void onStartTrackingTouch(SeekBar seekBar) {
+						popupUpdateSeekbarScaleLeft.setText(seekBar
+								.getProgress());
+						popupUpdateSeekbarScaleRight.setText(seekBar.getMax()
+								- seekBar.getProgress());
+					}
+
+					@Override
+					public void onProgressChanged(SeekBar arg0, int arg1,
+							boolean arg2) {
+
+					}
+				});
+		popupUpdateButtonCancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				hideWindow();
+			}
+		});
+		popupUpdateButtonConfirm.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				DemoDB<Target> db = new DemoDB<Target>(startTarget);
+				startTarget.setScale(popupUpdateSeekbar.getProgress());
+				endTarget.setScale(popupUpdateSeekbar.getMax()
+						- popupUpdateSeekbar.getProgress());
+				try {// 修改后，如果比例为零，表示要删掉
+					if (startTarget.getScale() > 0) {
+						db.update(startTarget, TargetManageOptionActivity.this);
+					} else {
+						db.remove(startTarget.get_id() + "",
+								TargetManageOptionActivity.this);
+					}
+					if (endTarget.getScale() > 0) {
+						db.update(endTarget, TargetManageOptionActivity.this);
+					} else {
+						db.remove(endTarget.get_id() + "",
+								TargetManageOptionActivity.this);
+					}
+					Toast.makeText(TargetManageOptionActivity.this, "操作成功！",
+							Toast.LENGTH_SHORT).show();
+					hideWindow();
+					loadData();
+					drawDataToBitmap();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	// add layout
+
+	private void initAddLayoutContent() {
+		popupAddStartTargetName.setText(startTarget.getName());
+		popupAddEndTargetName.setText("请再次输入分身名称");
+		popupAddSeekbar.setMax(startTarget.getScale());
+		popupAddSeekbar.setProgress(startTarget.getScale());
+		popupAddSeekbarScaleLeft.setText(startTarget.getScale());
+		popupAddSeekbarScaleRight.setText(0);
+		popupAddSeekbar
+				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+					@Override
+					public void onStopTrackingTouch(SeekBar arg0) {
+
+					}
+
+					@Override
+					public void onStartTrackingTouch(SeekBar seekBar) {
+						popupAddSeekbarScaleLeft.setText(seekBar.getProgress());
+						popupAddSeekbarScaleRight.setText(seekBar.getMax()
+								- seekBar.getProgress());
+					}
+
+					@Override
+					public void onProgressChanged(SeekBar arg0, int arg1,
+							boolean arg2) {
+
+					}
+				});
+		popupAddButtonCancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				hideWindow();
+			}
+		});
+		popupAddButtonConfirm.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				DemoDB<Target> db = new DemoDB<Target>(startTarget);
+				startTarget.setScale(popupAddSeekbar.getProgress());
+				endTarget.setScale(popupAddSeekbar.getMax()
+						- popupAddSeekbar.getProgress());
+				endTarget.setDelFlag(Model.FLAG_EXISTS);
+				endTarget.setName(popupAddEndTargetName.getText().toString());
+				if (TextUtils.isEmpty(endTarget.getName())) {
+					Toast.makeText(TargetManageOptionActivity.this,
+							"分身名称不能为空，请重新填写！", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				try {// 修改后，如果比例为零，表示要删掉
+					if (startTarget.getScale() > 0) {
+						db.update(startTarget, TargetManageOptionActivity.this);
+					} else {
+						db.remove(startTarget.get_id() + "",
+								TargetManageOptionActivity.this);
+					}
+					if (endTarget.getScale() > 0) {
+						db.insert(endTarget, TargetManageOptionActivity.this);
+					}
+					Toast.makeText(TargetManageOptionActivity.this, "操作成功！",
+							Toast.LENGTH_SHORT).show();
+					hideWindow();
+					loadData();
+					drawDataToBitmap();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
 	// window
 	private View popupView;
 	// update
@@ -321,48 +466,6 @@ public class TargetManageOptionActivity extends Activity {
 	private SeekBar popupAddSeekbar;// main_target_manage_option_popup_add_seekbar
 	private Button popupAddButtonCancel;// main_target_manage_option_popup_add_button_cancel
 	private Button popupAddButtonConfirm;// addmain_target_manage_option_popup_add_button_confirm
-
-	private void initUpdateLayoutContent() {
-		popupUpdateStartTargetName.setText(startTarget.getName());
-		popupUpdateEndTargetName.setText(endTarget.getName());
-		popupUpdateSeekbarScaleLeft.setText(startTarget.getScale());
-		popupUpdateSeekbarScaleRight.setText(0);
-		popupUpdateSeekbar.setMax(startTarget.getScale()+endTarget.getScale());
-		popupUpdateSeekbar.setProgress(startTarget.getScale());
-		popupUpdateSeekbar
-				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-
-					@Override
-					public void onStopTrackingTouch(SeekBar arg0) {
-
-					}
-
-					@Override
-					public void onStartTrackingTouch(SeekBar arg0) {
-					}
-
-					@Override
-					public void onProgressChanged(SeekBar arg0, int arg1,
-							boolean arg2) {
-
-					}
-				});
-		popupUpdateButtonCancel.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				hideWindow();
-			}
-		});
-		popupUpdateButtonConfirm.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				DemoDB<Target>db = new DemoDB<Target>(startTarget);
-				startTarget.setScale(popupUpdateSeekbar.getProgress());
-				endTarget.setScale(popupUpdateSeekbar.getMax()-popupUpdateSeekbar.getProgress());
-				db.update(obj, context)(new Target(name, scale), context)
-			}
-		});
-	}
 
 	private void initLayout() {
 		// update
