@@ -29,6 +29,15 @@
             android:layout_centerVertical="true"
             android:text="见风使舵"
             android:textSize="18sp" />
+
+        <ImageButton
+            android:id="@+id/main_target_manage_option_topbar_plus"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="18dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/plus" />
     </RelativeLayout>
 
     <ImageView
@@ -43,9 +52,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        android:padding="10dp"
-        
-        android:background="#EEEEEE"  >
+        android:background="#EEEEEE"
+        android:padding="10dp" >
 
         <LinearLayout
             android:id="@+id/main_target_manage_option_linearLayout"

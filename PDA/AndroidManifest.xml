@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="15"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -77,6 +77,15 @@
         </activity>
         <activity
             android:name="com.david.pda.SelfPrincipleOptionActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity android:name="org.achartengine.GraphicalActivity" />
+        <activity
+            android:name="com.david.pda.TargetManageComparedToFact"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.david.pda.TestBarActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
