@@ -68,6 +68,18 @@
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
+            android:name="com.david.pda.AffairFourClass"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.david.pda.AffairPlanOptionActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.david.pda.SelfPrincipleOptionActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity
             android:name="com.david.pda.WelcomeActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>

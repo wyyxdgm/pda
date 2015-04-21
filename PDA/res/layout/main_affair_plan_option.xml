@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_affair_plan_option"
+    android:orientation="vertical" >
+<RelativeLayout
+        android:id="@+id/main_affair_plan_option_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#5555FF" >
+
+        <ImageButton
+            android:id="@+id/main_affair_plan_option_topbar_backward"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="18dp"
+            android:background="@drawable/backward" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="具体路线"
+            android:textSize="18sp" />
+    </RelativeLayout>
+</LinearLayout>
