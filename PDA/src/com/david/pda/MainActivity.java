@@ -3,8 +3,13 @@ package com.david.pda;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.json.JSONException;
+
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -21,26 +26,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.david.pda.adapter.BataanAdapter;
+import com.david.pda.adapter.SystemSettingListAdapter;
+import com.david.pda.sqlite.model.CycleType;
+import com.david.pda.sqlite.model.Memo;
 import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DrawUtil;
 import com.david.pda.weather.model.util.L;
 
 public class MainActivity extends ActionBarActivity {
+	private int currentPostion = 0;
 	public static final int POSTION_TARGET_MANAGE = 0;
 	public static final int POSTION_AFFAIR_PLAN = 1;
 	public static final int POSTION_TODAY_SCHEDULE = 2;
@@ -127,6 +139,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	public void initMainView(int position) {
+		currentPostion = position;
 		if (mainContentLayout.getChildCount() > 0) {// hash view already
 			if (mainContentLayout.getChildAt(0).getId() != mainViewIds[position]) {
 				Log.i(L.t, "mainContentLayout.getChildAt(0).getId():"
@@ -205,7 +218,69 @@ public class MainActivity extends ActionBarActivity {
 		} else if (position == POSTION_SELF_PRINCIPLE) {
 
 		} else if (position == POSTION_SYSTEM_SETTIONG) {
+			final ListView listView = (ListView) v
+					.findViewById(R.id.main_system_setting_listview);
+			listView.setAdapter(new SystemSettingListAdapter(this));
+			listView.setOnItemClickListener(new OnItemClickListener() {
 
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					Intent i = new Intent(MainActivity.this,CycleTypeOptionActivity.class);
+					i.putExtra("opt", "update");
+					i.putExtra("position", arg2);
+					MainActivity.this.startActivity(i);
+				}
+			});
+			listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+				@Override
+				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+						final int position, long arg3) {
+					AlertDialog.Builder builder = new Builder(MainActivity.this);
+					builder.setMessage("确认删除吗？");
+					builder.setTitle("提示");
+					builder.setPositiveButton("确认",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+									DemoDB<CycleType> db = new DemoDB<CycleType>(
+											new CycleType());
+									List<CycleType> list = db
+											.getList(MainActivity.this);
+									try {
+										db.realRemove(list.get(position)
+												.get_id() + "",
+												MainActivity.this);
+										Toast.makeText(
+												MainActivity.this,
+												"删除《"
+														+ list.get(position)
+																.getName()
+														+ "》成功！",
+												Toast.LENGTH_SHORT).show();
+										list.remove(position);
+										listView.setAdapter(new SystemSettingListAdapter(
+												MainActivity.this));
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+								}
+							});
+					builder.setNegativeButton("取消",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+								}
+							});
+					builder.create().show();
+					return false;
+				}
+			});
 		} else if (position == POSTION_TARGET_MANAGE) {
 			initTargetManage(v);
 		} else if (position == POSTION_TODAY_SCHEDULE) {
@@ -231,8 +306,12 @@ public class MainActivity extends ActionBarActivity {
 		Paint p;
 		Target t;
 		RectF rectf = new RectF(0, 0, 400, 400);
-		List<Target> targets = new DemoDB<Target>(new Target())
-				.getList(MainActivity.this);
+		DemoDB<Target> db = new DemoDB<Target>(new Target());
+		List<Target> targets = db.getList(MainActivity.this);
+		if (targets.size() == 0) {// tianjiayigedemo
+			db.insert(new Target("我的储备精力", 360), this);
+			targets = db.getList(this);
+		}
 		for (int i = 0, startScale = 0; i < targets.size(); startScale += targets
 				.get(i).getScale(), i++) {
 			t = targets.get(i);
@@ -285,7 +364,21 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
+		if (this.currentPostion == POSTION_SYSTEM_SETTIONG) {
+			getMenuInflater().inflate(R.menu.menu_system_setting, menu);
+			menu.getItem(0).setOnMenuItemClickListener(
+					new OnMenuItemClickListener() {
+
+						@Override
+						public boolean onMenuItemClick(MenuItem arg0) {
+							Intent i = new Intent(MainActivity.this,
+									CycleTypeOptionActivity.class);
+							startActivity(i);
+							return false;
+						}
+					});
+		} else
+			getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 

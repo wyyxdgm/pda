@@ -1,5 +1,6 @@
 package com.david.pda.util.other;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,6 +12,7 @@ import android.util.Log;
 import com.david.pda.weather.model.util.L;
 
 public class DateUtil {
+	public final static long DAY = 24 * 60 * 60 * 1000l;
 	public final static String yyyyMMdd = "yyyyMMdd";
 	public final static String yyyy_MM_dd = "yyyy-MM-dd";
 	public final static String yyyy年MM月dd日 = "yyyy年MM月dd日";
@@ -75,7 +77,7 @@ public class DateUtil {
 		Log.i(L.t, (endTime - System.currentTimeMillis()) / (1000 * 60 * 60)
 				+ "");
 		long gap = endTime - System.currentTimeMillis();
-		if(gap<0){
+		if (gap < 0) {
 			return -360;
 		}
 		Log.i(L.t, "gap:" + gap);
@@ -122,5 +124,15 @@ public class DateUtil {
 			}
 		}
 		return new Date().getTime();
+	}
+
+	public static String formatYMWD(Long cycleLength) {
+		if (cycleLength > DAY)
+			return new BigDecimal(cycleLength * 1.0 / DAY).setScale(2,
+					BigDecimal.ROUND_HALF_EVEN).toString()
+					+ "天";
+		else {
+			return format(H时_m分, cycleLength);
+		}
 	}
 }
