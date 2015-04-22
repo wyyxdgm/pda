@@ -20,8 +20,8 @@ public class Plan extends Model {
 	public final static String TITLE = "title";
 	public final static String URGENCYIMPORTANT = "urgencyimportant";
 	public final static String CREATETIME = "createTime";
-	public final static String FIRSTTYPE = "firstType";
-	public final static String SECONDTYPE = "secondType";
+	public final static String TARGET = "target";
+	public final static String ISTIP = "isTip";
 	public final static String WEATHERSENSITIVITY = "weatherSensitivity";
 	public final static String TOTALTIME = "totalTime";
 	public final static String TOTALUSED = "totalUsed";
@@ -37,8 +37,8 @@ public class Plan extends Model {
 		sb.append(TITLE).append(" TEXT,");
 		sb.append(URGENCYIMPORTANT).append(" INT,");
 		sb.append(CREATETIME).append(" LONG,");
-		sb.append(FIRSTTYPE).append(" INT,");
-		sb.append(SECONDTYPE).append(" INT,");
+		sb.append(TARGET).append(" INT,");
+		sb.append(ISTIP).append(" INT,");
 		sb.append(WEATHERSENSITIVITY).append(" INT,");
 		sb.append(TOTALTIME).append(" LONG,");
 		sb.append(TOTALUSED).append(" LONG,");
@@ -53,8 +53,8 @@ public class Plan extends Model {
 	private String title;
 	private Integer urgencyimportant;
 	private Long createTime;
-	private Integer firstType;
-	private Integer secondType;
+	private Integer target;
+	private Integer isTip;
 	private Integer weatherSensitivity;
 	private Long totalTime;
 	private Long totalUsed;
@@ -65,34 +65,34 @@ public class Plan extends Model {
 
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
-		if (_id !=null)
+		if (_id != null)
 			cv.put(_ID, _id);
 		if (!TextUtils.isEmpty(title))
 			cv.put(TITLE, title);
-		if (urgencyimportant !=null)
+		if (urgencyimportant != null)
 			cv.put(URGENCYIMPORTANT, urgencyimportant);
-		if (createTime !=null) {
+		if (createTime != null) {
 			cv.put(CREATETIME, createTime);
 		}
-		if (firstType !=null) {
-			cv.put(FIRSTTYPE, firstType);
+		if (target != null) {
+			cv.put(TARGET, target);
 		}
-		if (secondType !=null) {
-			cv.put(SECONDTYPE, secondType);
+		if (isTip != null) {
+			cv.put(ISTIP, isTip);
 		}
-		if (weatherSensitivity !=null) {
+		if (weatherSensitivity != null) {
 			cv.put(WEATHERSENSITIVITY, weatherSensitivity);
 		}
-		if (totalTime !=null) {
+		if (totalTime != null) {
 			cv.put(TOTALTIME, totalTime);
 		}
-		if (totalUsed !=null) {
+		if (totalUsed != null) {
 			cv.put(TOTALUSED, totalUsed);
 		}
-		if (startTime !=null) {
+		if (startTime != null) {
 			cv.put(STARTTIME, startTime);
 		}
-		if (endTime !=null) {
+		if (endTime != null) {
 			cv.put(ENDTIME, endTime);
 		}
 		if (!TextUtils.isEmpty(doAfterSuccess))
@@ -106,8 +106,8 @@ public class Plan extends Model {
 		this.title = c.getString(c.getColumnIndex(TITLE));
 		this.urgencyimportant = c.getInt(c.getColumnIndex(URGENCYIMPORTANT));
 		this.createTime = c.getLong(c.getColumnIndex(CREATETIME));
-		this.firstType = c.getInt(c.getColumnIndex(FIRSTTYPE));
-		this.secondType = c.getInt(c.getColumnIndex(SECONDTYPE));
+		this.target = c.getInt(c.getColumnIndex(TARGET));
+		this.isTip = c.getInt(c.getColumnIndex(ISTIP));
 		this.weatherSensitivity = c
 				.getInt(c.getColumnIndex(WEATHERSENSITIVITY));
 		this.totalTime = c.getLong(c.getColumnIndex(TOTALTIME));
@@ -150,20 +150,20 @@ public class Plan extends Model {
 		this.createTime = createTime;
 	}
 
-	public Integer getFirstType() {
-		return firstType;
+	public Integer getTarget() {
+		return target;
 	}
 
-	public void setFirstType(Integer firstType) {
-		this.firstType = firstType;
+	public void setTarget(Integer target) {
+		this.target = target;
 	}
 
-	public Integer getSecondType() {
-		return secondType;
+	public Integer getIsTip() {
+		return isTip;
 	}
 
-	public void setSecondType(Integer secondType) {
-		this.secondType = secondType;
+	public void setIsTip(Integer isTip) {
+		this.isTip = isTip;
 	}
 
 	public Integer getWeatherSensitivity() {
@@ -226,6 +226,7 @@ public class Plan extends Model {
 	public Uri CONTEN_URI() {
 		return CONTENT_URI;
 	}
+
 	@Override
 	public Model getInstance(Cursor c) {
 		return new Plan(c);
