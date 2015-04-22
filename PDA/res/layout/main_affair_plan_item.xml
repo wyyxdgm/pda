@@ -1,31 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout 
+     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    
-    >
- <RelativeLayout 
-       android:id="@+id/affair_plan_top"
-       android:layout_height="150dp"
-       android:layout_width="fill_parent"
        >
    <RelativeLayout 
-       android:id="@+id/affair_plan_top_left"
+       android:id="@+id/affair_plan_item_left"
        android:layout_height="150dp"
        android:layout_width="150dp"
        >
-       <EditText 
-           android:id="@+id/affair_plan_top_search"
+       <TextView
+           android:id="@+id/affair_plan_item_left_thingname"
            android:layout_height="35dp"
            android:layout_width="fill_parent"
            />
-       <Spinner   
-        android:id="@+id/spinner1"  
-        android:layout_width="100dp"  
-        android:layout_height="65dp"  
-        android:layout_marginTop="20dp"
-        android:entries="@array/cityarray"/>  
        
+        <CheckBox  
+	    android:id="@+id/affair_plan_item_left_jj"  
+	    android:layout_width="70dp"  
+	    android:layout_height="50dp"  
+	    android:text="紧急"  
+   	 />  
+	<CheckBox  
+	    android:id="@+id/affair_plan_item_left_zy"  
+	    android:layout_width="70dp"  
+	    android:layout_height="50dp"  
+	    android:text="重要"  
+	   android:layout_toRightOf="@id/affair_plan_item_left_jj"
+    />  
    </RelativeLayout>
    
     <RelativeLayout 
@@ -34,17 +36,17 @@
        android:layout_width="100dp"
        android:layout_toRightOf="@id/affair_plan_top_left"
        >
-       <CheckBox  
-	    android:id="@+id/affair_plan_top_mid_jj"  
+       <TextView 
+	    android:id="@+id/affair_plan_item_mid_top"  
 	    android:layout_width="70dp"  
 	    android:layout_height="50dp"  
-	    android:text="紧急"  
+	    android:text="2015-4-22 9:49"  
    	 />  
-	<CheckBox  
-	    android:id="@+id/affair_plan_top_mid_zy"  
+	<TextView 
+	    android:id="@+id/affair_plan_item_mid_bottom"  
 	    android:layout_width="70dp"  
 	    android:layout_height="50dp"  
-	    android:text="重要"  
+	    android:text="工作-日常安排"  
 	    android:layout_below="@id/affair_plan_top_mid_jj"
     />  
         
@@ -64,15 +66,3 @@
            />
    </RelativeLayout>
    </RelativeLayout>
-   <RelativeLayout 
-       android:id="@+id/affair_plan_bottom"
-       android:layout_height="150dp"
-       android:layout_width="fill_parent"
-       >
-       <ListView 
-             android:layout_height="150dp"
-       android:layout_width="fill_parent"
-           ></ListView>
-   </RelativeLayout>
-
-</RelativeLayout>
