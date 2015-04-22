@@ -8,6 +8,7 @@ import org.json.JSONException;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -44,6 +45,7 @@ import com.david.pda.weather.model.util.L;
 public class TargetManageOptionActivity extends Activity {
 	ImageView imageView;
 	ImageButton backward;
+	ImageButton plus;
 	LinearLayout linearLayout;
 	RelativeLayout topBar;
 	Canvas c;
@@ -61,15 +63,28 @@ public class TargetManageOptionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_target_manage_option);
 		backward = (ImageButton) findViewById(R.id.main_target_manage_option_topbar_backward);
+		Bind.bindReturn(backward, TargetManageOptionActivity.this,
+				MainActivity.class, MainActivity.POSTION_TARGET_MANAGE);
+		plus = (ImageButton) findViewById(R.id.main_target_manage_option_topbar_plus);
 		imageView = (ImageView) findViewById(R.id.main_target_manage_option_imageView);
 		topBar = (RelativeLayout) findViewById(R.id.main_target_manage_option_topbar);
 		linearLayout = (LinearLayout) findViewById(R.id.main_target_manage_option_linearLayout);
-		Bind.bindReturn(backward, TargetManageOptionActivity.this,
-				MainActivity.class, MainActivity.POSTION_TARGET_MANAGE);
 		refreshBitmap();
 		loadData();
 		drawDataToBitmap();// 利用数据 draw bitmap
 		imageView.setOnTouchListener(new ImageOnTouchListener());
+		plus.setOnClickListener(new PlusOnclickListener());
+	}
+
+	class PlusOnclickListener implements OnClickListener {
+		@Override
+		public void onClick(View arg0) {
+			Intent i = new Intent(TargetManageOptionActivity.this,
+					TestBarActivity.class);
+			TargetManageOptionActivity.this.startActivity(i);
+			TargetManageOptionActivity.this.finish();
+		}
+
 	}
 
 	private void refreshBitmap() {
@@ -527,5 +542,5 @@ public class TargetManageOptionActivity extends Activity {
 		popupAddButtonConfirm = (Button) popupView
 				.findViewById(R.id.main_target_manage_option_popup_add_button_confirm);// addmain_target_manage_option_popup_add_button_confirm
 	}
-	//
+
 }

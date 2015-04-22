@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/main_target_manage_compared_to_fact_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#5555FF" >
+
+        <ImageButton
+            android:id="@+id/main_target_manage_compared_to_fact_topbar_backward"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="18dp"
+            android:background="@drawable/backward" />
+
+        <TextView
+            android:id="@+id/main_target_manage_compared_to_fact_topbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="目标VS航向"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#FFEEEE" >
+
+        <LinearLayout
+            android:id="@+id/main_target_manage_compared_to_fact_content_layout"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+		
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,19 +1,15 @@
 package com.david.pda.sqlite.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.david.pda.sqlite.model.base.Model;
-import com.david.pda.sqlite.privider.ModelProvider;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
+
+import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.sqlite.privider.ModelProvider;
 
 public class CycleType extends Model {
 	private static final long serialVersionUID = -9000521813963145217L;
@@ -22,9 +18,11 @@ public class CycleType extends Model {
 			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
 	public final static String _ID = "_id";
 	public final static String NAME = "name";
+	public final static String CYCLELENGTH = "cycleLength";
 	private Long _id;
 	private String name;
 	private Integer delFlag;
+	private Long cycleLength;
 
 	public CycleType() {
 		super();
@@ -36,33 +34,28 @@ public class CycleType extends Model {
 		sb.append(TABLE_NAME).append("(");
 		sb.append(_ID).append(" INTEGER primary key autoincrement,");
 		sb.append(NAME).append(" TEXT,");
+		sb.append(CYCLELENGTH).append(" TEXT,");
 		sb.append(DELFLAG).append(" INT)");
 		return sb.toString();
 	}
 
 	public CycleType(JSONObject jo) throws JSONException {
-		if (jo.has("_id"))
-			this._id = jo.getLong("_id");
-		if (jo.has("delFlag")) {
+		if (jo.has(_ID))
+			this._id = jo.getLong(_ID);
+		if (jo.has(DELFLAG)) {
 			this.setDelFlag(jo.getInt(DELFLAG));
 		}
-		if (jo.has("name"))
-			this.name = jo.getString("name");
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public List getList(JSONArray ja) throws JSONException {
-		List<CycleType> li = new ArrayList<CycleType>();
-		for (Integer i = 0; i < ja.length(); i++) {
-			JSONObject jo = ja.getJSONObject(i);
-			li.add(new CycleType(jo));
+		if (jo.has(CYCLELENGTH)) {
+			this.setCycleLength(jo.getLong(CYCLELENGTH));
 		}
-		return li;
+		if (jo.has(NAME))
+			this.name = jo.getString("name");
 	}
 
 	public CycleType(Cursor c) {
 		this._id = c.getLong(c.getColumnIndex(_ID));
 		this.name = c.getString(c.getColumnIndex(NAME));
+		this.cycleLength = c.getLong(c.getColumnIndex(CYCLELENGTH));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
 	}
 
@@ -74,6 +67,8 @@ public class CycleType extends Model {
 			cv.put(NAME, name);
 		if (delFlag != null)
 			cv.put(DELFLAG, delFlag);
+		if (cycleLength != null)
+			cv.put(CYCLELENGTH, cycleLength);
 		return cv;
 	}
 
@@ -81,6 +76,8 @@ public class CycleType extends Model {
 		JSONObject jo = new JSONObject();
 		if (_id != null)
 			jo.put(_ID, _id);
+		if (cycleLength != null)
+			jo.put(CYCLELENGTH, cycleLength);
 		if (!TextUtils.isEmpty(name))
 			jo.put(NAME, name);
 		jo.put(DELFLAG, delFlag);
@@ -109,6 +106,14 @@ public class CycleType extends Model {
 
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
+	}
+
+	public Long getCycleLength() {
+		return cycleLength;
+	}
+
+	public void setCycleLength(Long cycleLength) {
+		this.cycleLength = cycleLength;
 	}
 
 	@Override

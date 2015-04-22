@@ -13,6 +13,7 @@
        android:id="@+id/affair_plan_top_left"
        android:layout_height="150dp"
        android:layout_width="150dp"
+        android:layout_marginTop="20dp"
        >
        <EditText 
            android:id="@+id/affair_plan_top_search"
@@ -21,9 +22,9 @@
            />
        <Spinner   
         android:id="@+id/spinner1"  
-        android:layout_width="100dp"  
-        android:layout_height="65dp"  
-        android:layout_marginTop="20dp"
+        android:layout_width="150dp"  
+        android:layout_height="45dp"  
+        android:layout_marginTop="30dp"
         android:entries="@array/cityarray"/>  
        
    </RelativeLayout>
@@ -33,6 +34,7 @@
        android:layout_height="150dp"
        android:layout_width="100dp"
        android:layout_toRightOf="@id/affair_plan_top_left"
+        android:layout_marginTop="10dp"
        >
        <CheckBox  
 	    android:id="@+id/affair_plan_top_mid_jj"  
@@ -70,6 +72,7 @@
        android:layout_width="fill_parent"
        >
        <ListView 
+           android:id="@+id/main_affair_plan_listview"
              android:layout_height="150dp"
        android:layout_width="fill_parent"
            ></ListView>

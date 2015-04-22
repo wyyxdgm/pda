@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="15"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -79,8 +79,21 @@
             android:name="com.david.pda.SelfPrincipleOptionActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
+       <!--  <activity android:name="org.achartengine.GraphicalActivity" /> -->
+        <activity
+            android:name="com.david.pda.TargetManageComparedToFact"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.david.pda.TestBarActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
         <activity
             android:name="com.david.pda.WelcomeActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        </activity>
+  <activity
+            android:name="com.david.pda.TestActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -88,7 +101,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <provider
             android:name="com.david.pda.sqlite.privider.ModelProvider"
             android:authorities="com.david.pda.model" />

@@ -16,9 +16,8 @@ public class Alarm extends Model {
 	public final static String _ID = "_id";
 	public final static String TITLE = "title";
 	public final static String REMARKS = "remarks";
-	public final static String ENDTIME = "endTime";
+	public final static String ISON = "ISON";
 	public final static String CYCLETYPE = "cycleType";
-	public final static String CYCLECONTENT = "cycleContent";
 
 	public static String CREATE_TABLE() {
 		StringBuffer sb = new StringBuffer();
@@ -28,19 +27,17 @@ public class Alarm extends Model {
 		sb.append(" INTEGER primary key autoincrement,");
 		sb.append(TITLE).append(" TEXT,");
 		sb.append(REMARKS).append(" TEXT,");
-		sb.append(ENDTIME).append(" TEXT,");
-		sb.append(CYCLETYPE).append(" INT,");
-		sb.append(CYCLECONTENT).append(" TEXT,");
-		sb.append(DELFLAG).append(" INT)");
+		sb.append(ISON).append(" INTEGER,");
+		sb.append(CYCLETYPE).append(" INTEGER,");
+		sb.append(DELFLAG).append(" INTEGER)");
 		return sb.toString();
 	}
 
 	private Long _id;
 	private String title;
 	private String remarks;
-	private Long endTime;
+	private Integer isOn;
 	private Long cycleType;
-	private Long cycleContent;
 	private Integer delFlag;
 
 	public ContentValues toContentValues() {
@@ -53,14 +50,11 @@ public class Alarm extends Model {
 			cv.put(TITLE, title);
 		if (!TextUtils.isEmpty(remarks))
 			cv.put(REMARKS, remarks);
-		if (endTime != null) {
-			cv.put(ENDTIME, endTime);
+		if (ISON != null) {
+			cv.put(ISON, isOn);
 		}
 		if (cycleType != null) {
 			cv.put(CYCLETYPE, cycleType);
-		}
-		if (cycleContent != null) {
-			cv.put(CYCLECONTENT, cycleContent);
 		}
 		return cv;
 	}
@@ -72,9 +66,8 @@ public class Alarm extends Model {
 		this._id = c.getLong(c.getColumnIndex(_ID));
 		this.title = c.getString(c.getColumnIndex(TITLE));
 		this.remarks = c.getString(c.getColumnIndex(REMARKS));
-		this.endTime = c.getLong(c.getColumnIndex(ENDTIME));
+		this.isOn = c.getInt(c.getColumnIndex(ISON));
 		this.cycleType = c.getLong(c.getColumnIndex(CYCLETYPE));
-		this.cycleContent = c.getLong(c.getColumnIndex(CYCLECONTENT));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
 	}
 
@@ -102,12 +95,12 @@ public class Alarm extends Model {
 		this.remarks = remarks;
 	}
 
-	public Long getEndTime() {
-		return endTime;
+	public Integer getIsOn() {
+		return isOn;
 	}
 
-	public void setEndTime(Long endTime) {
-		this.endTime = endTime;
+	public void setIsOn(Integer isOn) {
+		this.isOn = isOn;
 	}
 
 	public Long getCycleType() {
@@ -116,14 +109,6 @@ public class Alarm extends Model {
 
 	public void setCycleType(Long cycleType) {
 		this.cycleType = cycleType;
-	}
-
-	public Long getCycleContent() {
-		return cycleContent;
-	}
-
-	public void setCycleContent(Long cycleContent) {
-		this.cycleContent = cycleContent;
 	}
 
 	public Integer getDelFlag() {

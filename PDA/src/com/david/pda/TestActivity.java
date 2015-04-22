@@ -1,15 +1,20 @@
 package com.david.pda;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.david.pda.adapter.MainAffairPlanAdapter;
+import com.david.pda.sqlite.model.Plan;
 
 public class TestActivity extends Activity {
 	private Button btnShowCity = null;  
@@ -21,50 +26,22 @@ public class TestActivity extends Activity {
 	    protected void onCreate(Bundle savedInstanceState) {  
         super.onCreate(savedInstanceState);  
 	        setContentView(R.layout.main_affair_plan);  
-//	        //按钮相关  
-//	       btnShowCity = (Button) super.findViewById(R.id.btn);  
-//       btnShowCity.setOnClickListener(new OnClickListenerImpl());  
-//	       //静态实现的下拉框，数据写在cityInfo.xml文件中  
-//	       this.spCityStatic = (Spinner) super  
-//	                .findViewById(R.id.spinner1);  
-//	        this.spCityStatic  
-//               .setOnItemSelectedListener(new OnItemSelectedListenerImpl());  
-//	       //动态实现的下拉框，数据在程序中获得，实际项目可能来自数据库等  
-//	       this.spCity = (Spinner) super.findViewById(R.id.spinner2);  
-//	       this.adapterCity = new ArrayAdapter<CharSequence>(this,  
-//	                android.R.layout.simple_spinner_dropdown_item, cityInfo);  
-//	       this.spCity.setAdapter(adapterCity);  
-//	      this.spCity.setOnItemSelectedListener(new OnItemSelectedListenerImpl());  
-	    }  
-	    //按钮点击事件  
-	    private class OnClickListenerImpl implements OnClickListener {  
-	        @Override  
-	       public void onClick(View v) {  
-	           String cityStatic = spCityStatic.getSelectedItem().toString();  
-	           String city = spCity.getSelectedItem().toString();  
-	           String selectInfo = "第一个选择的城市是：" + city + "，第二个选择的城市是："  
-	                   + cityStatic;  
-	           Toast.makeText(TestActivity.this, selectInfo, Toast.LENGTH_LONG)  
-	                 .show();  
-	       }  
-	 
-   }  
-	   //下拉框选择事件  
-	   private class OnItemSelectedListenerImpl implements OnItemSelectedListener {  
-	       @Override  
-	      public void onItemSelected(AdapterView<?> parent, View view,  
-	               int position, long id) {  
-	          String city = parent.getItemAtPosition(position).toString();  
-	          Toast.makeText(TestActivity.this, "选择的城市是：" + city,  
-	                    Toast.LENGTH_LONG).show();  
-	       }  
-	 
-	        @Override  
-       public void onNothingSelected(AdapterView<?> parent) {  
-	          // TODO Auto-generated method stub  
-	       }  
-	  
-	    }  
+	        ListView plan_listview = (ListView) findViewById(R.id.main_affair_plan_listview);
+	        MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(this,getItems()); 
+	        plan_listview.setAdapter(planadapter);
 
+	    }  
+	  
+	public List<Plan> getItems(){
+		List<Plan> list = new ArrayList<Plan>();
+		Plan plan = null;
+		for(int i=0;i<5;i++){
+			plan = new Plan();
+			plan.setTitle("title"+(i+1));
+			plan.setCreateTime(2222l);
+			list.add(plan);
+		}
+		return list;
+	}   
 
 }

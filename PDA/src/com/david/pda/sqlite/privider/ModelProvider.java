@@ -16,7 +16,10 @@ import android.net.Uri;
 
 import com.david.pda.sqlite.model.Alarm;
 import com.david.pda.sqlite.model.Countdown;
-import com.david.pda.sqlite.model.CycleContent;
+import com.david.pda.sqlite.model.CycleDetails;
+import com.david.pda.sqlite.model.CycleDetailsForAlarm;
+import com.david.pda.sqlite.model.CycleDetailsForPlan;
+import com.david.pda.sqlite.model.CycleDetailsForPrinciple;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.Memo;
 import com.david.pda.sqlite.model.Plan;
@@ -42,7 +45,9 @@ public class ModelProvider extends ContentProvider {
 	static {
 		TABLES.add(Alarm.TABLE_NAME);
 		TABLES.add(Countdown.TABLE_NAME);
-		TABLES.add(CycleContent.TABLE_NAME);
+		TABLES.add(CycleDetailsForAlarm.TABLE_NAME);
+		TABLES.add(CycleDetailsForPlan.TABLE_NAME);
+		TABLES.add(CycleDetailsForPrinciple.TABLE_NAME);
 		TABLES.add(CycleType.TABLE_NAME);
 		TABLES.add(Memo.TABLE_NAME);
 		TABLES.add(Plan.TABLE_NAME);
@@ -50,21 +55,26 @@ public class ModelProvider extends ContentProvider {
 		TABLES.add(Target.TABLE_NAME);
 
 		for (int i = 0; i < TABLES.size(); i++) {
-			URI_MATHER.addURI(AUTHORITY, TABLES.get(i), i);
+			if (TABLES.get(i).indexOf("for") != -1) {
+				URI_MATHER.addURI(AUTHORITY + "/" + CycleDetails.TABLE_NAME,
+						TABLES.get(i), i);
+			} else
+				URI_MATHER.addURI(AUTHORITY, TABLES.get(i), i);
 		}
 		CREATE_TABLE.put(Alarm.TABLE_NAME, Alarm.CREATE_TABLE());
 		CREATE_TABLE.put(Countdown.TABLE_NAME, Countdown.CREATE_TABLE());
-		CREATE_TABLE.put(CycleContent.TABLE_NAME, CycleContent.CREATE_TABLE());
+
+		CREATE_TABLE.put(CycleDetailsForAlarm.TABLE_NAME,
+				CycleDetailsForAlarm.CREATE_TABLE());
+		CREATE_TABLE.put(CycleDetailsForPlan.TABLE_NAME,
+				CycleDetailsForPlan.CREATE_TABLE());
+		CREATE_TABLE.put(CycleDetailsForPrinciple.TABLE_NAME,
+				CycleDetailsForPrinciple.CREATE_TABLE());
 		CREATE_TABLE.put(CycleType.TABLE_NAME, CycleType.CREATE_TABLE());
 		CREATE_TABLE.put(Memo.TABLE_NAME, Memo.CREATE_TABLE());
 		CREATE_TABLE.put(Plan.TABLE_NAME, Plan.CREATE_TABLE());
 		CREATE_TABLE.put(Principal.TABLE_NAME, Principal.CREATE_TABLE());
 		CREATE_TABLE.put(Target.TABLE_NAME, Target.CREATE_TABLE());
-	}
-
-	public static void add(String table) {
-		TABLES.add(table);
-		URI_MATHER.addURI(AUTHORITY, table, TABLES.size() - 1);
 	}
 
 	@Override
