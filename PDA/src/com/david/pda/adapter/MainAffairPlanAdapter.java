@@ -22,27 +22,23 @@ public class MainAffairPlanAdapter extends BaseAdapter {
 	}
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return data.size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		return data.get(arg0);
 	}
 
 	@Override
 	public long getItemId(int arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+		return arg0;
 	}
 
 	@Override
 	public View getView(int idx, View convertView, ViewGroup parent) {
 		View row = null;
 		if (convertView == null) {
-			// create the row for the first time
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			row = inflater.inflate(R.layout.main_affair_plan_item, parent, false);

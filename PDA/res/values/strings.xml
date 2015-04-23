@@ -55,7 +55,8 @@
     </string-array>
 
     <!-- system setting -->
-    <string name="add_type">添加类型</string>
+    <string name="add_type">添加周期类型</string>
+    <string name="add_affair_plan">添加事务计划</string>
 
     <string-array name="date_type">
         <item>小时</item>

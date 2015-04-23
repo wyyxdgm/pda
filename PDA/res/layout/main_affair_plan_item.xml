@@ -1,68 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RelativeLayout 
-     xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-       >
-   <RelativeLayout 
-       android:id="@+id/affair_plan_item_left"
-       android:layout_height="150dp"
-       android:layout_width="150dp"
-       >
-       <TextView
-           android:id="@+id/affair_plan_item_left_thingname"
-           android:layout_height="35dp"
-           android:layout_width="fill_parent"
-           />
-       
-        <CheckBox  
-	    android:id="@+id/affair_plan_item_left_jj"  
-	    android:layout_width="70dp"  
-	    android:layout_height="50dp"  
-	    android:text="紧急"  
-   	 />  
-	<CheckBox  
-	    android:id="@+id/affair_plan_item_left_zy"  
-	    android:layout_width="70dp"  
-	    android:layout_height="50dp"  
-	    android:text="重要"  
-	   android:layout_toRightOf="@id/affair_plan_item_left_jj"
-    />  
-   </RelativeLayout>
-   
-    <RelativeLayout 
-       android:id="@+id/affair_plan_top_mid"
-       android:layout_height="150dp"
-       android:layout_width="100dp"
-       android:layout_toRightOf="@id/affair_plan_top_left"
-       >
-       <TextView 
-	    android:id="@+id/affair_plan_item_mid_top"  
-	    android:layout_width="70dp"  
-	    android:layout_height="50dp"  
-	    android:text="2015-4-22 9:49"  
-   	 />  
-	<TextView 
-	    android:id="@+id/affair_plan_item_mid_bottom"  
-	    android:layout_width="70dp"  
-	    android:layout_height="50dp"  
-	    android:text="工作-日常安排"  
-	    android:layout_below="@id/affair_plan_top_mid_jj"
-    />  
-        
-   </RelativeLayout>
-   
-     <RelativeLayout 
-       android:id="@+id/affair_plan_top_right"
-       android:layout_height="60dp"
-       android:layout_width="60dp"
-       android:layout_toRightOf="@id/affair_plan_top_mid"
-       >
-       <Button 
-            android:layout_height="60dp"
-             android:layout_marginTop="20dp"
-       android:layout_width="60dp"
-       android:text="GO"
-           />
-   </RelativeLayout>
-   </RelativeLayout>
+    android:background="@drawable/main_some_tools_weather_headpic"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:padding="10dp" >
+
+    <RelativeLayout
+        android:id="@+id/affair_plan_item_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/affair_plan_item_left_thingname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#aaaaaa" />
+
+        <CheckBox
+            android:id="@+id/affair_plan_item_left_jj"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/affair_plan_item_left_thingname"
+            android:layout_marginTop="20dp"
+            android:text="紧急" />
+
+        <CheckBox
+            android:id="@+id/affair_plan_item_left_zy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/affair_plan_item_left_jj"
+            android:layout_toRightOf="@id/affair_plan_item_left_jj"
+            android:text="重要" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/affair_plan_top_mid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/affair_plan_item_mid_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="2015-4-22 9:49" />
+
+        <TextView
+            android:id="@+id/affair_plan_item_mid_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/affair_plan_item_mid_top"
+            android:layout_marginTop="20dp"
+            android:text="工作-日常安排" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/affair_plan_top_right"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/affair_plan_scale_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="#0000FF"
+            android:src="@drawable/yundong" />
+    </RelativeLayout>
+
+</LinearLayout>

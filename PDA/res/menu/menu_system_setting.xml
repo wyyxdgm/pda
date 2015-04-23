@@ -9,4 +9,9 @@
         android:title="@string/add_type"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/menu_system_setting_add_affair_plan"
+        android:orderInCategory="100"
+        android:title="@string/add_affair_plan"
+        app:showAsAction="never"/>
 </menu>
