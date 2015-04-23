@@ -208,10 +208,6 @@ public class TargetManageOptionActivity extends Activity {
 	private void loadData() {
 		DemoDB<Target> db = new DemoDB<Target>(new Target());
 		targets = db.getList(TargetManageOptionActivity.this);
-		if (targets.size() == 0) {// tianjiayigedemo
-			db.insert(new Target("我的储备精力", 360), this);
-			targets = db.getList(TargetManageOptionActivity.this);
-		}
 	}
 
 	private void drawDataToBitmap() {

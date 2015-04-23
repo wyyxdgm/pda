@@ -47,7 +47,7 @@ public class WelcomeActivity extends Activity {
 		public void run() {
 			Log.i(L.t, "has delay 3000 to init app,now start");
 			Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-			intent.setFlags(MainActivity.POSTION_TARGET_MANAGE);
+			intent.setFlags(MainActivity.POSTION_SYSTEM_SETTIONG);
 			startActivity(intent);
 			WelcomeActivity.this.finish();
 		}
