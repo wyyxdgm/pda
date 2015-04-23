@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/main_some_tools_weather_headpic"
+    android:layoutMode="clipBounds"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/list_item_cycle_type_name_lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:text="类型名称:"
+        android:textColor="#FFFF99" />
+
+    <TextView
+        android:id="@+id/list_item_cycle_type_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/list_item_cycle_type_name_lable"
+        android:layout_toRightOf="@id/list_item_cycle_type_name_lable"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/list_item_cycle_type_cycle_length"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="15dp"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/list_item_cycle_type_cycle_length_lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/list_item_cycle_type_cycle_length"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_toLeftOf="@id/list_item_cycle_type_cycle_length"
+        android:text="周期长度:"
+        android:textColor="#FFFF99" />
+
+</RelativeLayout>

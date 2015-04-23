@@ -19,13 +19,25 @@ public class CycleType extends Model {
 	public final static String _ID = "_id";
 	public final static String NAME = "name";
 	public final static String CYCLELENGTH = "cycleLength";
+	public final static String DATETYPE = "dateType";
 	private Long _id;
 	private String name;
 	private Integer delFlag;
 	private Long cycleLength;
+	private DateType dateType;
 
 	public CycleType() {
 		super();
+	}
+
+	public CycleType(Cursor c, Long _id, String name, Integer delFlag,
+			Long cycleLength, DateType dateType) {
+		super(c);
+		this._id = _id;
+		this.name = name;
+		this.delFlag = delFlag;
+		this.cycleLength = cycleLength;
+		this.dateType = dateType;
 	}
 
 	public static String CREATE_TABLE() {
@@ -35,8 +47,17 @@ public class CycleType extends Model {
 		sb.append(_ID).append(" INTEGER primary key autoincrement,");
 		sb.append(NAME).append(" TEXT,");
 		sb.append(CYCLELENGTH).append(" TEXT,");
+		sb.append(DATETYPE).append(" int,");
 		sb.append(DELFLAG).append(" INT)");
 		return sb.toString();
+	}
+
+	public DateType getDateType() {
+		return dateType;
+	}
+
+	public void setDateType(DateType dateType) {
+		this.dateType = dateType;
 	}
 
 	public CycleType(JSONObject jo) throws JSONException {
@@ -48,6 +69,9 @@ public class CycleType extends Model {
 		if (jo.has(CYCLELENGTH)) {
 			this.setCycleLength(jo.getLong(CYCLELENGTH));
 		}
+		if (jo.has(DATETYPE)) {
+			this.setDateType(DateType.values()[jo.getInt(DATETYPE)]);
+		}
 		if (jo.has(NAME))
 			this.name = jo.getString("name");
 	}
@@ -57,6 +81,7 @@ public class CycleType extends Model {
 		this.name = c.getString(c.getColumnIndex(NAME));
 		this.cycleLength = c.getLong(c.getColumnIndex(CYCLELENGTH));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
+		this.dateType = DateType.values()[c.getInt(c.getColumnIndex(DATETYPE))];
 	}
 
 	public ContentValues toContentValues() {
@@ -69,6 +94,8 @@ public class CycleType extends Model {
 			cv.put(DELFLAG, delFlag);
 		if (cycleLength != null)
 			cv.put(CYCLELENGTH, cycleLength);
+		if (dateType != null)
+			cv.put(DATETYPE, dateType.getIndex());
 		return cv;
 	}
 
@@ -81,6 +108,7 @@ public class CycleType extends Model {
 		if (!TextUtils.isEmpty(name))
 			jo.put(NAME, name);
 		jo.put(DELFLAG, delFlag);
+		jo.put(DATETYPE, dateType.getIndex());
 		return jo;
 	}
 
