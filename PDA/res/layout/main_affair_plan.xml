@@ -1,27 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/main_affair_plan"
-    android:orientation="horizontal" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="4dp"
-        android:contentDescription="@string/abc_action_bar_up_description" >
-    </ImageView>
-
-    <TextView
-        android:id="@+id/textView1"
+    <LinearLayout
+        android:id="@+id/affair_plan_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:gravity="left"
-        android:text="@string/drawer_open"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="18sp" >
-    </TextView>
+        android:background="#6666FF"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/affair_plan_top_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="2"
+            android:orientation="vertical" >
+
+            <AutoCompleteTextView
+                android:id="@+id/affair_plan_top_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:hint="请输入收索条件"
+                android:inputType="text" />
+
+            <Spinner
+                android:id="@+id/affair_plan_top_target_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:entries="@array/cityarray" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/affair_plan_top_mid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/affair_plan_top_mid_jj"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="紧急" />
+
+            <CheckBox
+                android:id="@+id/affair_plan_top_mid_zy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="重要" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/affair_plan_top_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/affair_plan_top_go"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:text="GO" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/main_affair_plan_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>

@@ -46,8 +46,17 @@
     <string name="main_some_tools_weather_ganmao">感冒</string>
     <!-- main_target_manage -->
     <string name="please_input_scryed">请输入分身</string>
+
+    <string-array name="cityarray">
+        <item>北京</item>
+        <item>江苏</item>
+        <item>浙江</item>
+        <item>上海</item>
+    </string-array>
+
     <!-- system setting -->
-    <string name="add_type">添加类型</string>
+    <string name="add_type">添加周期类型</string>
+    <string name="add_affair_plan">添加事务计划</string>
 
     <string-array name="date_type">
         <item>小时</item>

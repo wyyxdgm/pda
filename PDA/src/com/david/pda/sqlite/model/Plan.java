@@ -118,6 +118,10 @@ public class Plan extends Model {
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
 	}
 
+	public Plan() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Long get_id() {
 		return _id;
 	}

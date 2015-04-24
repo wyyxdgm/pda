@@ -1,6 +1,7 @@
 package com.david.pda;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
@@ -32,20 +33,24 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.david.pda.adapter.BataanAdapter;
+import com.david.pda.adapter.MainAffairPlanAdapter;
 import com.david.pda.adapter.SystemSettingListAdapter;
 import com.david.pda.sqlite.model.CycleType;
-import com.david.pda.sqlite.model.Memo;
 import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DrawUtil;
@@ -212,7 +217,26 @@ public class MainActivity extends ActionBarActivity {
 				}
 			});
 		} else if (position == POSTION_AFFAIR_PLAN) {
-
+			Button go = (Button) v.findViewById(R.id.affair_plan_top_go);
+			Spinner targets = (Spinner) v
+					.findViewById(R.id.affair_plan_top_target_spinner);
+			List<Target> ts = new DemoDB<Target>(new Target()).getList(this);
+			List<String> names = new ArrayList<String>();
+			for (Target t : ts) {
+				names.add(t.getName());
+			}
+			targets.setAdapter(new ArrayAdapter<String>(this,
+					android.R.layout.simple_spinner_dropdown_item, names));
+			AutoCompleteTextView searchText = (AutoCompleteTextView) v
+					.findViewById(R.id.affair_plan_top_search);
+			CheckBox jj = (CheckBox) v
+					.findViewById(R.id.affair_plan_top_mid_jj);
+			CheckBox zy = (CheckBox) v
+					.findViewById(R.id.affair_plan_top_mid_jj);
+			ListView plan_listview = (ListView) findViewById(R.id.main_affair_plan_listview);
+			MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(this,
+					new TestActivity().getItems());
+			plan_listview.setAdapter(planadapter);
 		} else if (position == POSTION_FOUR_CLASSES) {
 
 		} else if (position == POSTION_SELF_PRINCIPLE) {
@@ -226,7 +250,8 @@ public class MainActivity extends ActionBarActivity {
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int arg2, long arg3) {
-					Intent i = new Intent(MainActivity.this,CycleTypeOptionActivity.class);
+					Intent i = new Intent(MainActivity.this,
+							CycleTypeOptionActivity.class);
 					i.putExtra("opt", "update");
 					i.putExtra("position", arg2);
 					MainActivity.this.startActivity(i);
@@ -364,21 +389,30 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (this.currentPostion == POSTION_SYSTEM_SETTIONG) {
-			getMenuInflater().inflate(R.menu.menu_system_setting, menu);
-			menu.getItem(0).setOnMenuItemClickListener(
-					new OnMenuItemClickListener() {
 
-						@Override
-						public boolean onMenuItemClick(MenuItem arg0) {
-							Intent i = new Intent(MainActivity.this,
-									CycleTypeOptionActivity.class);
-							startActivity(i);
-							return false;
-						}
-					});
-		} else
-			getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.menu.menu_system_setting, menu);
+		menu.getItem(0).setOnMenuItemClickListener(
+				new OnMenuItemClickListener() {
+					@Override
+					public boolean onMenuItemClick(MenuItem arg0) {
+						Intent i = new Intent(MainActivity.this,
+								CycleTypeOptionActivity.class);
+						i.setFlags(POSTION_SYSTEM_SETTIONG);
+						startActivity(i);
+						return false;
+					}
+				});
+		menu.getItem(1).setOnMenuItemClickListener(
+				new OnMenuItemClickListener() {
+					@Override
+					public boolean onMenuItemClick(MenuItem arg0) {
+						Intent i = new Intent(MainActivity.this,
+								AffairPlanOptionActivity.class);
+						i.setFlags(POSTION_AFFAIR_PLAN);
+						startActivity(i);
+						return false;
+					}
+				});
 		return true;
 	}
 

@@ -79,7 +79,7 @@
             android:name="com.david.pda.SelfPrincipleOptionActivity"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
-        <activity android:name="org.achartengine.GraphicalActivity" />
+        <!-- <activity android:name="org.achartengine.GraphicalActivity" /> -->
         <activity
             android:name="com.david.pda.TargetManageComparedToFact"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
@@ -100,6 +100,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.david.pda.TestActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
 
         <provider
