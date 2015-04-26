@@ -21,79 +21,108 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.david.pda.MainActivity"
-            android:label="" >
+            android:label=""
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.david.pda.LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name="com.david.pda.SomeToolsWeatherActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.SomeToolsWeatherDataActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.SomeToolsMemoActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.SomeToolsMemoOptionActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.TestDrawableActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.SomeToolsCountdownActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.SomeToolsCountdownOptionActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.DateTimePicker"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.SomeToolsCalendarActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.david.pda.SomeToolsAlarmActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.david.pda.SomeToolsAlarmOptionActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.TargetManageOptionActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.AffairFourClass"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.AffairPlanOptionActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.SelfPrincipleOptionActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
-        <!-- <activity android:name="org.achartengine.GraphicalActivity" /> -->
+        <!-- <activity android:screenOrientation="portrait" android:name="org.achartengine.GraphicalActivity" /> -->
         <activity
             android:name="com.david.pda.TargetManageComparedToFact"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.TestBarActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.CycleTypeOptionActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
         <activity
             android:name="com.david.pda.WelcomeActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -103,6 +132,7 @@
         </activity>
         <activity
             android:name="com.david.pda.TestActivity"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
 

@@ -3,6 +3,7 @@ package com.david.pda.sqlite.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.david.pda.sqlite.model.base.Model;
@@ -69,6 +70,26 @@ public class Alarm extends Model {
 		this.isOn = c.getInt(c.getColumnIndex(ISON));
 		this.cycleType = c.getLong(c.getColumnIndex(CYCLETYPE));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
+	}
+
+	public Alarm(Bundle b) {
+		this._id = b.getLong(_ID);
+		this.title = b.getString(TITLE);
+		this.remarks = b.getString(REMARKS);
+		this.isOn = b.getInt(ISON);
+		this.cycleType = b.getLong(CYCLETYPE);
+		this.delFlag = b.getInt(DELFLAG);
+	}
+
+	public Bundle toBundle() {
+		Bundle b = new Bundle();
+		b.putLong(_ID, _id);
+		b.putString(TITLE, title);
+		b.putString(REMARKS, remarks);
+		b.putInt(ISON, isOn);
+		b.putLong(CYCLETYPE, cycleType);
+		b.putInt(DELFLAG, delFlag);
+		return b;
 	}
 
 	public Long get_id() {

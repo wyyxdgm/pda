@@ -41,7 +41,7 @@ public class CycleDetailsForPrinciple extends CycleDetails {
 		sb.append(ISAHEAD).append(" INT,");
 		sb.append(AHEADTIME).append(" TEXT,");
 		sb.append(DISCRIPTION).append(" TEXT,");
-		sb.append(WEATHERSENSITIVITY).append(" INT,");
+		sb.append(WEATHERSENSITIVITY).append(" TEXT,");
 		sb.append(STARTTIME).append(" LONG,");
 		sb.append(ENDTIME).append(" LONG,");
 		sb.append(DELFLAG).append(" INT)");
@@ -54,7 +54,7 @@ public class CycleDetailsForPrinciple extends CycleDetails {
 	private Integer isAhead;
 	private Long aheadTime;
 	private String discription;
-	private Integer weatherSensitivity;
+	private String weatherSensitivity;
 	private Long startTime;
 	private Long endTime;
 	private Integer delFlag;
@@ -94,8 +94,8 @@ public class CycleDetailsForPrinciple extends CycleDetails {
 		this.isAhead = c.getInt(c.getColumnIndex(ISAHEAD));
 		this.cycleFor = c.getLong(c.getColumnIndex(CYLEFOR));
 		this.isTip = c.getInt(c.getColumnIndex(ISTIP));
-		this.weatherSensitivity = c
-				.getInt(c.getColumnIndex(WEATHERSENSITIVITY));
+		this.weatherSensitivity = c.getString(c
+				.getColumnIndex(WEATHERSENSITIVITY));
 		this.aheadTime = c.getLong(c.getColumnIndex(AHEADTIME));
 		this.startTime = c.getLong(c.getColumnIndex(STARTTIME));
 		this.endTime = c.getLong(c.getColumnIndex(ENDTIME));
@@ -151,11 +151,11 @@ public class CycleDetailsForPrinciple extends CycleDetails {
 		this.discription = discription;
 	}
 
-	public Integer getWeatherSensitivity() {
+	public String getWeatherSensitivity() {
 		return weatherSensitivity;
 	}
 
-	public void setWeatherSensitivity(Integer weatherSensitivity) {
+	public void setWeatherSensitivity(String weatherSensitivity) {
 		this.weatherSensitivity = weatherSensitivity;
 	}
 

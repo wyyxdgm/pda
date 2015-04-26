@@ -140,6 +140,13 @@ public class CycleType extends Model {
 		return cycleLength;
 	}
 
+	public String getDescription() {
+		if (cycleLength != null && dateType != null)
+			return cycleLength + "" + dateType.getName();
+		else
+			return "";
+	}
+
 	public void setCycleLength(Long cycleLength) {
 		this.cycleLength = cycleLength;
 	}

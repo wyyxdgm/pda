@@ -16,7 +16,8 @@ public class CycleDetailsForAlarm extends CycleDetails {
 	private static final long serialVersionUID = 36361417733489344L;
 	public static final String TABLE_NAME = "foralarm";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
-			+ ModelProvider.AUTHORITY + "/"+CycleDetails.TABLE_NAME +"/"+ TABLE_NAME);
+			+ ModelProvider.AUTHORITY + "/" + CycleDetails.TABLE_NAME + "/"
+			+ TABLE_NAME);
 	public final static String _ID = "_id";
 	public final static String CYLEFOR = "cycleFor";
 	public final static String STARTTIME = "startTime";
@@ -26,6 +27,20 @@ public class CycleDetailsForAlarm extends CycleDetails {
 	public final static String ISAHEAD = "isAhead";
 	public final static String AHEADTIME = "aheadTime";
 	public final static String DISCRIPTION = "discription";
+
+	public static CycleDetailsForAlarm getTest(int i) {
+		CycleDetailsForAlarm c = new CycleDetailsForAlarm();
+		c.set_id(i * 1l);
+		c.setAheadTime(111111111l);
+		c.setDelFlag(Model.FLAG_EXISTS);
+		c.setDiscription("hhe");
+		c.setEndTime(10000000000l);
+		c.setStartTime(100000000l);
+		c.setIsAhead(Model.IS_YES);
+		c.setWeatherSensitivity("mingtian");
+		c.setIsTip(Model.IS_YES);
+		return c;
+	}
 
 	public CycleDetailsForAlarm() {
 	}
@@ -40,7 +55,7 @@ public class CycleDetailsForAlarm extends CycleDetails {
 		sb.append(ISAHEAD).append(" INT,");
 		sb.append(AHEADTIME).append(" TEXT,");
 		sb.append(DISCRIPTION).append(" TEXT,");
-		sb.append(WEATHERSENSITIVITY).append(" INT,");
+		sb.append(WEATHERSENSITIVITY).append(" TEXT,");
 		sb.append(STARTTIME).append(" LONG,");
 		sb.append(ENDTIME).append(" LONG,");
 		sb.append(DELFLAG).append(" INT)");
@@ -51,9 +66,12 @@ public class CycleDetailsForAlarm extends CycleDetails {
 	private Long cycleFor;
 	private Integer isTip;
 	private Integer isAhead;
+	/*
+	 * 单位分钟
+	 */
 	private Long aheadTime;
 	private String discription;
-	private Integer weatherSensitivity;
+	private String weatherSensitivity;
 	private Long startTime;
 	private Long endTime;
 	private Integer delFlag;
@@ -93,8 +111,8 @@ public class CycleDetailsForAlarm extends CycleDetails {
 		this.isAhead = c.getInt(c.getColumnIndex(ISAHEAD));
 		this.cycleFor = c.getLong(c.getColumnIndex(CYLEFOR));
 		this.isTip = c.getInt(c.getColumnIndex(ISTIP));
-		this.weatherSensitivity = c
-				.getInt(c.getColumnIndex(WEATHERSENSITIVITY));
+		this.weatherSensitivity = c.getString(c
+				.getColumnIndex(WEATHERSENSITIVITY));
 		this.aheadTime = c.getLong(c.getColumnIndex(AHEADTIME));
 		this.startTime = c.getLong(c.getColumnIndex(STARTTIME));
 		this.endTime = c.getLong(c.getColumnIndex(ENDTIME));
@@ -134,10 +152,16 @@ public class CycleDetailsForAlarm extends CycleDetails {
 		this.isAhead = isAhead;
 	}
 
+	/*
+	 * 单位分钟
+	 */
 	public Long getAheadTime() {
 		return aheadTime;
 	}
 
+	/*
+	 * 单位分钟
+	 */
 	public void setAheadTime(Long aheadTime) {
 		this.aheadTime = aheadTime;
 	}
@@ -150,11 +174,11 @@ public class CycleDetailsForAlarm extends CycleDetails {
 		this.discription = discription;
 	}
 
-	public Integer getWeatherSensitivity() {
+	public String getWeatherSensitivity() {
 		return weatherSensitivity;
 	}
 
-	public void setWeatherSensitivity(Integer weatherSensitivity) {
+	public void setWeatherSensitivity(String weatherSensitivity) {
 		this.weatherSensitivity = weatherSensitivity;
 	}
 

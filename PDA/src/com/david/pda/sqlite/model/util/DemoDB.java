@@ -40,6 +40,20 @@ public class DemoDB<T extends Model> {
 		return list;
 	}
 
+	public List<T> getList(Context context, String selections, String[] args,
+			String orderBy) {
+		Cursor c = context.getContentResolver().query(t.CONTEN_URI(), null,
+				selections, args, orderBy == null ? " _id desc" : null);
+		List<T> list = new ArrayList<T>();
+		if (c != null) {
+			while (c.moveToNext()) {
+				list.add(getModel(c));
+			}
+			c.close();
+		}
+		return list;
+	}
+
 	public boolean update(Model obj, Context context) throws JSONException {
 		ContentValues values = obj.toContentValues();
 		String where = T._ID + "=?";

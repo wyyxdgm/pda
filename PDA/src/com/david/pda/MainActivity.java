@@ -57,7 +57,7 @@ import com.david.pda.util.other.DrawUtil;
 import com.david.pda.weather.model.util.L;
 
 public class MainActivity extends ActionBarActivity {
-	private int currentPostion = 0;
+	public int currentPostion = 0;
 	public static final int POSTION_TARGET_MANAGE = 0;
 	public static final int POSTION_AFFAIR_PLAN = 1;
 	public static final int POSTION_TODAY_SCHEDULE = 2;
@@ -188,6 +188,7 @@ public class MainActivity extends ActionBarActivity {
 					Intent intent = new Intent(MainActivity.this,
 							SomeToolsWeatherActivity.class);
 					startActivity(intent);
+					MainActivity.this.finish();
 				}
 			});
 			memo.setOnClickListener(new OnClickListener() {
@@ -197,6 +198,7 @@ public class MainActivity extends ActionBarActivity {
 					Intent intent = new Intent(MainActivity.this,
 							SomeToolsMemoActivity.class);
 					startActivity(intent);
+					MainActivity.this.finish();
 				}
 			});
 			countdown.setOnClickListener(new OnClickListener() {
@@ -206,6 +208,7 @@ public class MainActivity extends ActionBarActivity {
 					Intent intent = new Intent(MainActivity.this,
 							SomeToolsCountdownActivity.class);
 					startActivity(intent);
+					MainActivity.this.finish();
 				}
 			});
 			calendar.setOnClickListener(new OnClickListener() {
@@ -214,6 +217,18 @@ public class MainActivity extends ActionBarActivity {
 					Intent intent = new Intent(MainActivity.this,
 							SomeToolsCalendarActivity.class);
 					startActivity(intent);
+					MainActivity.this.finish();
+				}
+			});
+			alarm.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					Log.i(L.t, "alarm");
+					Intent intent = new Intent(MainActivity.this,
+							SomeToolsAlarmActivity.class);
+					startActivity(intent);
+					MainActivity.this.finish();
 				}
 			});
 		} else if (position == POSTION_AFFAIR_PLAN) {

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/main_some_tools_weather_headpic"
+    android:layoutMode="clipBounds"
+    android:padding="10dp" >
+
+    <!-- 标题: -->
+
+    <TextView
+        android:id="@+id/list_item_alarm_title_lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:text="标题:"
+        android:textColor="#FFFF99" />
+
+    <TextView
+        android:id="@+id/list_item_alarm_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/list_item_alarm_title_lable"
+        android:layout_toRightOf="@id/list_item_alarm_title_lable"
+        android:layout_marginLeft="20dp"
+        android:textSize="16sp" />
+    <!-- 周期 -->
+
+    <TextView
+        android:id="@+id/list_item_alarm_cycle_lable"
+        android:layout_below="@id/list_item_alarm_title_lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:text="周期:"
+        android:textColor="#FFFF99" />
+
+    <TextView
+        android:id="@+id/list_item_alarm_cycle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_alignBaseline="@id/list_item_alarm_cycle_lable"
+        android:layout_toRightOf="@id/list_item_alarm_cycle_lable"
+        android:textSize="16sp" />
+    <!-- 备注 -->
+
+    <TextView
+        android:id="@+id/list_item_alarm_remarks"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="15dp"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/list_item_alarm_remarks_lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/list_item_alarm_remarks"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_toLeftOf="@id/list_item_alarm_remarks"
+        android:text="备注:"
+        android:textColor="#FFFF99" />
+    <!-- 下一次提醒时间 -->
+
+    <TextView
+        android:id="@+id/list_item_alarm_next_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/list_item_alarm_remarks"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="15dp"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/list_item_alarm_next_time_lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/list_item_alarm_remarks_lable"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_toLeftOf="@id/list_item_alarm_next_time"
+        android:text="最近提醒时间:"
+        android:textColor="#FFFF99" />
+
+</RelativeLayout>

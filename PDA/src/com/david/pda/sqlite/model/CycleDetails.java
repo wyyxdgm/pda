@@ -1,12 +1,12 @@
 package com.david.pda.sqlite.model;
 
-import com.david.pda.sqlite.model.base.Model;
-import com.david.pda.sqlite.privider.ModelProvider;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
+
+import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.sqlite.privider.ModelProvider;
 
 public abstract class CycleDetails extends Model {
 	public static final int DETAIL_FOR_PLAN = 1;
@@ -40,7 +40,7 @@ public abstract class CycleDetails extends Model {
 		sb.append(ISAHEAD).append(" INT,");
 		sb.append(AHEADTIME).append(" TEXT,");
 		sb.append(DISCRIPTION).append(" TEXT,");
-		sb.append(WEATHERSENSITIVITY).append(" INT,");
+		sb.append(WEATHERSENSITIVITY).append(" TEXT,");
 		sb.append(STARTTIME).append(" LONG,");
 		sb.append(ENDTIME).append(" LONG,");
 		sb.append(DELFLAG).append(" INT)");
@@ -53,7 +53,7 @@ public abstract class CycleDetails extends Model {
 	private Integer isAhead;
 	private Long aheadTime;
 	private String discription;
-	private Integer weatherSensitivity;
+	private String weatherSensitivity;
 	private Long startTime;
 	private Long endTime;
 	private Integer delFlag;
@@ -93,8 +93,8 @@ public abstract class CycleDetails extends Model {
 		this.isAhead = c.getInt(c.getColumnIndex(ISAHEAD));
 		this.cycleFor = c.getLong(c.getColumnIndex(CYLEFOR));
 		this.isTip = c.getInt(c.getColumnIndex(ISTIP));
-		this.weatherSensitivity = c
-				.getInt(c.getColumnIndex(WEATHERSENSITIVITY));
+		this.weatherSensitivity = c.getString(c
+				.getColumnIndex(WEATHERSENSITIVITY));
 		this.aheadTime = c.getLong(c.getColumnIndex(AHEADTIME));
 		this.startTime = c.getLong(c.getColumnIndex(STARTTIME));
 		this.endTime = c.getLong(c.getColumnIndex(ENDTIME));
@@ -150,11 +150,11 @@ public abstract class CycleDetails extends Model {
 		this.discription = discription;
 	}
 
-	public Integer getWeatherSensitivity() {
+	public String getWeatherSensitivity() {
 		return weatherSensitivity;
 	}
 
-	public void setWeatherSensitivity(Integer weatherSensitivity) {
+	public void setWeatherSensitivity(String weatherSensitivity) {
 		this.weatherSensitivity = weatherSensitivity;
 	}
 

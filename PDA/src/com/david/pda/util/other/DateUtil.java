@@ -135,4 +135,17 @@ public class DateUtil {
 			return format(H时_m分, cycleLength);
 		}
 	}
+
+	public static int[] getDHM(long mi) {
+		int[] a = new int[3];
+		long t = mi / (1000 * 60);// m is m
+		a[2] = (int) (t % 60);// get m
+		t /= 60;// m is h
+		a[1] = (int) (t % 24);// get h
+		a[0] = (int) (t / 24);// get day
+		return a;
+	}
+	public static long getLongByDHM(int d,int h,int m){
+		return ((d*24+h)*60+m)*60l*1000l;
+	}
 }
