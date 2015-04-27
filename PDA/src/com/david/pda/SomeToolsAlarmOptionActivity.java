@@ -1,10 +1,15 @@
 package com.david.pda;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
@@ -14,6 +19,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -40,12 +48,14 @@ import com.david.pda.weather.model.util.L;
 public class SomeToolsAlarmOptionActivity extends Activity {
 	public final static int FLAG_ADD = 1;
 	public final static int FLAG_UPDATE = 2;
-	private final String OPTION_UPDATE = "update";
-	private final String OPTION_ADD = "add";
-	private final String OPTION_DELETE = "delete";
+	private int flagOption = FLAG_ADD;
+	// private final String OPTION_UPDATE = "update";
+	// private final String OPTION_ADD = "add";
+	// private final String OPTION_DELETE = "delete";
 	ImageButton backward;
 	private Alarm alarm = new Alarm();
-	private List<CycleDetailsForAlarm> details = new ArrayList<CycleDetailsForAlarm>();
+	// private List<CycleDetailsForAlarm> details = new
+	// ArrayList<CycleDetailsForAlarm>();
 	private ListView detailsListView;
 	EditText titleEditText;
 	EditText contentEditText;
@@ -59,12 +69,12 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 	private PopupWindow popupWindow;
 	private CycleDetails currentDetail;
 	private List<CycleType> cycleTypeList;
+	private int selectionOfCycleTyp = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_some_tools_alarm_option);
-		Intent intent = super.getIntent();
 		backward = (ImageButton) findViewById(R.id.main_some_tools_alarm_option_topbar_backward);
 		topBar = (RelativeLayout) findViewById(R.id.main_some_tools_alarm_option_topbar);
 		Bind.bindReturn(backward, SomeToolsAlarmOptionActivity.this,
@@ -79,22 +89,19 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 		cycleTypes = (Spinner) findViewById(R.id.main_some_tools_alarm_option_cycle_type_spinner);
 		addforList.setOnClickListener(new AddListItemListener());
 		cancleButton.setOnClickListener(new OnCancelListener());
+		mAdapter = new CycleDetailsArrayAdapter(this,
+				R.id.list_item_cycle_details_resource);
 		detailsListView.setAdapter(mAdapter);
-		Log.i(L.t, "intent" + intent);
-		Intent i = intent;
-		if (FLAG_UPDATE == intent.getFlags()) {// update
-			alarm = (Alarm) intent.getSerializableExtra("alarm");
-			Log.i(L.t, alarm + "");
-			getDetailsByAlarm();
-			mAdapter = new CycleDetailsArrayAdapter(this,
-					R.id.list_item_cycle_details_resource, details);
-			yesButton.setOnClickListener(new UpdateListenr());
+		detailsListView.setOnItemLongClickListener(new DeleteDetailListener());
+		detailsListView.setOnItemClickListener(new UpdateDetailListener());
+		if (FLAG_UPDATE == super.getIntent().getFlags()) {// update
+			alarm = (Alarm) super.getIntent().getSerializableExtra("alarm");
 			showModelToView();
+			yesButton.setOnClickListener(new UpdateListenr());
 			Log.i(L.t, "update");
-		} else if (FLAG_ADD == intent.getFlags()) {// add
+			flagOption = FLAG_UPDATE;
+		} else if (FLAG_ADD == super.getIntent().getFlags()) {// add
 			yesButton.setOnClickListener(new AddListenr());
-			mAdapter = new CycleDetailsArrayAdapter(this,
-					R.id.list_item_cycle_details_resource, details);
 			Log.i(L.t, "add");
 		}
 		cycleTypes
@@ -102,8 +109,6 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 						android.R.layout.simple_spinner_dropdown_item,
 						getCycleTypes()));
 	}
-
-	private int selectionOfCycleTyp = 0;
 
 	private String[] getCycleTypes() {
 		if (cycleTypeList == null) {
@@ -128,18 +133,23 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 
 		@Override
 		public void onClick(View arg0) {
-			Log.i(L.t, "为List添加item");
-			showWindowForAdd();
+			if (flagOption == FLAG_ADD) {
+				Log.i(L.t, "为List添加item");
+				showWindowForAdd();
+			} else if (flagOption == FLAG_UPDATE) {
+				if (currentDetail != null)
+					currentDetail.set_id(null);
+				showWindowForUpdate();
+			}
 		}
 	}
 
 	// update Alarm的时候，获取之前的Details数据
-	void getDetailsByAlarm() {
-		// detailsListView.setAdapter();
-		details = new DemoDB<CycleDetailsForAlarm>(new CycleDetailsForAlarm())
+	List<CycleDetailsForAlarm> getDetailsByAlarm(String alarmId) {
+		return new DemoDB<CycleDetailsForAlarm>(new CycleDetailsForAlarm())
 				.getList(SomeToolsAlarmOptionActivity.this, " "
 						+ CycleDetailsForAlarm.CYLEFOR + "=?",
-						new String[] { alarm.get_id() + "" }, null);
+						new String[] { alarmId }, null);
 	}
 
 	// 点击更新按钮。更新除了List外的数据
@@ -147,9 +157,20 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 
 		@Override
 		public void onClick(View arg0) {
-
+			getAlarmFromView();
+			DemoDB<Alarm> db = new DemoDB<Alarm>(alarm);
+			try {
+				db.update(alarm, SomeToolsAlarmOptionActivity.this);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			Toast.makeText(SomeToolsAlarmOptionActivity.this, "更新成功!",
+					Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(SomeToolsAlarmOptionActivity.this,
+					SomeToolsAlarmActivity.class);
+			startActivity(intent);
+			finish();
 		}
-
 	}
 
 	// 点击添加按钮，新建，这时候需要将list数据同步更新到数据库
@@ -158,8 +179,9 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 		public void onClick(View arg0) {
 			Log.i(L.t, "add Alarm");
 			getAlarmFromView();
-			if(mAdapter.getCount()==0){
-				//add Toast here
+			if (mAdapter.getCount() == 0) {
+				Toast.makeText(SomeToolsAlarmOptionActivity.this,
+						"请添加具体的周期内容!", Toast.LENGTH_SHORT).show();
 				return;
 			}
 			DemoDB<Alarm> db = new DemoDB<Alarm>(new Alarm());
@@ -197,32 +219,33 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 		alarm.setCycleType(c.get_id());
 	}
 
+	public void refreshDetails() {
+		if (mAdapter != null) {
+			mAdapter.clear();
+			List<CycleDetailsForAlarm> details = getDetailsByAlarm(alarm
+					.get_id() + "");
+			for (CycleDetailsForAlarm c : details) {
+				mAdapter.add(c);
+			}
+			mAdapter.notifyDataSetChanged();
+		}
+	}
+
 	// 更新的时候，将数据显示到视图上
 	public void showModelToView() {
 		this.checkBox.setChecked(alarm.getIsOn() == Model.IS_ON);
 		this.contentEditText.setText(alarm.getRemarks());
 		this.titleEditText.setText(alarm.getTitle());
-
 		this.cycleTypes.setSelection(selectionOfCycleTyp);
-		if (details == null) {
-			DemoDB<CycleDetailsForAlarm> db = new DemoDB<CycleDetailsForAlarm>(
-					new CycleDetailsForAlarm());
-			details = db.getList(this, CycleDetailsForAlarm.CYLEFOR + "=?",
-					new String[] { alarm.get_id() + "" }, null);
-		}
-		if (details.size() == 0) {
-			CycleDetailsForAlarm c = null;
-			for (int i = 0; i < 10; i++) {
-				c = CycleDetailsForAlarm.getTest(i);
-				details.add(c);
-			}
-		}
-		mAdapter.notifyDataSetChanged();
+		refreshDetails();
 	}
 
 	private void showWindowForUpdate() {
-		if (alarm == null || currentDetail == null) {
+		if (alarm == null) {
 			return;
+		}
+		if (currentDetail == null) {
+			currentDetail = new CycleDetailsForAlarm();
 		}
 		initWindow();
 		initUpdateLayoutContent();
@@ -262,10 +285,9 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 			public void onClick(View arg0) {// add
 				Log.i(L.t, "add");
 				getCycleDetailFromPopup();
-				SomeToolsAlarmOptionActivity.this.mAdapter.add(currentDetail);
-				SomeToolsAlarmOptionActivity.this.mAdapter
-						.notifyDataSetChanged();
-				SomeToolsAlarmOptionActivity.this.hideWindow();
+				mAdapter.add(currentDetail);
+				mAdapter.notifyDataSetChanged();
+				hideWindow();
 			}
 		});
 	}
@@ -273,6 +295,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 	// update layout
 
 	private void initUpdateLayoutContent() {
+		fillPopupByCurrentDetail();
 		popupButtonCancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -283,6 +306,25 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {// update
 				Log.i(L.t, "update");
+				getCycleDetailFromPopup();
+				DemoDB<CycleDetailsForAlarm> db = new DemoDB<CycleDetailsForAlarm>(
+						new CycleDetailsForAlarm());
+				if (currentDetail.get_id() != null) {// update
+					try {
+						db.update(currentDetail,
+								SomeToolsAlarmOptionActivity.this);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				} else {// add
+					currentDetail.setCycleFor(alarm.get_id());
+					db.insert(currentDetail, SomeToolsAlarmOptionActivity.this);
+				}
+				refreshDetails();
+				Toast.makeText(SomeToolsAlarmOptionActivity.this,
+						currentDetail.get_id() == null ? "添加成功！" : "更新成功！",
+						Toast.LENGTH_SHORT).show();
+				hideWindow();
 			}
 		});
 	}
@@ -363,6 +405,56 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 		}
 	}
 
+	private void fillPopupByCurrentDetail() {
+		TextView sday = (TextView) popupView
+				.findViewById(R.id.popup_cycle_details_starttime_day);
+		TextView eday = (TextView) popupView
+				.findViewById(R.id.popup_cycle_details_endtime_day);
+		TextView shour = (TextView) popupView
+				.findViewById(R.id.popup_cycle_details_starttime_hour);
+		TextView ehour = (TextView) popupView
+				.findViewById(R.id.popup_cycle_details_endtime_hour);
+		TextView sminute = (TextView) popupView
+				.findViewById(R.id.popup_cycle_details_starttime_minute);
+		TextView eminute = (TextView) popupView
+				.findViewById(R.id.popup_cycle_details_endtime_minute);
+
+		CheckBox isahead = (CheckBox) popupView
+				.findViewById(R.id.popup_cycle_details_isaheadtime);
+		CheckBox istip = (CheckBox) popupView
+				.findViewById(R.id.popup_cycle_details_istip);
+		TextView content = (TextView) popupView
+				.findViewById(R.id.popup_cycle_details_content);
+		TextView aheadtime = (TextView) popupView
+				.findViewById(R.id.popup_cycle_details_ahead_time);
+		TextView weatherSensitive = (TextView) popupView
+				.findViewById(R.id.popup_cycle_details_weather_sensitive);
+		if (this.currentDetail == null) {
+			this.currentDetail = new CycleDetailsForAlarm();
+		}
+		CycleDetails detail = this.currentDetail;
+
+		int s[] = DateUtil.getDHM(detail.getStartTime());
+		int e[] = DateUtil.getDHM(detail.getEndTime());
+		sday.setText(s[0] + "");
+		shour.setText(s[1] + "");
+		sminute.setText(s[2] + "");
+		eday.setText(e[0] + "");
+		ehour.setText(e[1] + "");
+		eminute.setText(e[2] + "");
+		isahead.setChecked(detail.getIsAhead() != null
+				&& detail.getIsAhead() == Model.IS_YES);
+		istip.setChecked(detail.getIsTip() != null
+				&& detail.getIsTip() == Model.IS_YES);
+		content.setText(detail.getDiscription() == null ? "" : detail
+				.getDiscription());
+		aheadtime.setText(detail.getAheadTime() != null ? detail.getAheadTime()
+				+ "" : "");
+		weatherSensitive
+				.setText(detail.getWeatherSensitivity() != null ? detail
+						.getWeatherSensitivity() : "");
+	}
+
 	private void getCycleDetailFromPopup() {
 		TextView sday = (TextView) popupView
 				.findViewById(R.id.popup_cycle_details_starttime_day);
@@ -387,8 +479,12 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 				.findViewById(R.id.popup_cycle_details_ahead_time);
 		TextView weatherSensitive = (TextView) popupView
 				.findViewById(R.id.popup_cycle_details_weather_sensitive);
-
-		CycleDetails detail = new CycleDetailsForAlarm();
+		CycleDetails detail = null;
+		if (this.currentDetail == null) {
+			detail = new CycleDetailsForAlarm();
+		} else {
+			detail = this.currentDetail;
+		}
 		int ssday = (int) getNumber(sday.getText().toString());
 		int esday = (int) getNumber(eday.getText().toString());
 		int sshour = (int) getNumber(shour.getText().toString());
@@ -397,7 +493,6 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 		int ssminute = (int) getNumber(sminute.getText().toString());
 		int esminute = (int) getNumber(eminute.getText().toString());
 
-		detail.set_id(null);
 		detail.setStartTime(DateUtil.getLongByDHM(ssday, sshour, ssminute));
 		detail.setEndTime(DateUtil.getLongByDHM(esday, eshour, esminute));
 		detail.setIsAhead(isahead.isChecked() ? Model.IS_YES : Model.IS_NO);
@@ -410,8 +505,66 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 
 	private long getNumber(String s) {
 		if (s != null && !s.equals("") && TextUtils.isDigitsOnly(s)) {
-			return Long.valueOf("0" + s);
+			return Long.valueOf("" + s);
 		} else
 			return 0;
+	}
+
+	class UpdateDetailListener implements OnItemClickListener {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+			if (dialog != null && dialog.isShowing()) {
+				return;
+			}
+			currentDetail = mAdapter.getItem(position);
+			showWindowForUpdate();
+		}
+
+	}
+
+	Dialog dialog = null;
+
+	class DeleteDetailListener implements OnItemLongClickListener {
+		@Override
+		public boolean onItemLongClick(AdapterView<?> parent, View view,
+				final int position, long id) {
+			AlertDialog.Builder builder = new Builder(
+					SomeToolsAlarmOptionActivity.this);
+			builder.setMessage("确认删除吗？");
+			builder.setTitle("提示");
+			builder.setPositiveButton("确认",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							CycleDetails c = mAdapter.getItem(position);
+							mAdapter.remove(c);
+							if (c.get_id() != null) {
+								DemoDB<CycleDetailsForAlarm> db = new DemoDB<CycleDetailsForAlarm>(
+										new CycleDetailsForAlarm());
+								try {
+									db.realRemove(c.get_id() + "",
+											SomeToolsAlarmOptionActivity.this);
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+							}
+							mAdapter.notifyDataSetChanged();
+						}
+					});
+			builder.setNegativeButton("取消",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
+			dialog = builder.create();
+			dialog.show();
+			return false;
+		}
+
 	}
 }

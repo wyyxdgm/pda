@@ -55,8 +55,9 @@
             android:id="@+id/main_some_tools_alarm_option_content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:minLines="5" />
+            android:layout_weight="3"
+            android:minLines="3"
+            android:textSize="15sp" />
 
         <RelativeLayout
             android:layout_width="match_parent"

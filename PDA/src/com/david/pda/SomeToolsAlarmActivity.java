@@ -16,7 +16,6 @@ import android.widget.ListView;
 
 import com.david.pda.adapter.AlarmListAdapter;
 import com.david.pda.sqlite.model.Alarm;
-import com.david.pda.sqlite.model.CycleDetailsForAlarm;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
 import com.david.pda.weather.model.util.L;

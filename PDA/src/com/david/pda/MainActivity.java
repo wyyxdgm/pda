@@ -252,6 +252,14 @@ public class MainActivity extends ActionBarActivity {
 			MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(this,
 					new TestActivity().getItems());
 			plan_listview.setAdapter(planadapter);
+			go.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					Intent intent = new Intent(MainActivity.this,
+							AffairPlanOptionActivity.class);
+					startActivity(intent);
+				}
+			});
 		} else if (position == POSTION_FOUR_CLASSES) {
 
 		} else if (position == POSTION_SELF_PRINCIPLE) {

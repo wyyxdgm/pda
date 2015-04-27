@@ -75,7 +75,8 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:gravity="center"
-                android:text="GO" />
+                android:textSize="30sp"
+                android:text="+" />
         </LinearLayout>
     </LinearLayout>
 

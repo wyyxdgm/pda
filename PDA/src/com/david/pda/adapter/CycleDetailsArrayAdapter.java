@@ -1,5 +1,6 @@
 package com.david.pda.adapter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class CycleDetailsArrayAdapter extends ArrayAdapter<CycleDetails> {
 		super(context, resource);
 		this.context = context;
 		this.resource = resource;
+		this.details = new ArrayList<CycleDetails>();
 	}
 
 	@SuppressWarnings("unchecked")

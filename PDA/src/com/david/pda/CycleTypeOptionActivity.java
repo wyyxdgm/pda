@@ -6,7 +6,6 @@ import org.json.JSONException;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -90,9 +89,8 @@ public class CycleTypeOptionActivity extends Activity {
 					ct.setName(name.getText().toString());
 					ct.setDelFlag(Model.FLAG_EXISTS);
 					ct.set_id(CycleTypeOptionActivity.this.id);
-					boolean a = false;
 					try {
-						a = db.update(ct, CycleTypeOptionActivity.this);
+						db.update(ct, CycleTypeOptionActivity.this);
 					} catch (JSONException e) {
 						e.printStackTrace();
 						Toast.makeText(CycleTypeOptionActivity.this, "操作失败！",
@@ -123,7 +121,7 @@ public class CycleTypeOptionActivity extends Activity {
 							.getSelectedView()).getText().toString()));
 					ct.setName(name.getText().toString());
 					ct.setDelFlag(Model.FLAG_EXISTS);
-					Uri a = db.insert(ct, CycleTypeOptionActivity.this);
+					db.insert(ct, CycleTypeOptionActivity.this);
 					Toast.makeText(CycleTypeOptionActivity.this, "操作成功！",
 							Toast.LENGTH_SHORT).show();
 					Intent i = new Intent(CycleTypeOptionActivity.this,

@@ -136,7 +136,9 @@ public class DateUtil {
 		}
 	}
 
-	public static int[] getDHM(long mi) {
+	public static int[] getDHM(Long mi) {
+		if (mi == null)
+			return new int[] { 0, 0, 0 };
 		int[] a = new int[3];
 		long t = mi / (1000 * 60);// m is m
 		a[2] = (int) (t % 60);// get m
@@ -145,7 +147,8 @@ public class DateUtil {
 		a[0] = (int) (t / 24);// get day
 		return a;
 	}
-	public static long getLongByDHM(int d,int h,int m){
-		return ((d*24+h)*60+m)*60l*1000l;
+
+	public static long getLongByDHM(int d, int h, int m) {
+		return ((d * 24 + h) * 60 + m) * 60l * 1000l;
 	}
 }

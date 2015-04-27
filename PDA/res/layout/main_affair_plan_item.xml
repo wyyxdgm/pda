@@ -27,6 +27,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/affair_plan_item_left_thingname"
             android:layout_marginTop="20dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:text="紧急" />
 
         <CheckBox
@@ -35,6 +38,9 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/affair_plan_item_left_jj"
             android:layout_toRightOf="@id/affair_plan_item_left_jj"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:text="重要" />
     </RelativeLayout>
 

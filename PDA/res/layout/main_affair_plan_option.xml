@@ -29,9 +29,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:layout_margin="20dp"
-        android:layout_marginTop="10dp"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -53,7 +52,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:hint="请输入计划名称" />
+                android:hint="请输入计划名称"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -85,11 +85,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:text="开始日期" />
+
+            <EditText
+                android:id="@+id/main_affair_plan_option_target_start_date_et"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:editable="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
                 android:text="开始时间" />
 
             <EditText
-                android:id="@+id/main_affair_plan_option_target_startTime"
-                android:layout_width="fill_parent"
+                android:id="@+id/main_affair_plan_option_target_start_time_et"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:editable="false" />
@@ -105,11 +118,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="开始时间" />
+                android:text="结束日期" />
 
             <EditText
-                android:id="@+id/main_affair_plan_option_target_startTime"
-                android:layout_width="fill_parent"
+                android:id="@+id/main_affair_plan_option_target_end_date_et"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:editable="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="结束时间" />
+
+            <EditText
+                android:id="@+id/main_affair_plan_option_target_end_time_et"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:editable="false" />
@@ -165,11 +191,13 @@
             android:layout_weight="2" >
 
             <EditText
+                android:id="@+id/main_affair_plan_option_content"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="20dp"
                 android:hint="具体内容"
-                android:minLines="5" />
+                android:minLines="2"
+                android:maxLines="2" />
         </LinearLayout>
 
         <LinearLayout
@@ -178,11 +206,13 @@
             android:layout_weight="2" >
 
             <EditText
+                android:id="@+id/main_affair_plan_option_after_success"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="20dp"
                 android:hint="事成之后，奖励自己点什么吧？"
-                android:minLines="5" />
+                android:maxLines="2"
+                android:minLines="2" />
         </LinearLayout>
 
         <LinearLayout
