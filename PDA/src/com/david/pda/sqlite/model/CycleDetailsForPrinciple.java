@@ -16,7 +16,7 @@ public class CycleDetailsForPrinciple extends CycleDetails {
 	private static final long serialVersionUID = 36361417733489344L;
 	public static final String TABLE_NAME = "forprinciple";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
-			+ ModelProvider.AUTHORITY + "/" + CycleDetails.TABLE_NAME + "/"
+			+ ModelProvider.AUTHORITY + "/" + CycleDetails.TABLE_NAME + "/#/"
 			+ TABLE_NAME);
 	public final static String _ID = "_id";
 	public final static String CYLEFOR = "cycleFor";

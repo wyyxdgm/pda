@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import com.david.pda.adapter.AlarmListAdapter;
 import com.david.pda.sqlite.model.Alarm;
+import com.david.pda.sqlite.model.CycleDetailsForAlarm;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
 import com.david.pda.weather.model.util.L;
@@ -30,6 +31,8 @@ public class SomeToolsAlarmActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setContentView(R.layout.main_some_tools_alarm);
+	//	DemoDB<CycleDetailsForAlarm>db = new DemoDB<CycleDetailsForAlarm>(new CycleDetailsForAlarm());
+	//	db.insert(CycleDetailsForAlarm.getTest(12), this);
 		addButton = (Button) findViewById(R.id.addAlarm);
 		listView = (ListView) findViewById(R.id.main_some_tools_alarm_listview);
 		backward = (ImageButton) findViewById(R.id.main_some_tools_alarm_topbar_backward);

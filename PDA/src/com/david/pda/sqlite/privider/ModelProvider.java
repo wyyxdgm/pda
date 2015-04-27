@@ -45,6 +45,7 @@ public class ModelProvider extends ContentProvider {
 	static {
 		TABLES.add(Alarm.TABLE_NAME);
 		TABLES.add(Countdown.TABLE_NAME);
+		TABLES.add(CycleDetails.TABLE_NAME);
 		TABLES.add(CycleDetailsForAlarm.TABLE_NAME);
 		TABLES.add(CycleDetailsForPlan.TABLE_NAME);
 		TABLES.add(CycleDetailsForPrinciple.TABLE_NAME);
@@ -56,14 +57,14 @@ public class ModelProvider extends ContentProvider {
 
 		for (int i = 0; i < TABLES.size(); i++) {
 			if (TABLES.get(i).indexOf("for") != -1) {
-				URI_MATHER.addURI(AUTHORITY + "/" + CycleDetails.TABLE_NAME,
-						TABLES.get(i), i);
+				String s = CycleDetails.TABLE_NAME + "/#/" + TABLES.get(i);
+				URI_MATHER.addURI(AUTHORITY, "/" + s, i);
 			} else
-				URI_MATHER.addURI(AUTHORITY, TABLES.get(i), i);
+				URI_MATHER.addURI(AUTHORITY, "/" + TABLES.get(i), i);
 		}
 		CREATE_TABLE.put(Alarm.TABLE_NAME, Alarm.CREATE_TABLE());
 		CREATE_TABLE.put(Countdown.TABLE_NAME, Countdown.CREATE_TABLE());
-
+		CREATE_TABLE.put(CycleDetails.TABLE_NAME, CycleDetails.CREATE_TABLE());
 		CREATE_TABLE.put(CycleDetailsForAlarm.TABLE_NAME,
 				CycleDetailsForAlarm.CREATE_TABLE());
 		CREATE_TABLE.put(CycleDetailsForPlan.TABLE_NAME,

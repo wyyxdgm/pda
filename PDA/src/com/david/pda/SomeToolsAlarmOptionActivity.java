@@ -44,7 +44,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 	private final String OPTION_ADD = "add";
 	private final String OPTION_DELETE = "delete";
 	ImageButton backward;
-	private Alarm alarm;
+	private Alarm alarm = new Alarm();
 	private List<CycleDetailsForAlarm> details = new ArrayList<CycleDetailsForAlarm>();
 	private ListView detailsListView;
 	EditText titleEditText;
@@ -89,16 +89,18 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 			mAdapter = new CycleDetailsArrayAdapter(this,
 					R.id.list_item_cycle_details_resource, details);
 			yesButton.setOnClickListener(new UpdateListenr());
+			showModelToView();
+			Log.i(L.t, "update");
 		} else if (FLAG_ADD == intent.getFlags()) {// add
 			yesButton.setOnClickListener(new AddListenr());
 			mAdapter = new CycleDetailsArrayAdapter(this,
 					R.id.list_item_cycle_details_resource, details);
+			Log.i(L.t, "add");
 		}
 		cycleTypes
 				.setAdapter(new ArrayAdapter<String>(this,
 						android.R.layout.simple_spinner_dropdown_item,
 						getCycleTypes()));
-		showModelToView();
 	}
 
 	private int selectionOfCycleTyp = 0;
@@ -114,7 +116,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 			s[i++] = c.getDescription();
 			if (alarm != null && alarm.get_id() != null) {
 				if (c.get_id().intValue() == alarm.getCycleType().intValue()) {
-					selectionOfCycleTyp = i-1;
+					selectionOfCycleTyp = i - 1;
 				}
 			}
 		}
@@ -156,14 +158,22 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 		public void onClick(View arg0) {
 			Log.i(L.t, "add Alarm");
 			getAlarmFromView();
+			if(mAdapter.getCount()==0){
+				//add Toast here
+				return;
+			}
 			DemoDB<Alarm> db = new DemoDB<Alarm>(new Alarm());
 			Uri uri = db.insert(alarm, SomeToolsAlarmOptionActivity.this);
 			Long id = Long.valueOf(uri.getLastPathSegment());
 			Log.i(L.t, "" + id);
-			DemoDB<CycleDetailsForAlarm> db2 = new DemoDB<CycleDetailsForAlarm>(
-					new CycleDetailsForAlarm());
-			for (CycleDetailsForAlarm c : details) {
+			CycleDetailsForAlarm alarmfordb = new CycleDetailsForAlarm();
+			DemoDB<CycleDetailsForAlarm> db2;
+			for (int i = 0; i < mAdapter.getCount(); i++) {
+				CycleDetailsForAlarm c = (CycleDetailsForAlarm) mAdapter
+						.getItem(i);
+				Log.i(L.t, c.getCycleFor() + ";;" + c.getAheadTime());
 				c.setCycleFor(id);
+				db2 = new DemoDB<CycleDetailsForAlarm>(alarmfordb);
 				db2.insert(c, SomeToolsAlarmOptionActivity.this);
 			}
 			Toast.makeText(SomeToolsAlarmOptionActivity.this, "添加成功!",
@@ -181,7 +191,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 			alarm = new Alarm();
 		}
 		alarm.setTitle(titleEditText.getText().toString());
-		alarm.setRemarks(content.getText().toString());
+		alarm.setRemarks(contentEditText.getText().toString());
 		alarm.setIsOn(checkBox.isChecked() ? Model.IS_ON : Model.IS_OFF);
 		CycleType c = cycleTypeList.get(cycleTypes.getSelectedItemPosition());
 		alarm.setCycleType(c.get_id());
@@ -195,7 +205,10 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 
 		this.cycleTypes.setSelection(selectionOfCycleTyp);
 		if (details == null) {
-			details = new ArrayList<CycleDetailsForAlarm>();
+			DemoDB<CycleDetailsForAlarm> db = new DemoDB<CycleDetailsForAlarm>(
+					new CycleDetailsForAlarm());
+			details = db.getList(this, CycleDetailsForAlarm.CYLEFOR + "=?",
+					new String[] { alarm.get_id() + "" }, null);
 		}
 		if (details.size() == 0) {
 			CycleDetailsForAlarm c = null;

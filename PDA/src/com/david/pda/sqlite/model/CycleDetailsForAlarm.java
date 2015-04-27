@@ -16,7 +16,7 @@ public class CycleDetailsForAlarm extends CycleDetails {
 	private static final long serialVersionUID = 36361417733489344L;
 	public static final String TABLE_NAME = "foralarm";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
-			+ ModelProvider.AUTHORITY + "/" + CycleDetails.TABLE_NAME + "/"
+			+ ModelProvider.AUTHORITY + "/" + CycleDetails.TABLE_NAME + "/#/"
 			+ TABLE_NAME);
 	public final static String _ID = "_id";
 	public final static String CYLEFOR = "cycleFor";
@@ -30,7 +30,7 @@ public class CycleDetailsForAlarm extends CycleDetails {
 
 	public static CycleDetailsForAlarm getTest(int i) {
 		CycleDetailsForAlarm c = new CycleDetailsForAlarm();
-		c.set_id(i * 1l);
+		c.setCycleFor((long)i);
 		c.setAheadTime(111111111l);
 		c.setDelFlag(Model.FLAG_EXISTS);
 		c.setDiscription("hhe");
