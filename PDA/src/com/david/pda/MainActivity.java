@@ -51,7 +51,9 @@ import com.david.pda.adapter.BataanAdapter;
 import com.david.pda.adapter.MainAffairPlanAdapter;
 import com.david.pda.adapter.SystemSettingListAdapter;
 import com.david.pda.sqlite.model.CycleType;
+import com.david.pda.sqlite.model.Plan;
 import com.david.pda.sqlite.model.Target;
+import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DrawUtil;
 import com.david.pda.weather.model.util.L;
@@ -249,14 +251,16 @@ public class MainActivity extends ActionBarActivity {
 			CheckBox zy = (CheckBox) v
 					.findViewById(R.id.affair_plan_top_mid_jj);
 			ListView plan_listview = (ListView) findViewById(R.id.main_affair_plan_listview);
+			DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
 			MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(this,
-					new TestActivity().getItems());
+					db.getList(this));
 			plan_listview.setAdapter(planadapter);
 			go.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					Intent intent = new Intent(MainActivity.this,
 							AffairPlanOptionActivity.class);
+					intent.setFlags(AffairPlanOptionActivity.FLAG_ADD);
 					startActivity(intent);
 				}
 			});

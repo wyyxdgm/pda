@@ -29,6 +29,14 @@ public class Plan extends Model {
 	public final static String ENDTIME = "endTime";
 	public final static String DOAFTERSUCCESS = "doAfterSuccess";
 
+	public static int urgency(int urgencyimportant) {// 00,01,10,11
+		return urgencyimportant >> 1;
+	}
+
+	public static int important(int urgencyimportant) {
+		return urgencyimportant % 2;
+	}
+
 	public static String CREATE_TABLE() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("CREATE TABLE ");

@@ -29,6 +29,7 @@ public class CycleDetailsForPlan extends CycleDetails {
 	public final static String DISCRIPTION = "discription";
 
 	public CycleDetailsForPlan() {
+		super();
 	}
 
 	public static String CREATE_TABLE() {
