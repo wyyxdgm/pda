@@ -50,6 +50,7 @@ import android.widget.Toast;
 import com.david.pda.adapter.BataanAdapter;
 import com.david.pda.adapter.MainAffairPlanAdapter;
 import com.david.pda.adapter.SystemSettingListAdapter;
+import com.david.pda.sqlite.model.CycleDetailsForPlan;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.Plan;
 import com.david.pda.sqlite.model.Target;
@@ -171,6 +172,8 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
+	ListView plan_listview = null;
+
 	private void initMainView(int position, View v) {
 		if (position == POSTION_SOME_TOOLS) {
 			ImageButton alarm = (ImageButton) v
@@ -250,7 +253,7 @@ public class MainActivity extends ActionBarActivity {
 					.findViewById(R.id.affair_plan_top_mid_jj);
 			CheckBox zy = (CheckBox) v
 					.findViewById(R.id.affair_plan_top_mid_jj);
-			ListView plan_listview = (ListView) findViewById(R.id.main_affair_plan_listview);
+			plan_listview = (ListView) findViewById(R.id.main_affair_plan_listview);
 			DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
 			MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(this,
 					db.getList(this));
@@ -264,6 +267,80 @@ public class MainActivity extends ActionBarActivity {
 					startActivity(intent);
 				}
 			});
+			plan_listview
+					.setOnItemLongClickListener(new OnItemLongClickListener() {
+						@Override
+						public boolean onItemLongClick(AdapterView<?> arg0,
+								View arg1, final int position, long arg3) {
+							AlertDialog.Builder builder = new Builder(
+									MainActivity.this);
+							builder.setMessage("确认删除吗？");
+							builder.setTitle("提示");
+							builder.setPositiveButton("确认",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											dialog.dismiss();
+											DemoDB<Plan> db = new DemoDB<Plan>(
+													new Plan());
+											List<Plan> list = db
+													.getList(MainActivity.this);
+											try {
+												DemoDB<CycleDetailsForPlan> detailsDb = new DemoDB<CycleDetailsForPlan>(
+														new CycleDetailsForPlan());
+												List<CycleDetailsForPlan> ds = detailsDb
+														.getList(
+																MainActivity.this,
+																CycleDetailsForPlan.CYLEFOR
+																		+ "=?",
+																new String[] { list
+																		.get(position)
+																		.get_id()
+																		+ "" },
+																null);
+												if (ds.size() > 0) {
+													detailsDb.realRemove(ds
+															.get(0).get_id()
+															+ "",
+															MainActivity.this);
+												}
+												db.realRemove(list
+														.get(position).get_id()
+														+ "", MainActivity.this);
+												Toast.makeText(
+														MainActivity.this,
+														"删除《"
+																+ list.get(
+																		position)
+																		.getTitle()
+																+ "》成功！",
+														Toast.LENGTH_SHORT)
+														.show();
+												list.remove(position);
+												plan_listview
+														.setAdapter(new MainAffairPlanAdapter(
+																MainActivity.this,
+																db.getList(MainActivity.this)));
+											} catch (JSONException e) {
+												e.printStackTrace();
+											}
+										}
+									});
+							builder.setNegativeButton("取消",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											dialog.dismiss();
+										}
+									});
+							builder.create().show();
+							return false;
+						}
+					});
 		} else if (position == POSTION_FOUR_CLASSES) {
 
 		} else if (position == POSTION_SELF_PRINCIPLE) {
