@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="天" />
+                android:text="@string/day" />
 
             <TextView
                 android:id="@+id/list_item_cycle_details_starttime_hour"
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="时" />
+                android:text="@string/hour" />
 
             <TextView
                 android:id="@+id/list_item_cycle_details_starttime_minute"
@@ -55,7 +55,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="分" />
+                android:text="@string/minute" />
         </LinearLayout>
 
         <LinearLayout
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="天" />
+                android:text="@string/day" />
 
             <TextView
                 android:id="@+id/list_item_cycle_details_endtime_hour"
@@ -88,7 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="时" />
+                android:text="@string/hour" />
 
             <TextView
                 android:id="@+id/list_item_cycle_details_endtime_minute"
@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="分" />
+                android:text="@string/minute" />
         </LinearLayout>
 
         <CheckBox
@@ -111,7 +111,7 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="是否提示" />
+            android:text="@string/is_tip" />
 
         <CheckBox
             android:id="@+id/list_item_cycle_details_isaheadtime"
@@ -120,7 +120,7 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="是否提前提醒" />
+            android:text="@string/is_aheadtime" />
     </LinearLayout>
 
     <LinearLayout

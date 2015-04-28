@@ -322,9 +322,9 @@
                         android:id="@+id/main_affair_plan_option_weather_sensitive"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
                         android:layout_weight="1"
                         android:hint="使用,风隔天气敏感词汇"
-                        android:layout_margin="10dp"
                         android:maxLength="10"
                         android:textSize="15sp" >
                     </EditText>
@@ -357,9 +357,9 @@
                         android:id="@+id/main_affair_plan_option_ahead_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
                         android:hint="提前时间，单位分钟"
                         android:inputType="number"
-                        android:layout_margin="10dp"
                         android:maxLength="3"
                         android:textSize="15sp" >
                     </EditText>
@@ -376,14 +376,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="取消" />
+                    android:layout_weight="1"
+                    android:text="@string/cancel" />
 
                 <Button
                     android:id="@+id/main_affair_plan_option_yes_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="确定" />
+                    android:layout_weight="1"
+                    android:text="@string/confirm" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

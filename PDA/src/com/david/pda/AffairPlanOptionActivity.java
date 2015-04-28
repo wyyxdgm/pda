@@ -3,6 +3,8 @@ package com.david.pda;
 import java.util.Calendar;
 import java.util.List;
 
+import org.json.JSONException;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -59,7 +61,7 @@ public class AffairPlanOptionActivity extends Activity {
 	EditText weatherSensitive;
 	EditText aheadTime;
 
-	Button cancleBT;
+	Button cancelBT;
 	Button confirmBT;
 	private List<Target> targets;
 	private int targetIndex;
@@ -92,7 +94,7 @@ public class AffairPlanOptionActivity extends Activity {
 		isAhead = (CheckBox) findViewById(R.id.main_affair_plan_option_isaheadtime);
 		weatherSensitive = (EditText) findViewById(R.id.main_affair_plan_option_weather_sensitive);
 		aheadTime = (EditText) findViewById(R.id.main_affair_plan_option_ahead_time);
-		cancleBT = (Button) findViewById(R.id.main_affair_plan_option_cancle_button);
+		cancelBT = (Button) findViewById(R.id.main_affair_plan_option_cancle_button);
 		confirmBT = (Button) findViewById(R.id.main_affair_plan_option_yes_button);
 		final Calendar c = Calendar.getInstance();
 		targetListSP
@@ -135,13 +137,10 @@ public class AffairPlanOptionActivity extends Activity {
 								.get(Calendar.DAY_OF_MONTH)).show();
 			}
 		});
-		cancleBT.setOnClickListener(new OnClickListener() {
+		cancelBT.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Intent intent = new Intent(AffairPlanOptionActivity.this,
-						MainActivity.class);
-				AffairPlanOptionActivity.this.startActivity(intent);
-				AffairPlanOptionActivity.this.finish();
+				goBack();
 			}
 		});
 		if (getIntent().getFlags() == FLAG_ADD) {// add option
@@ -154,15 +153,12 @@ public class AffairPlanOptionActivity extends Activity {
 	}
 
 	public void getModelByViewWhenUpdate() {
-		if (detail == null) {
-			getDetailFromDB();
-		}
-		fillViewFromDetail();
 		if (plan == null || plan.get_id() == null) {
 			Toast.makeText(AffairPlanOptionActivity.this, "数据异常！",
 					Toast.LENGTH_SHORT).show();
 		} else {
 			getPlanFromView();
+			getDetailFromView();
 		}
 	}
 
@@ -172,7 +168,18 @@ public class AffairPlanOptionActivity extends Activity {
 		public void onClick(View arg0) {
 			getModelByViewWhenUpdate();
 			if (detail.get_id() != null) {
-
+				DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
+				try {
+					db.update(plan, AffairPlanOptionActivity.this);
+					DemoDB<CycleDetailsForPlan> db2 = new DemoDB<CycleDetailsForPlan>(
+							new CycleDetailsForPlan());
+					db2.update(detail, AffairPlanOptionActivity.this);
+					Toast.makeText(AffairPlanOptionActivity.this, "更新成功！",
+							Toast.LENGTH_SHORT).show();
+					goBack();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -215,7 +222,7 @@ public class AffairPlanOptionActivity extends Activity {
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
-			String ymd = "" + year + "-" + monthOfYear + 1 + "-" + dayOfMonth;
+			String ymd = "" + year + "." + (monthOfYear + 1) + "." + dayOfMonth;
 			Toast.makeText(AffairPlanOptionActivity.this, ymd,
 					Toast.LENGTH_SHORT).show();
 			this.et.setText(ymd);
@@ -239,6 +246,21 @@ public class AffairPlanOptionActivity extends Activity {
 		}
 	}
 
+	private void getTargetIndex() {
+		if (targets != null && plan != null && plan.getTarget() != null) {
+			int i = 0;
+			for (Target t : targets) {
+				if (t.get_id().intValue() == plan.getTarget().intValue()) {
+					targetIndex = i;
+					return;
+				}
+				i++;
+			}
+		} else {
+			targetIndex = 0;
+		}
+	}
+
 	private String[] getTargetList() {
 		DemoDB<Target> db = new DemoDB<Target>(new Target());
 		targets = db.getList(this);
@@ -246,13 +268,6 @@ public class AffairPlanOptionActivity extends Activity {
 		int i = 0;
 		for (Target t : targets) {
 			names[i] = t.getName();
-			if (plan != null && plan.getTarget() != null) {
-				if (t.get_id().intValue() == plan.getTarget().intValue()) {
-					targetIndex = i;
-				}
-			} else {
-				targetIndex = 0;
-			}
 			i++;
 		}
 		return names;
@@ -335,6 +350,7 @@ public class AffairPlanOptionActivity extends Activity {
 	}
 
 	private void fillCommonAttrViewFromPlan() {
+		getTargetIndex();
 		targetListSP.setSelection(targetIndex);
 		title.setText(plan.getTitle());
 		startDP.setText(DateUtil.format(DateUtil.yyyy_MM_dd,
@@ -342,8 +358,8 @@ public class AffairPlanOptionActivity extends Activity {
 		startTP.setText(DateUtil.format(DateUtil.HH_mm, plan.getStartTime()));
 		endDP.setText(DateUtil.format(DateUtil.yyyy_MM_dd, plan.getEndTime()));
 		endTP.setText(DateUtil.format(DateUtil.HH_mm, plan.getEndTime()));
-		jjCB.setText(Plan.urgency(plan.getUrgencyimportant()));
-		zyCB.setText(Plan.important(plan.getUrgencyimportant()));
+		jjCB.setChecked(Plan.urgency(plan.getUrgencyimportant()) == 1);
+		zyCB.setChecked(Plan.important(plan.getUrgencyimportant()) == 1);
 		afterSuccessET.setText(plan.getDoAfterSuccess());
 	}
 
@@ -357,6 +373,7 @@ public class AffairPlanOptionActivity extends Activity {
 		// return;
 		// }
 		targetIndex = targetListSP.getSelectedItemPosition();
+		plan.setTarget(targets.get(targetIndex).get_id().intValue());
 		plan.setStartTime(DateUtil.parse(DateUtil.yyyy_MM_dd_HH_mm, startDP
 				.getText().toString() + " " + startTP.getText().toString()));
 		plan.setEndTime(DateUtil.parse(DateUtil.yyyy_MM_dd_HH_mm, endDP

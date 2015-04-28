@@ -37,6 +37,13 @@ public class Target extends Model {
 		this.delFlag = Model.FLAG_EXISTS;
 	}
 
+	public Target(Long _id, String name, Integer scale) {
+		this._id = _id;
+		this.name = name;
+		this.scale = scale;
+		this.delFlag = Model.FLAG_EXISTS;
+	}
+
 	public Target clone() {
 		Target t = new Target();
 		t.set_id(this._id);

@@ -14,12 +14,12 @@ import com.david.pda.weather.model.util.L;
 public class DateUtil {
 	public final static long DAY = 24 * 60 * 60 * 1000l;
 	public final static String yyyyMMdd = "yyyyMMdd";
-	public final static String yyyy_MM_dd = "yyyy-MM-dd";
+	public final static String yyyy_MM_dd = "yyyy.MM.dd";
 	public final static String yyyy年MM月dd日 = "yyyy年MM月dd日";
 	public final static String yyyy年M月d日 = "yyyy年M月d日";
-	public final static String yyyy_MM_dd_HH_mm_ss = "yyyy-MM-dd HH:mm:ss";
-	public final static String yyyy_MM_dd_HH_mm = "yyyy-MM-dd HH:mm";
-	public final static String MM_dd_HH_mm = "MM-dd HH:mm";
+	public final static String yyyy_MM_dd_HH_mm_ss = "yyyy.MM.dd HH:mm:ss";
+	public final static String yyyy_MM_dd_HH_mm = "yyyy.MM.dd HH:mm";
+	public final static String MM_dd_HH_mm = "MM.dd HH:mm";
 	public final static String HH_mm_ss = "HH:mm:ss";
 	public final static String HH_mm = "HH:mm";
 	public final static String H时_m分 = "H时m分";
@@ -91,22 +91,22 @@ public class DateUtil {
 		Paint p = new Paint();
 		if (angle > 360) {
 			p.setARGB(30, 5, 55, 5);
-			p.setStyle(Paint.Style.FILL);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
 		} else if (angle > 180) {
 			p.setARGB(50, 0, 50, 255);
-			p.setStyle(Paint.Style.FILL);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
 		} else if (angle > 90) {
 			p.setARGB(150, 250, 215, 0);
-			p.setStyle(Paint.Style.FILL);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
 		} else if (angle > 50) {
 			p.setARGB(150, 205, 50, 50);
-			p.setStyle(Paint.Style.FILL);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
 		} else if (angle > 20) {
 			p.setARGB(200, 250, 10, 10);
-			p.setStyle(Paint.Style.FILL);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
 		} else if (angle >= 0) {
 			p.setARGB(255, 255, 0, 0);
-			p.setStyle(Paint.Style.FILL);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
 		} else {// 比当前早，kill it shuld be
 			p.setARGB(10, 0, 0, 0);
 			p.setStyle(Paint.Style.STROKE);
@@ -115,10 +115,12 @@ public class DateUtil {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static Long parse(String text, String yyyyMmDdHHMm) {
+	public static Long parse(String yyyyMmDdHHMm,String text) {
 		if (yyyyMmDdHHMm != null && !yyyyMmDdHHMm.equals("")) {
 			try {
-				return new SimpleDateFormat(yyyyMmDdHHMm).parse(text).getTime();
+				SimpleDateFormat sdf = new SimpleDateFormat(yyyyMmDdHHMm);
+				Date d = sdf.parse(text);
+				return d.getTime();
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

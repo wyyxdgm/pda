@@ -78,8 +78,7 @@
             android:id="@+id/affair_plan_scale_image"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:background="#0000FF"
-            android:src="@drawable/yundong" />
+            android:scaleType="centerInside" />
     </RelativeLayout>
 
 </LinearLayout>

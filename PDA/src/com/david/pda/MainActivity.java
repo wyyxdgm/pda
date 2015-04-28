@@ -24,6 +24,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,10 +34,13 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,6 +49,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.david.pda.adapter.BataanAdapter;
@@ -54,7 +59,6 @@ import com.david.pda.sqlite.model.CycleDetailsForPlan;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.Plan;
 import com.david.pda.sqlite.model.Target;
-import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DrawUtil;
 import com.david.pda.weather.model.util.L;
@@ -173,6 +177,40 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	ListView plan_listview = null;
+	final List<Plan> planList = new ArrayList<Plan>();
+
+	public void setPlanList(List<Plan> newList) {
+		planList.clear();
+		planList.addAll(newList);
+	}
+
+	public void reloadPlan(String title, Long targetId, boolean jj, boolean zy) {
+		String select = null;
+		String[] selectOption = new String[] { targetId + "",
+				((jj ? 2 * 1 : 2 * 0) + (zy ? 1 : 0)) + "" };
+		if (targetId == -1) {
+			selectOption = new String[] { ((jj ? 2 * 1 : 2 * 0) + (zy ? 1 : 0))
+					+ "" };
+			if (title != null && !title.equals("")) {
+				select = Plan.TITLE + " like %" + title + "% and "
+						+ Plan.URGENCYIMPORTANT + "=? ";
+			} else {
+				select = Plan.URGENCYIMPORTANT + "=? ";
+			}
+		} else {
+			if (title != null && !title.equals("")) {
+				select = Plan.TITLE + " like %" + title + "% and "
+						+ Plan.TARGET + "=? and " + Plan.URGENCYIMPORTANT
+						+ "=? ";
+			} else {
+				select = Plan.TARGET + "=? and " + Plan.URGENCYIMPORTANT
+						+ "=? ";
+			}
+		}
+		DemoDB<Plan> planDb = new DemoDB<Plan>(new Plan());
+		setPlanList(planDb.getList(this, select, selectOption, null));
+		plan_listview.setAdapter(new MainAffairPlanAdapter(this, planList));
+	}
 
 	private void initMainView(int position, View v) {
 		if (position == POSTION_SOME_TOOLS) {
@@ -237,26 +275,100 @@ public class MainActivity extends ActionBarActivity {
 				}
 			});
 		} else if (position == POSTION_AFFAIR_PLAN) {
+			DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
+			setPlanList(db.getList(this));
+			final List<Target> ts = new DemoDB<Target>(new Target())
+					.getList(this);
+			ts.add(0, new Target(-1l, "所有目标", 360));
 			Button go = (Button) v.findViewById(R.id.affair_plan_top_go);
-			Spinner targets = (Spinner) v
+			final CheckBox jj = (CheckBox) v
+					.findViewById(R.id.affair_plan_top_mid_jj);
+			final CheckBox zy = (CheckBox) v
+					.findViewById(R.id.affair_plan_top_mid_zy);
+			final Spinner targets = (Spinner) v
 					.findViewById(R.id.affair_plan_top_target_spinner);
-			List<Target> ts = new DemoDB<Target>(new Target()).getList(this);
+			List<String> titles = new ArrayList<String>();
+			for (Plan p : planList) {
+				if (p.getTitle() != null && p.getTitle().length() > 1)
+					titles.add(p.getTitle());
+			}
 			List<String> names = new ArrayList<String>();
 			for (Target t : ts) {
 				names.add(t.getName());
 			}
 			targets.setAdapter(new ArrayAdapter<String>(this,
-					android.R.layout.simple_spinner_dropdown_item, names));
-			AutoCompleteTextView searchText = (AutoCompleteTextView) v
+					android.R.layout.simple_spinner_dropdown_item, names) {
+				@Override
+				public long getItemId(int position) {
+					return ts.get(position).get_id();
+				}
+
+			});
+			final AutoCompleteTextView searchText = (AutoCompleteTextView) v
 					.findViewById(R.id.affair_plan_top_search);
-			CheckBox jj = (CheckBox) v
-					.findViewById(R.id.affair_plan_top_mid_jj);
-			CheckBox zy = (CheckBox) v
-					.findViewById(R.id.affair_plan_top_mid_jj);
+			searchText.setAdapter(new ArrayAdapter<String>(this,
+					android.R.layout.simple_dropdown_item_1line, titles));
+			searchText.setOnItemSelectedListener(new OnItemSelectedListener() {
+				@Override
+				public void onItemSelected(AdapterView<?> parent, View view,
+						int position, long id) {
+					reloadPlan(searchText.getText().toString(),
+							targets.getSelectedItemId(), jj.isChecked(),
+							zy.isChecked());
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> arg0) {
+
+				}
+			});
+			searchText.setOnEditorActionListener(new OnEditorActionListener() {
+
+				@Override
+				public boolean onEditorAction(TextView v, int actionId,
+						KeyEvent event) {
+					Log.i(L.t, event.getCharacters());
+					reloadPlan(searchText.getText().toString(),
+							targets.getSelectedItemId(), jj.isChecked(),
+							zy.isChecked());
+					return false;
+				}
+			});
+			targets.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+				@Override
+				public void onItemSelected(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					reloadPlan(searchText.getText().toString(),
+							targets.getSelectedItemId(), jj.isChecked(),
+							zy.isChecked());
+				}
+
+				@Override
+				public void onNothingSelected(AdapterView<?> arg0) {
+
+				}
+			});
+			jj.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+					reloadPlan(searchText.getText().toString(),
+							targets.getSelectedItemId(), jj.isChecked(),
+							zy.isChecked());
+				}
+			});
+			zy.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton arg0,
+						boolean checked) {
+					reloadPlan(searchText.getText().toString(),
+							targets.getSelectedItemId(), jj.isChecked(),
+							checked);
+				}
+			});
 			plan_listview = (ListView) findViewById(R.id.main_affair_plan_listview);
-			DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
 			MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(this,
-					db.getList(this));
+					planList);
 			plan_listview.setAdapter(planadapter);
 			go.setOnClickListener(new OnClickListener() {
 				@Override
@@ -265,6 +377,18 @@ public class MainActivity extends ActionBarActivity {
 							AffairPlanOptionActivity.class);
 					intent.setFlags(AffairPlanOptionActivity.FLAG_ADD);
 					startActivity(intent);
+				}
+			});
+			plan_listview.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					Intent intent = new Intent(MainActivity.this,
+							AffairPlanOptionActivity.class);
+					intent.setFlags(AffairPlanOptionActivity.FLAG_UPDATE);
+					intent.putExtra("plan", planList.get(position));
+					MainActivity.this.startActivity(intent);
 				}
 			});
 			plan_listview
@@ -338,7 +462,7 @@ public class MainActivity extends ActionBarActivity {
 										}
 									});
 							builder.create().show();
-							return false;
+							return true;
 						}
 					});
 		} else if (position == POSTION_FOUR_CLASSES) {

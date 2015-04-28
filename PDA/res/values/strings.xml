@@ -67,4 +67,19 @@
         <item>年</item>
     </string-array>
 
+    <string name="minute">分</string>
+    <string name="hour">小时</string>
+    <string name="day">天</string>
+    <string name="week">周</string>
+    <string name="month">月</string>
+    <string name="quater">季度</string>
+    <string name="year">年</string>
+    <!-- common -->
+    <string name="title">标题:</string>
+    <string name="cycle">周期:</string>
+    <string name="remarks">备注:</string>
+    <string name="last_tip_time">最近提醒时间:</string>
+    <string name="is_tip">是否提示:</string>
+    <string name="is_aheadtime">是否提前提醒:</string>
+
 </resources>

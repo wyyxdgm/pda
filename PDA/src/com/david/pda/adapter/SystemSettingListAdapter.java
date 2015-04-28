@@ -14,7 +14,6 @@ import com.david.pda.R;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.DateType;
 import com.david.pda.sqlite.model.util.DemoDB;
-import com.david.pda.util.other.DateUtil;
 import com.david.pda.weather.model.util.L;
 
 public class SystemSettingListAdapter extends BaseAdapter {
