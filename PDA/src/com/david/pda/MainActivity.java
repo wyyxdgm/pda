@@ -62,10 +62,13 @@ import android.widget.Toast;
 
 import com.david.pda.adapter.BataanAdapter;
 import com.david.pda.adapter.MainAffairPlanAdapter;
+import com.david.pda.adapter.SelfPrincipleListAdapter;
 import com.david.pda.adapter.SystemSettingListAdapter;
 import com.david.pda.sqlite.model.CycleDetailsForPlan;
+import com.david.pda.sqlite.model.CycleDetailsForPrinciple;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.Plan;
+import com.david.pda.sqlite.model.Principal;
 import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DrawUtil;
@@ -697,7 +700,84 @@ public class MainActivity extends ActionBarActivity {
 			mTabWidget.setCurrentTab(0);
 
 		} else if (position == POSTION_SELF_PRINCIPLE) {
-
+			final ListView listView = (ListView) v
+					.findViewById(R.id.main_self_principle_listview);
+			listView.setAdapter(new SelfPrincipleListAdapter(this));
+			listView.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					Intent i = new Intent(MainActivity.this,
+							SelfPrincipleOptionActivity.class);
+					i.putExtra("opt", "update");
+					i.putExtra("position", arg2);
+					MainActivity.this.startActivity(i);
+				}
+			});
+			listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+				@Override
+				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+						final int position, long arg3) {
+					AlertDialog.Builder builder = new Builder(MainActivity.this);
+					builder.setMessage("确认删除吗？");
+					builder.setTitle("提示");
+					builder.setPositiveButton("确认",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+									DemoDB<Principal> db = new DemoDB<Principal>(
+											new Principal());
+									List<Principal> list = db
+											.getList(MainActivity.this);
+									try {
+										DemoDB<CycleDetailsForPrinciple> db2 = new DemoDB<CycleDetailsForPrinciple>(
+												new CycleDetailsForPrinciple());
+										List<CycleDetailsForPrinciple> details = db2
+												.getList(
+														MainActivity.this,
+														CycleDetailsForPrinciple.CYLEFOR
+																+ "=?",
+														new String[] { ""
+																+ list.get(
+																		position)
+																		.get_id() },
+														null);
+										for (CycleDetailsForPrinciple c : details) {
+											db2.realRemove(c.get_id() + "",
+													MainActivity.this);
+										}
+										db.realRemove(list.get(position)
+												.get_id() + "",
+												MainActivity.this);
+										Toast.makeText(
+												MainActivity.this,
+												"删除《"
+														+ list.get(position)
+																.getTitle()
+														+ "》成功！",
+												Toast.LENGTH_SHORT).show();
+										list.remove(position);
+										listView.setAdapter(new SelfPrincipleListAdapter(
+												MainActivity.this));
+									} catch (JSONException e) {
+										e.printStackTrace();
+									}
+								}
+							});
+					builder.setNegativeButton("取消",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.dismiss();
+								}
+							});
+					builder.create().show();
+					return true;
+				}
+			});
 		} else if (position == POSTION_SYSTEM_SETTIONG) {
 			final ListView listView = (ListView) v
 					.findViewById(R.id.main_system_setting_listview);
@@ -760,7 +840,7 @@ public class MainActivity extends ActionBarActivity {
 								}
 							});
 					builder.create().show();
-					return false;
+					return true;
 				}
 			});
 		} else if (position == POSTION_TARGET_MANAGE) {

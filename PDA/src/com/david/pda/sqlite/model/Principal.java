@@ -39,6 +39,10 @@ public class Principal extends Model {
 	private Long cycleDetails;
 	private Integer delFlag;
 
+	public Principal() {
+		super();
+	}
+
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
 		if (_id != null)
