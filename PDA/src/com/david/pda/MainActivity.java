@@ -2,6 +2,8 @@ package com.david.pda;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -71,6 +73,7 @@ import com.david.pda.sqlite.model.Plan;
 import com.david.pda.sqlite.model.Principal;
 import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.util.DemoDB;
+import com.david.pda.util.other.DateUtil;
 import com.david.pda.util.other.DrawUtil;
 import com.david.pda.weather.model.util.L;
 
@@ -187,40 +190,34 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
-	ListView plan_listview = null;
-	final List<Plan> planList = new ArrayList<Plan>();
-
-	public void setPlanList(List<Plan> newList) {
-		planList.clear();
-		planList.addAll(newList);
-	}
-
-	public void reloadPlan(String title, Long targetId, boolean jj, boolean zy) {
-		String select = null;
-		String[] selectOption = new String[] { targetId + "",
-				((jj ? 2 * 1 : 2 * 0) + (zy ? 1 : 0)) + "" };
-		if (targetId == -1) {
-			selectOption = new String[] { ((jj ? 2 * 1 : 2 * 0) + (zy ? 1 : 0))
-					+ "" };
-			if (title != null && !title.equals("")) {
-				select = Plan.TITLE + " like %" + title + "% and "
-						+ Plan.URGENCYIMPORTANT + "=? ";
-			} else {
-				select = Plan.URGENCYIMPORTANT + "=? ";
-			}
-		} else {
-			if (title != null && !title.equals("")) {
-				select = Plan.TITLE + " like %" + title + "% and "
-						+ Plan.TARGET + "=? and " + Plan.URGENCYIMPORTANT
-						+ "=? ";
-			} else {
-				select = Plan.TARGET + "=? and " + Plan.URGENCYIMPORTANT
-						+ "=? ";
-			}
+	private void initMainView(int position, View v) {
+		switch (position) {
+		case POSTION_SOME_TOOLS:
+			initSomeTools(v);
+			break;
+		case POSTION_AFFAIR_PLAN:
+			initAffairPlan(v);
+			break;
+		case POSTION_FOUR_CLASSES:
+			initFourClasses(v);
+			break;
+		case POSTION_TARGET_MANAGE:
+			initTargetManage(v);
+			break;
+		case POSTION_SYSTEM_SETTIONG:
+			initSystemSetting(v);
+			break;
+		case POSTION_SELF_PRINCIPLE:
+			initSelfPrinciple(v);
+			break;
+		case POSTION_TODAY_SCHEDULE:
+			initTodaySchedule(v);
+			break;
+		default:
+			Toast.makeText(this, "no result", Toast.LENGTH_SHORT).show();
+			break;
 		}
-		DemoDB<Plan> planDb = new DemoDB<Plan>(new Plan());
-		setPlanList(planDb.getList(this, select, selectOption, null));
-		plan_listview.setAdapter(new MainAffairPlanAdapter(this, planList));
+		Log.i(L.t, "init view:" + v.getId() + " at " + position);
 	}
 
 	private ViewPager mViewPager;
@@ -402,456 +399,551 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
-	private void initMainView(int position, View v) {
-		if (position == POSTION_SOME_TOOLS) {
-			ImageButton alarm = (ImageButton) v
-					.findViewById(R.id.main_some_tools_alarm);
-			ImageButton memo = (ImageButton) v
-					.findViewById(R.id.main_some_tools_note);
-			ImageButton weather = (ImageButton) v
-					.findViewById(R.id.main_some_tools_weather);
-			ImageButton calendar = (ImageButton) v
-					.findViewById(R.id.main_some_tools_calendar);
-			ImageButton countdown = (ImageButton) v
-					.findViewById(R.id.main_some_tools_countdown);
-			weather.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					Log.i(L.t, "weather");
-					Intent intent = new Intent(MainActivity.this,
-							SomeToolsWeatherActivity.class);
-					startActivity(intent);
-					MainActivity.this.finish();
-				}
-			});
-			memo.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					Log.i(L.t, "memo");
-					Intent intent = new Intent(MainActivity.this,
-							SomeToolsMemoActivity.class);
-					startActivity(intent);
-					MainActivity.this.finish();
-				}
-			});
-			countdown.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					Log.i(L.t, "countdown");
-					Intent intent = new Intent(MainActivity.this,
-							SomeToolsCountdownActivity.class);
-					startActivity(intent);
-					MainActivity.this.finish();
-				}
-			});
-			calendar.setOnClickListener(new OnClickListener() {
-				public void onClick(View arg0) {
-					Log.i(L.t, "calendar");
-					Intent intent = new Intent(MainActivity.this,
-							SomeToolsCalendarActivity.class);
-					startActivity(intent);
-					MainActivity.this.finish();
-				}
-			});
-			alarm.setOnClickListener(new OnClickListener() {
+	private void initFourClasses(View v) {
+		mTabWidget = (TabWidget) v.findViewById(R.id.tabWidget1);
+		mTabWidget.setStripEnabled(false);
+		mBtnTabs[0] = new Button(this);
+		mBtnTabs[0].setFocusable(true);
+		mBtnTabs[0].setText(addresses[0]);
+		mBtnTabs[0].setTextColor(getResources().getColorStateList(
+				R.color.abc_search_url_text_holo));
+		mTabWidget.addView(mBtnTabs[0]);
+		/*
+		 * Listener必须在mTabWidget.addView()之后再加入，用于覆盖默认的Listener，
+		 * mTabWidget.addView()中默认的Listener没有NullPointer检测。
+		 */
+		mBtnTabs[0].setOnClickListener(mTabClickListener);
+		mBtnTabs[1] = new Button(this);
+		mBtnTabs[1].setFocusable(true);
+		mBtnTabs[1].setText(addresses[1]);
+		mBtnTabs[1].setTextColor(getResources().getColorStateList(
+				R.color.abc_search_url_text_holo));
+		mTabWidget.addView(mBtnTabs[1]);
+		mBtnTabs[1].setOnClickListener(mTabClickListener);
+		mBtnTabs[2] = new Button(this);
+		mBtnTabs[2].setFocusable(true);
+		mBtnTabs[2].setText(addresses[2]);
+		mBtnTabs[2].setTextColor(getResources().getColorStateList(
+				R.color.abc_search_url_text_holo));
+		mTabWidget.addView(mBtnTabs[2]);
+		mBtnTabs[2].setOnClickListener(mTabClickListener);
 
-				@Override
-				public void onClick(View arg0) {
-					Log.i(L.t, "alarm");
-					Intent intent = new Intent(MainActivity.this,
-							SomeToolsAlarmActivity.class);
-					startActivity(intent);
-					MainActivity.this.finish();
-				}
-			});
-		} else if (position == POSTION_AFFAIR_PLAN) {
-			DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
-			setPlanList(db.getList(this));
-			final List<Target> ts = new DemoDB<Target>(new Target())
-					.getList(this);
-			ts.add(0, new Target(-1l, "所有目标", 360));
-			Button go = (Button) v.findViewById(R.id.affair_plan_top_go);
-			final CheckBox jj = (CheckBox) v
-					.findViewById(R.id.affair_plan_top_mid_jj);
-			final CheckBox zy = (CheckBox) v
-					.findViewById(R.id.affair_plan_top_mid_zy);
-			final Spinner targets = (Spinner) v
-					.findViewById(R.id.affair_plan_top_target_spinner);
-			List<String> titles = new ArrayList<String>();
-			for (Plan p : planList) {
-				if (p.getTitle() != null && p.getTitle().length() > 1)
-					titles.add(p.getTitle());
-			}
-			List<String> names = new ArrayList<String>();
-			for (Target t : ts) {
-				names.add(t.getName());
-			}
-			targets.setAdapter(new ArrayAdapter<String>(this,
-					android.R.layout.simple_spinner_dropdown_item, names) {
-				@Override
-				public long getItemId(int position) {
-					return ts.get(position).get_id();
-				}
+		mBtnTabs[3] = new Button(this);
+		mBtnTabs[3].setFocusable(true);
+		mBtnTabs[3].setText(addresses[3]);
+		mBtnTabs[3].setTextColor(getResources().getColorStateList(
+				R.color.abc_search_url_text_holo));
+		mTabWidget.addView(mBtnTabs[3]);
+		mBtnTabs[3].setOnClickListener(mTabClickListener);
 
-			});
-			final AutoCompleteTextView searchText = (AutoCompleteTextView) v
-					.findViewById(R.id.affair_plan_top_search);
-			searchText.setAdapter(new ArrayAdapter<String>(this,
-					android.R.layout.simple_dropdown_item_1line, titles));
-			searchText.setOnItemSelectedListener(new OnItemSelectedListener() {
-				@Override
-				public void onItemSelected(AdapterView<?> parent, View view,
-						int position, long id) {
-					reloadPlan(searchText.getText().toString(),
-							targets.getSelectedItemId(), jj.isChecked(),
-							zy.isChecked());
-				}
+		mViewPager = (ViewPager) v.findViewById(R.id.viewPager1);
+		mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+		mViewPager.setOnPageChangeListener(mPageChangeListener);
 
-				@Override
-				public void onNothingSelected(AdapterView<?> arg0) {
+		mTabWidget.setCurrentTab(0);
 
-				}
-			});
-			searchText.setOnEditorActionListener(new OnEditorActionListener() {
-
-				@Override
-				public boolean onEditorAction(TextView v, int actionId,
-						KeyEvent event) {
-					Log.i(L.t, event.getCharacters());
-					reloadPlan(searchText.getText().toString(),
-							targets.getSelectedItemId(), jj.isChecked(),
-							zy.isChecked());
-					return false;
-				}
-			});
-			targets.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-				@Override
-				public void onItemSelected(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-					reloadPlan(searchText.getText().toString(),
-							targets.getSelectedItemId(), jj.isChecked(),
-							zy.isChecked());
-				}
-
-				@Override
-				public void onNothingSelected(AdapterView<?> arg0) {
-
-				}
-			});
-			jj.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
-					reloadPlan(searchText.getText().toString(),
-							targets.getSelectedItemId(), jj.isChecked(),
-							zy.isChecked());
-				}
-			});
-			zy.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton arg0,
-						boolean checked) {
-					reloadPlan(searchText.getText().toString(),
-							targets.getSelectedItemId(), jj.isChecked(),
-							checked);
-				}
-			});
-			go.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					Intent intent = new Intent(MainActivity.this,
-							AffairPlanOptionActivity.class);
-					intent.setFlags(AffairPlanOptionActivity.FLAG_ADD);
-					startActivity(intent);
-				}
-			});
-			plan_listview = (ListView) findViewById(R.id.main_affair_plan_listview);
-			MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(this,
-					planList);
-			plan_listview.setAdapter(planadapter);
-			plan_listview.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-					Intent intent = new Intent(MainActivity.this,
-							AffairPlanOptionActivity.class);
-					intent.setFlags(AffairPlanOptionActivity.FLAG_UPDATE);
-					intent.putExtra("plan", planList.get(position));
-					MainActivity.this.startActivity(intent);
-				}
-			});
-			plan_listview
-					.setOnItemLongClickListener(new OnItemLongClickListener() {
-						@Override
-						public boolean onItemLongClick(AdapterView<?> arg0,
-								View arg1, final int position, long arg3) {
-							AlertDialog.Builder builder = new Builder(
-									MainActivity.this);
-							builder.setMessage("确认删除吗？");
-							builder.setTitle("提示");
-							builder.setPositiveButton("确认",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											dialog.dismiss();
-											DemoDB<Plan> db = new DemoDB<Plan>(
-													new Plan());
-											List<Plan> list = db
-													.getList(MainActivity.this);
-											try {
-												DemoDB<CycleDetailsForPlan> detailsDb = new DemoDB<CycleDetailsForPlan>(
-														new CycleDetailsForPlan());
-												List<CycleDetailsForPlan> ds = detailsDb
-														.getList(
-																MainActivity.this,
-																CycleDetailsForPlan.CYLEFOR
-																		+ "=?",
-																new String[] { list
-																		.get(position)
-																		.get_id()
-																		+ "" },
-																null);
-												if (ds.size() > 0) {
-													detailsDb.realRemove(ds
-															.get(0).get_id()
-															+ "",
-															MainActivity.this);
-												}
-												db.realRemove(list
-														.get(position).get_id()
-														+ "", MainActivity.this);
-												Toast.makeText(
-														MainActivity.this,
-														"删除《"
-																+ list.get(
-																		position)
-																		.getTitle()
-																+ "》成功！",
-														Toast.LENGTH_SHORT)
-														.show();
-												list.remove(position);
-												plan_listview
-														.setAdapter(new MainAffairPlanAdapter(
-																MainActivity.this,
-																db.getList(MainActivity.this)));
-											} catch (JSONException e) {
-												e.printStackTrace();
-											}
-										}
-									});
-							builder.setNegativeButton("取消",
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											dialog.dismiss();
-										}
-									});
-							builder.create().show();
-							return true;
-						}
-					});
-		} else if (position == POSTION_FOUR_CLASSES) {
-			mTabWidget = (TabWidget) v.findViewById(R.id.tabWidget1);
-			mTabWidget.setStripEnabled(false);
-			mBtnTabs[0] = new Button(this);
-			mBtnTabs[0].setFocusable(true);
-			mBtnTabs[0].setText(addresses[0]);
-			mBtnTabs[0].setTextColor(getResources().getColorStateList(
-					R.color.abc_search_url_text_holo));
-			mTabWidget.addView(mBtnTabs[0]);
-			/*
-			 * Listener必须在mTabWidget.addView()之后再加入，用于覆盖默认的Listener，
-			 * mTabWidget.addView()中默认的Listener没有NullPointer检测。
-			 */
-			mBtnTabs[0].setOnClickListener(mTabClickListener);
-			mBtnTabs[1] = new Button(this);
-			mBtnTabs[1].setFocusable(true);
-			mBtnTabs[1].setText(addresses[1]);
-			mBtnTabs[1].setTextColor(getResources().getColorStateList(
-					R.color.abc_search_url_text_holo));
-			mTabWidget.addView(mBtnTabs[1]);
-			mBtnTabs[1].setOnClickListener(mTabClickListener);
-			mBtnTabs[2] = new Button(this);
-			mBtnTabs[2].setFocusable(true);
-			mBtnTabs[2].setText(addresses[2]);
-			mBtnTabs[2].setTextColor(getResources().getColorStateList(
-					R.color.abc_search_url_text_holo));
-			mTabWidget.addView(mBtnTabs[2]);
-			mBtnTabs[2].setOnClickListener(mTabClickListener);
-
-			mBtnTabs[3] = new Button(this);
-			mBtnTabs[3].setFocusable(true);
-			mBtnTabs[3].setText(addresses[3]);
-			mBtnTabs[3].setTextColor(getResources().getColorStateList(
-					R.color.abc_search_url_text_holo));
-			mTabWidget.addView(mBtnTabs[3]);
-			mBtnTabs[3].setOnClickListener(mTabClickListener);
-
-			mViewPager = (ViewPager) v.findViewById(R.id.viewPager1);
-			mViewPager.setAdapter(new MyPagerAdapter(
-					getSupportFragmentManager()));
-			mViewPager.setOnPageChangeListener(mPageChangeListener);
-
-			mTabWidget.setCurrentTab(0);
-
-		} else if (position == POSTION_SELF_PRINCIPLE) {
-			final ListView listView = (ListView) v
-					.findViewById(R.id.main_self_principle_listview);
-			listView.setAdapter(new SelfPrincipleListAdapter(this));
-			listView.setOnItemClickListener(new OnItemClickListener() {
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-					Intent i = new Intent(MainActivity.this,
-							SelfPrincipleOptionActivity.class);
-					i.putExtra("opt", "update");
-					i.putExtra("position", arg2);
-					MainActivity.this.startActivity(i);
-				}
-			});
-			listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-				@Override
-				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-						final int position, long arg3) {
-					AlertDialog.Builder builder = new Builder(MainActivity.this);
-					builder.setMessage("确认删除吗？");
-					builder.setTitle("提示");
-					builder.setPositiveButton("确认",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									dialog.dismiss();
-									DemoDB<Principal> db = new DemoDB<Principal>(
-											new Principal());
-									List<Principal> list = db
-											.getList(MainActivity.this);
-									try {
-										DemoDB<CycleDetailsForPrinciple> db2 = new DemoDB<CycleDetailsForPrinciple>(
-												new CycleDetailsForPrinciple());
-										List<CycleDetailsForPrinciple> details = db2
-												.getList(
-														MainActivity.this,
-														CycleDetailsForPrinciple.CYLEFOR
-																+ "=?",
-														new String[] { ""
-																+ list.get(
-																		position)
-																		.get_id() },
-														null);
-										for (CycleDetailsForPrinciple c : details) {
-											db2.realRemove(c.get_id() + "",
-													MainActivity.this);
-										}
-										db.realRemove(list.get(position)
-												.get_id() + "",
-												MainActivity.this);
-										Toast.makeText(
-												MainActivity.this,
-												"删除《"
-														+ list.get(position)
-																.getTitle()
-														+ "》成功！",
-												Toast.LENGTH_SHORT).show();
-										list.remove(position);
-										listView.setAdapter(new SelfPrincipleListAdapter(
-												MainActivity.this));
-									} catch (JSONException e) {
-										e.printStackTrace();
-									}
-								}
-							});
-					builder.setNegativeButton("取消",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									dialog.dismiss();
-								}
-							});
-					builder.create().show();
-					return true;
-				}
-			});
-		} else if (position == POSTION_SYSTEM_SETTIONG) {
-			final ListView listView = (ListView) v
-					.findViewById(R.id.main_system_setting_listview);
-			listView.setAdapter(new SystemSettingListAdapter(this));
-			listView.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int arg2, long arg3) {
-					Intent i = new Intent(MainActivity.this,
-							CycleTypeOptionActivity.class);
-					i.putExtra("opt", "update");
-					i.putExtra("position", arg2);
-					MainActivity.this.startActivity(i);
-				}
-			});
-			listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-				@Override
-				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-						final int position, long arg3) {
-					AlertDialog.Builder builder = new Builder(MainActivity.this);
-					builder.setMessage("确认删除吗？");
-					builder.setTitle("提示");
-					builder.setPositiveButton("确认",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									dialog.dismiss();
-									DemoDB<CycleType> db = new DemoDB<CycleType>(
-											new CycleType());
-									List<CycleType> list = db
-											.getList(MainActivity.this);
-									try {
-										db.realRemove(list.get(position)
-												.get_id() + "",
-												MainActivity.this);
-										Toast.makeText(
-												MainActivity.this,
-												"删除《"
-														+ list.get(position)
-																.getName()
-														+ "》成功！",
-												Toast.LENGTH_SHORT).show();
-										list.remove(position);
-										listView.setAdapter(new SystemSettingListAdapter(
-												MainActivity.this));
-									} catch (JSONException e) {
-										e.printStackTrace();
-									}
-								}
-							});
-					builder.setNegativeButton("取消",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									dialog.dismiss();
-								}
-							});
-					builder.create().show();
-					return true;
-				}
-			});
-		} else if (position == POSTION_TARGET_MANAGE) {
-			initTargetManage(v);
-		} else if (position == POSTION_TODAY_SCHEDULE) {
-
-		}
-		Log.i(L.t, "init view:" + v.getId() + " at " + position);
 	}
 
-	public void initTargetManage(View v) {
+	ListView plan_listview = null;
+	final List<Plan> planList = new ArrayList<Plan>();
+
+	public void setPlanList(List<Plan> newList) {
+		planList.clear();
+		planList.addAll(newList);
+	}
+
+	public void reloadPlan(String title, Long targetId, boolean jj, boolean zy) {
+		String select = null;
+		String[] selectOption = new String[] { targetId + "",
+				((jj ? 2 * 1 : 2 * 0) + (zy ? 1 : 0)) + "" };
+		if (targetId == -1) {
+			selectOption = new String[] { ((jj ? 2 * 1 : 2 * 0) + (zy ? 1 : 0))
+					+ "" };
+			if (title != null && !title.equals("")) {
+				select = Plan.TITLE + " like %" + title + "% and "
+						+ Plan.URGENCYIMPORTANT + "=? ";
+			} else {
+				select = Plan.URGENCYIMPORTANT + "=? ";
+			}
+		} else {
+			if (title != null && !title.equals("")) {
+				select = Plan.TITLE + " like %" + title + "% and "
+						+ Plan.TARGET + "=? and " + Plan.URGENCYIMPORTANT
+						+ "=? ";
+			} else {
+				select = Plan.TARGET + "=? and " + Plan.URGENCYIMPORTANT
+						+ "=? ";
+			}
+		}
+		DemoDB<Plan> planDb = new DemoDB<Plan>(new Plan());
+		setPlanList(planDb.getList(this, select, selectOption, null));
+		plan_listview.setAdapter(new MainAffairPlanAdapter(this, planList));
+	}
+
+	private void initAffairPlan(View v) {
+
+		DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
+		setPlanList(db.getList(this));
+		final List<Target> ts = new DemoDB<Target>(new Target()).getList(this);
+		ts.add(0, new Target(-1l, "所有目标", 360));
+		Button go = (Button) v.findViewById(R.id.affair_plan_top_go);
+		final CheckBox jj = (CheckBox) v
+				.findViewById(R.id.affair_plan_top_mid_jj);
+		final CheckBox zy = (CheckBox) v
+				.findViewById(R.id.affair_plan_top_mid_zy);
+		final Spinner targets = (Spinner) v
+				.findViewById(R.id.affair_plan_top_target_spinner);
+		List<String> titles = new ArrayList<String>();
+		for (Plan p : planList) {
+			if (p.getTitle() != null && p.getTitle().length() > 1)
+				titles.add(p.getTitle());
+		}
+		List<String> names = new ArrayList<String>();
+		for (Target t : ts) {
+			names.add(t.getName());
+		}
+		targets.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_dropdown_item, names) {
+			@Override
+			public long getItemId(int position) {
+				return ts.get(position).get_id();
+			}
+
+		});
+		final AutoCompleteTextView searchText = (AutoCompleteTextView) v
+				.findViewById(R.id.affair_plan_top_search);
+		searchText.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_dropdown_item_1line, titles));
+		searchText.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				reloadPlan(searchText.getText().toString(),
+						targets.getSelectedItemId(), jj.isChecked(),
+						zy.isChecked());
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
+		searchText.setOnEditorActionListener(new OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				Log.i(L.t, event.getCharacters());
+				reloadPlan(searchText.getText().toString(),
+						targets.getSelectedItemId(), jj.isChecked(),
+						zy.isChecked());
+				return false;
+			}
+		});
+		targets.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				reloadPlan(searchText.getText().toString(),
+						targets.getSelectedItemId(), jj.isChecked(),
+						zy.isChecked());
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+
+			}
+		});
+		jj.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+				reloadPlan(searchText.getText().toString(),
+						targets.getSelectedItemId(), jj.isChecked(),
+						zy.isChecked());
+			}
+		});
+		zy.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton arg0, boolean checked) {
+				reloadPlan(searchText.getText().toString(),
+						targets.getSelectedItemId(), jj.isChecked(), checked);
+			}
+		});
+		go.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent intent = new Intent(MainActivity.this,
+						AffairPlanOptionActivity.class);
+				intent.setFlags(AffairPlanOptionActivity.FLAG_ADD);
+				startActivity(intent);
+			}
+		});
+		plan_listview = (ListView) findViewById(R.id.main_affair_plan_listview);
+		MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(this,
+				planList);
+		plan_listview.setAdapter(planadapter);
+		plan_listview.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Intent intent = new Intent(MainActivity.this,
+						AffairPlanOptionActivity.class);
+				intent.setFlags(AffairPlanOptionActivity.FLAG_UPDATE);
+				intent.putExtra("plan", planList.get(position));
+				MainActivity.this.startActivity(intent);
+			}
+		});
+		plan_listview.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					final int position, long arg3) {
+				AlertDialog.Builder builder = new Builder(MainActivity.this);
+				builder.setMessage("确认删除吗？");
+				builder.setTitle("提示");
+				builder.setPositiveButton("确认",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+								DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
+								List<Plan> list = db.getList(MainActivity.this);
+								try {
+									DemoDB<CycleDetailsForPlan> detailsDb = new DemoDB<CycleDetailsForPlan>(
+											new CycleDetailsForPlan());
+									List<CycleDetailsForPlan> ds = detailsDb
+											.getList(
+													MainActivity.this,
+													CycleDetailsForPlan.CYLEFOR
+															+ "=?",
+													new String[] { list.get(
+															position).get_id()
+															+ "" }, null);
+									if (ds.size() > 0) {
+										detailsDb.realRemove(ds.get(0).get_id()
+												+ "", MainActivity.this);
+									}
+									db.realRemove(list.get(position).get_id()
+											+ "", MainActivity.this);
+									Toast.makeText(
+											MainActivity.this,
+											"删除《"
+													+ list.get(position)
+															.getTitle()
+													+ "》成功！",
+											Toast.LENGTH_SHORT).show();
+									list.remove(position);
+									plan_listview
+											.setAdapter(new MainAffairPlanAdapter(
+													MainActivity.this,
+													db.getList(MainActivity.this)));
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+							}
+						});
+				builder.setNegativeButton("取消",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+				builder.create().show();
+				return true;
+			}
+		});
+	}
+
+	private void initSomeTools(View v) {
+
+		ImageButton alarm = (ImageButton) v
+				.findViewById(R.id.main_some_tools_alarm);
+		ImageButton memo = (ImageButton) v
+				.findViewById(R.id.main_some_tools_note);
+		ImageButton weather = (ImageButton) v
+				.findViewById(R.id.main_some_tools_weather);
+		ImageButton calendar = (ImageButton) v
+				.findViewById(R.id.main_some_tools_calendar);
+		ImageButton countdown = (ImageButton) v
+				.findViewById(R.id.main_some_tools_countdown);
+		weather.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Log.i(L.t, "weather");
+				Intent intent = new Intent(MainActivity.this,
+						SomeToolsWeatherActivity.class);
+				startActivity(intent);
+				MainActivity.this.finish();
+			}
+		});
+		memo.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Log.i(L.t, "memo");
+				Intent intent = new Intent(MainActivity.this,
+						SomeToolsMemoActivity.class);
+				startActivity(intent);
+				MainActivity.this.finish();
+			}
+		});
+		countdown.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Log.i(L.t, "countdown");
+				Intent intent = new Intent(MainActivity.this,
+						SomeToolsCountdownActivity.class);
+				startActivity(intent);
+				MainActivity.this.finish();
+			}
+		});
+		calendar.setOnClickListener(new OnClickListener() {
+			public void onClick(View arg0) {
+				Log.i(L.t, "calendar");
+				Intent intent = new Intent(MainActivity.this,
+						SomeToolsCalendarActivity.class);
+				startActivity(intent);
+				MainActivity.this.finish();
+			}
+		});
+		alarm.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				Log.i(L.t, "alarm");
+				Intent intent = new Intent(MainActivity.this,
+						SomeToolsAlarmActivity.class);
+				startActivity(intent);
+				MainActivity.this.finish();
+			}
+		});
+
+	}
+
+	private void initSelfPrinciple(View v) {
+
+		final ListView listView = (ListView) v
+				.findViewById(R.id.main_self_principle_listview);
+		listView.setAdapter(new SelfPrincipleListAdapter(this));
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Intent i = new Intent(MainActivity.this,
+						SelfPrincipleOptionActivity.class);
+				i.putExtra("opt", "update");
+				i.putExtra("position", arg2);
+				MainActivity.this.startActivity(i);
+			}
+		});
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					final int position, long arg3) {
+				AlertDialog.Builder builder = new Builder(MainActivity.this);
+				builder.setMessage("确认删除吗？");
+				builder.setTitle("提示");
+				builder.setPositiveButton("确认",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+								DemoDB<Principal> db = new DemoDB<Principal>(
+										new Principal());
+								List<Principal> list = db
+										.getList(MainActivity.this);
+								try {
+									DemoDB<CycleDetailsForPrinciple> db2 = new DemoDB<CycleDetailsForPrinciple>(
+											new CycleDetailsForPrinciple());
+									List<CycleDetailsForPrinciple> details = db2
+											.getList(
+													MainActivity.this,
+													CycleDetailsForPrinciple.CYLEFOR
+															+ "=?",
+													new String[] { ""
+															+ list.get(position)
+																	.get_id() },
+													null);
+									for (CycleDetailsForPrinciple c : details) {
+										db2.realRemove(c.get_id() + "",
+												MainActivity.this);
+									}
+									db.realRemove(list.get(position).get_id()
+											+ "", MainActivity.this);
+									Toast.makeText(
+											MainActivity.this,
+											"删除《"
+													+ list.get(position)
+															.getTitle()
+													+ "》成功！",
+											Toast.LENGTH_SHORT).show();
+									list.remove(position);
+									listView.setAdapter(new SelfPrincipleListAdapter(
+											MainActivity.this));
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+							}
+						});
+				builder.setNegativeButton("取消",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+				builder.create().show();
+				return true;
+			}
+		});
+	}
+
+	private void initSystemSetting(View v) {
+
+		final ListView listView = (ListView) v
+				.findViewById(R.id.main_system_setting_listview);
+		listView.setAdapter(new SystemSettingListAdapter(this));
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Intent i = new Intent(MainActivity.this,
+						CycleTypeOptionActivity.class);
+				i.putExtra("opt", "update");
+				i.putExtra("position", arg2);
+				MainActivity.this.startActivity(i);
+			}
+		});
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					final int position, long arg3) {
+				AlertDialog.Builder builder = new Builder(MainActivity.this);
+				builder.setMessage("确认删除吗？");
+				builder.setTitle("提示");
+				builder.setPositiveButton("确认",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+								DemoDB<CycleType> db = new DemoDB<CycleType>(
+										new CycleType());
+								List<CycleType> list = db
+										.getList(MainActivity.this);
+								try {
+									db.realRemove(list.get(position).get_id()
+											+ "", MainActivity.this);
+									Toast.makeText(
+											MainActivity.this,
+											"删除《"
+													+ list.get(position)
+															.getName() + "》成功！",
+											Toast.LENGTH_SHORT).show();
+									list.remove(position);
+									listView.setAdapter(new SystemSettingListAdapter(
+											MainActivity.this));
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+							}
+						});
+				builder.setNegativeButton("取消",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+				builder.create().show();
+				return true;
+			}
+		});
+
+	}
+
+	private void initTodaySchedule(View v) {
+		// TODO ..
+		ImageView imageView = (ImageView) v
+				.findViewById(R.id.main_today_shedule_imageview);
+		Bitmap bm400 = BitmapFactory.decodeResource(getResources(),
+				R.drawable.s400).copy(Bitmap.Config.ARGB_8888, true);
+		Canvas c400 = new Canvas(bm400);
+		LinearLayout linearLayout = (LinearLayout) v
+				.findViewById(R.id.main_today_shedule_linear_layout);
+		Canvas c40;
+		Bitmap bm40;
+		TextView txt;
+		ImageView icon;
+		Paint p;
+		Target t;
+		RectF rectf = new RectF(0, 0, 400, 400);
+		DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
+		DemoDB<CycleDetailsForPlan> ddb = new DemoDB<CycleDetailsForPlan>(
+				new CycleDetailsForPlan());
+		String start = DateUtil.getTodayStartTime() + "";
+		String end = DateUtil.getTodayEndTime() + "";
+		String q = "(" + CycleDetailsForPlan.STARTTIME + "<=? and "
+				+ CycleDetailsForPlan.STARTTIME + ">=?) or ("
+				+ CycleDetailsForPlan.ENDTIME + "<=? and "
+				+ CycleDetailsForPlan.ENDTIME + ">=?)";
+		List<CycleDetailsForPlan> pDetails = ddb.getList(this, q, new String[] {
+				end, start, end, start }, CycleDetailsForPlan.STARTTIME
+				+ " asc");
+		Plan plan = null;
+		List<Plan> plans = new ArrayList<Plan>();
+		for (CycleDetailsForPlan d : pDetails) {
+			plan = db.get(d.getCycleFor() + "", this);
+			plan.setDetail(d);
+			plans.add(plan);
+		}
+		Collections.sort(plans);
+		for (int i = 0, startScale = 0; i < plans.size(); startScale += plans
+				.get(i).getScale(), i++) {
+			t = plans.get(i);
+			p = DrawUtil.getPaint(i, i + 1 == plans.size());
+			c400.drawArc(rectf, startScale, t.getScale(), true, p);
+			LinearLayout l = new LinearLayout(this);
+			l.setOrientation(LinearLayout.HORIZONTAL);
+			bm40 = BitmapFactory.decodeResource(getResources(), R.drawable.s40)
+					.copy(Bitmap.Config.ARGB_8888, true);
+			c40 = new Canvas(bm40);
+			c40.drawCircle(20, 20, 10, p);
+			icon = new ImageView(this);
+			icon.setImageBitmap(bm40);
+			icon.setScaleType(ScaleType.CENTER);
+			icon.setMaxHeight(10);
+			icon.setMaxWidth(10);
+			txt = new TextView(this);
+			txt.setText(plans.get(i).getName()
+					+ "("
+					+ new BigDecimal(plans.get(i).getScale() * 100.0 / 360)
+							.setScale(2, BigDecimal.ROUND_HALF_EVEN).toString()
+					+ "%)");
+			l.addView(icon);
+			l.addView(txt);
+			linearLayout.addView(l);
+		}
+		imageView.setImageBitmap(bm400);
+		// imageView.setOnClickListener(new OnClickListener() {
+		// @Override
+		// public void onClick(View view) {
+		// Intent intent = new Intent(MainActivity.this,
+		// TargetManageOptionActivity.class);
+		// startActivity(intent);
+		// }
+		// });
+	}
+
+	private void initTargetManage(View v) {
 		ActionBar bar = super.getActionBar();
 		bar.setIcon(R.drawable.ziwaixian);
 		ImageView imageView = (ImageView) v

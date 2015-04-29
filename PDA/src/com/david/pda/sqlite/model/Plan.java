@@ -1,14 +1,14 @@
 package com.david.pda.sqlite.model;
 
-import com.david.pda.sqlite.model.base.Model;
-import com.david.pda.sqlite.privider.ModelProvider;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
 
-public class Plan extends Model {
+import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.sqlite.privider.ModelProvider;
+
+public class Plan extends Model implements Comparable<Plan> {
 	/**
 	 * 
 	 */
@@ -28,6 +28,15 @@ public class Plan extends Model {
 	public final static String STARTTIME = "startTime";
 	public final static String ENDTIME = "endTime";
 	public final static String DOAFTERSUCCESS = "doAfterSuccess";
+	private CycleDetailsForPlan detail;
+
+	public void setDetail(CycleDetailsForPlan detail) {
+		this.detail = detail;
+	}
+
+	public CycleDetailsForPlan getDetail() {
+		return this.detail;
+	}
 
 	public static int urgency(int urgencyimportant) {// 00,01,10,11
 		return urgencyimportant >> 1;
@@ -127,7 +136,7 @@ public class Plan extends Model {
 	}
 
 	public Plan() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 
 	public Long get_id() {
@@ -242,5 +251,14 @@ public class Plan extends Model {
 	@Override
 	public Model getInstance(Cursor c) {
 		return new Plan(c);
+	}
+
+	@Override
+	public int compareTo(Plan other) {
+		if (this.getDetail() != null && other.getDetail() != null) {
+			CycleDetailsForPlan c2 = other.getDetail();
+			if()
+		}
+		return 0;
 	}
 }

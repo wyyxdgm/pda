@@ -3,6 +3,7 @@ package com.david.pda.util.other;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
@@ -34,6 +35,25 @@ public class DateUtil {
 	public static String formatyyyy_MM_dd_HH_mm_ss(long mi) {
 		SimpleDateFormat sdf = new SimpleDateFormat(yyyy_MM_dd_HH_mm_ss);
 		return sdf.format(new Date(mi));
+	}
+
+	public static Long getTodayStartTime() {
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return c.getTimeInMillis();
+	}
+
+	public static Long getTodayEndTime() {
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		c.add(Calendar.DAY_OF_MONTH, 1);
+		return c.getTimeInMillis();
 	}
 
 	@SuppressLint("SimpleDateFormat")
@@ -115,7 +135,7 @@ public class DateUtil {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static Long parsePT(String yyyyMmDdHHMm,String text) {
+	public static Long parsePT(String yyyyMmDdHHMm, String text) {
 		if (yyyyMmDdHHMm != null && !yyyyMmDdHHMm.equals("")) {
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat(yyyyMmDdHHMm);
