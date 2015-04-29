@@ -115,7 +115,7 @@ public class DateUtil {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static Long parse(String yyyyMmDdHHMm,String text) {
+	public static Long parsePT(String yyyyMmDdHHMm,String text) {
 		if (yyyyMmDdHHMm != null && !yyyyMmDdHHMm.equals("")) {
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat(yyyyMmDdHHMm);

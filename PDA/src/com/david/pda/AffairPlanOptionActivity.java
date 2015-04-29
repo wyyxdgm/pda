@@ -374,9 +374,9 @@ public class AffairPlanOptionActivity extends Activity {
 		// }
 		targetIndex = targetListSP.getSelectedItemPosition();
 		plan.setTarget(targets.get(targetIndex).get_id().intValue());
-		plan.setStartTime(DateUtil.parse(DateUtil.yyyy_MM_dd_HH_mm, startDP
+		plan.setStartTime(DateUtil.parsePT(DateUtil.yyyy_MM_dd_HH_mm, startDP
 				.getText().toString() + " " + startTP.getText().toString()));
-		plan.setEndTime(DateUtil.parse(DateUtil.yyyy_MM_dd_HH_mm, endDP
+		plan.setEndTime(DateUtil.parsePT(DateUtil.yyyy_MM_dd_HH_mm, endDP
 				.getText().toString() + " " + endTP.getText().toString()));
 		plan.setUrgencyimportant((jjCB.isChecked() ? 1 * 2 : 0 * 2)
 				+ (zyCB.isChecked() ? 1 * 1 : 0 * 1));

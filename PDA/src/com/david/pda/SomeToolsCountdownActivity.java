@@ -187,7 +187,7 @@ public class SomeToolsCountdownActivity extends Activity {
 						}
 					});
 			builder.create().show();
-			return false;
+			return true;
 		}
 	}
 

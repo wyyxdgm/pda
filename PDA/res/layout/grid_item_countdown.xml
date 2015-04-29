@@ -27,6 +27,7 @@
         android:id="@+id/some_tools_countdown_item_endTime"
         android:layout_width="200px"
         android:layout_height="200px"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:scaleType="centerInside" />
 
 </RelativeLayout>

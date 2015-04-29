@@ -83,7 +83,6 @@ public class CountdownGridAdapter extends BaseAdapter {
 		Paint p = DateUtil.getPaint(angle);
 		Log.i(L.t, angle + "");
 		c.drawArc(new RectF(10, 10, 190, 190), 100, 360 - angle, true, p);
-		c.save();
 		endTime.setImageBitmap(bm);
 		return row;
 	}
