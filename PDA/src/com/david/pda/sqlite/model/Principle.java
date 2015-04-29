@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.privider.ModelProvider;
 
-public class Principal extends Model {
+public class Principle extends Model {
 	private static final long serialVersionUID = 1034701550127380262L;
 	public static final String TABLE_NAME = "principal";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
@@ -39,7 +39,7 @@ public class Principal extends Model {
 	private Long cycleDetails;
 	private Integer delFlag;
 
-	public Principal() {
+	public Principle() {
 		super();
 	}
 
@@ -62,7 +62,7 @@ public class Principal extends Model {
 		return cv;
 	}
 
-	public Principal(Cursor c) {
+	public Principle(Cursor c) {
 		this._id = c.getLong(c.getColumnIndex(_ID));
 		this.title = c.getString(c.getColumnIndex(TITLE));
 		this.remarks = c.getString(c.getColumnIndex(REMARKS));
@@ -126,6 +126,6 @@ public class Principal extends Model {
 
 	@Override
 	public Model getInstance(Cursor c) {
-		return new Principal(c);
+		return new Principle(c);
 	}
 }

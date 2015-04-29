@@ -23,7 +23,7 @@ import com.david.pda.sqlite.model.CycleDetailsForPrinciple;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.Memo;
 import com.david.pda.sqlite.model.Plan;
-import com.david.pda.sqlite.model.Principal;
+import com.david.pda.sqlite.model.Principle;
 import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.util.DBHelper;
 
@@ -52,7 +52,7 @@ public class ModelProvider extends ContentProvider {
 		TABLES.add(CycleType.TABLE_NAME);
 		TABLES.add(Memo.TABLE_NAME);
 		TABLES.add(Plan.TABLE_NAME);
-		TABLES.add(Principal.TABLE_NAME);
+		TABLES.add(Principle.TABLE_NAME);
 		TABLES.add(Target.TABLE_NAME);
 
 		for (int i = 0; i < TABLES.size(); i++) {
@@ -74,7 +74,7 @@ public class ModelProvider extends ContentProvider {
 		CREATE_TABLE.put(CycleType.TABLE_NAME, CycleType.CREATE_TABLE());
 		CREATE_TABLE.put(Memo.TABLE_NAME, Memo.CREATE_TABLE());
 		CREATE_TABLE.put(Plan.TABLE_NAME, Plan.CREATE_TABLE());
-		CREATE_TABLE.put(Principal.TABLE_NAME, Principal.CREATE_TABLE());
+		CREATE_TABLE.put(Principle.TABLE_NAME, Principle.CREATE_TABLE());
 		CREATE_TABLE.put(Target.TABLE_NAME, Target.CREATE_TABLE());
 	}
 

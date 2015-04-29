@@ -29,7 +29,7 @@ public abstract class CycleDetails extends Model {
 
 	public CycleDetails() {
 	}
-
+	public abstract CycleDetails clone();
 	public static String CREATE_TABLE() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("CREATE TABLE ");
@@ -101,7 +101,6 @@ public abstract class CycleDetails extends Model {
 		this.discription = c.getString(c.getColumnIndex(DISCRIPTION));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
 	}
-
 	public Long get_id() {
 		return _id;
 	}

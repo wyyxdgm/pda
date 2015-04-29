@@ -11,17 +11,17 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.david.pda.R;
-import com.david.pda.sqlite.model.Principal;
+import com.david.pda.sqlite.model.Principle;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.weather.model.util.L;
 
 public class SelfPrincipleListAdapter extends BaseAdapter {
 	private Context context;
-	private List<Principal> data;
+	private List<Principle> data;
 
 	public SelfPrincipleListAdapter(Context context) {
 		this.context = context;
-		this.data = new DemoDB<Principal>(new Principal()).getList(context);
+		this.data = new DemoDB<Principle>(new Principle()).getList(context);
 		Log.i(L.t, data.size() + "");
 	}
 
@@ -53,7 +53,7 @@ public class SelfPrincipleListAdapter extends BaseAdapter {
 		}
 		TextView title = (TextView) row
 				.findViewById(R.id.list_item_self_principle_title);
-		Principal ct = data.get(position);
+		Principle ct = data.get(position);
 		title.setText(ct.getTitle());
 		return row;
 	}

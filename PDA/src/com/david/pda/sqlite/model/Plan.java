@@ -22,6 +22,7 @@ public class Plan extends Model implements Comparable<Plan> {
 	public final static String CREATETIME = "createTime";
 	public final static String TARGET = "target";
 	public final static String ISTIP = "isTip";
+	public final static String CYCLETYPE = "cycleType";
 	public final static String WEATHERSENSITIVITY = "weatherSensitivity";
 	public final static String TOTALTIME = "totalTime";
 	public final static String TOTALUSED = "totalUsed";
@@ -59,6 +60,7 @@ public class Plan extends Model implements Comparable<Plan> {
 		sb.append(WEATHERSENSITIVITY).append(" INT,");
 		sb.append(TOTALTIME).append(" LONG,");
 		sb.append(TOTALUSED).append(" LONG,");
+		sb.append(CYCLETYPE).append(" INT,");
 		sb.append(STARTTIME).append(" LONG,");
 		sb.append(ENDTIME).append(" LONG,");
 		sb.append(DOAFTERSUCCESS).append(" TEXT,");
@@ -75,6 +77,7 @@ public class Plan extends Model implements Comparable<Plan> {
 	private Integer weatherSensitivity;
 	private Long totalTime;
 	private Long totalUsed;
+	private Long cycleType;
 	private Long startTime;
 	private Long endTime;
 	private String doAfterSuccess;
@@ -106,6 +109,9 @@ public class Plan extends Model implements Comparable<Plan> {
 		if (totalUsed != null) {
 			cv.put(TOTALUSED, totalUsed);
 		}
+		if (cycleType != null) {
+			cv.put(CYCLETYPE, cycleType);
+		}
 		if (startTime != null) {
 			cv.put(STARTTIME, startTime);
 		}
@@ -130,6 +136,7 @@ public class Plan extends Model implements Comparable<Plan> {
 		this.totalTime = c.getLong(c.getColumnIndex(TOTALTIME));
 		this.totalUsed = c.getLong(c.getColumnIndex(TOTALUSED));
 		this.startTime = c.getLong(c.getColumnIndex(STARTTIME));
+		this.cycleType = c.getLong(c.getColumnIndex(CYCLETYPE));
 		this.endTime = c.getLong(c.getColumnIndex(ENDTIME));
 		this.doAfterSuccess = c.getString(c.getColumnIndex(DOAFTERSUCCESS));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
@@ -253,11 +260,22 @@ public class Plan extends Model implements Comparable<Plan> {
 		return new Plan(c);
 	}
 
+	public Long getCycleType() {
+		return cycleType;
+	}
+
+	public void setCycleType(Long cycleType) {
+		this.cycleType = cycleType;
+	}
+
 	@Override
 	public int compareTo(Plan other) {
 		if (this.getDetail() != null && other.getDetail() != null) {
 			CycleDetailsForPlan c2 = other.getDetail();
-			if()
+			if (detail.getStartTime() < c2.getStartTime()) {
+				return -1;
+			} else
+				return 1;
 		}
 		return 0;
 	}

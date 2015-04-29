@@ -2,7 +2,6 @@ package com.david.pda;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -70,7 +69,7 @@ import com.david.pda.sqlite.model.CycleDetailsForPlan;
 import com.david.pda.sqlite.model.CycleDetailsForPrinciple;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.Plan;
-import com.david.pda.sqlite.model.Principal;
+import com.david.pda.sqlite.model.Principle;
 import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DateUtil;
@@ -752,9 +751,9 @@ public class MainActivity extends ActionBarActivity {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								dialog.dismiss();
-								DemoDB<Principal> db = new DemoDB<Principal>(
-										new Principal());
-								List<Principal> list = db
+								DemoDB<Principle> db = new DemoDB<Principle>(
+										new Principle());
+								List<Principle> list = db
 										.getList(MainActivity.this);
 								try {
 									DemoDB<CycleDetailsForPrinciple> db2 = new DemoDB<CycleDetailsForPrinciple>(
@@ -884,13 +883,14 @@ public class MainActivity extends ActionBarActivity {
 		TextView txt;
 		ImageView icon;
 		Paint p;
-		Target t;
 		RectF rectf = new RectF(0, 0, 400, 400);
 		DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
 		DemoDB<CycleDetailsForPlan> ddb = new DemoDB<CycleDetailsForPlan>(
 				new CycleDetailsForPlan());
-		String start = DateUtil.getTodayStartTime() + "";
-		String end = DateUtil.getTodayEndTime() + "";
+		Long startTime = DateUtil.getTodayStartTime();
+		String start = startTime + "";
+		Long endTime = DateUtil.getTodayEndTime();
+		String end = endTime + "";
 		String q = "(" + CycleDetailsForPlan.STARTTIME + "<=? and "
 				+ CycleDetailsForPlan.STARTTIME + ">=?) or ("
 				+ CycleDetailsForPlan.ENDTIME + "<=? and "
@@ -899,19 +899,21 @@ public class MainActivity extends ActionBarActivity {
 				end, start, end, start }, CycleDetailsForPlan.STARTTIME
 				+ " asc");
 		Plan plan = null;
-		List<Plan> plans = new ArrayList<Plan>();
+		final List<Plan> plans = new ArrayList<Plan>();
 		for (CycleDetailsForPlan d : pDetails) {
 			plan = db.get(d.getCycleFor() + "", this);
 			plan.setDetail(d);
 			plans.add(plan);
 		}
 		Collections.sort(plans);
-		for (int i = 0, startScale = 0; i < plans.size(); startScale += plans
-				.get(i).getScale(), i++) {
-			t = plans.get(i);
+		for (int i = 0; i < plans.size(); i++) {
+			int startAngle = DrawUtil.parseAngleByDayTime(startTime, endTime,
+					plans.get(i).getStartTime());
+			int endAngle = DrawUtil.parseAngleByDayTime(startTime, endTime,
+					plans.get(i).getStartTime());
 			p = DrawUtil.getPaint(i, i + 1 == plans.size());
-			c400.drawArc(rectf, startScale, t.getScale(), true, p);
-			LinearLayout l = new LinearLayout(this);
+			c400.drawArc(rectf, startAngle, endAngle - startAngle, true, p);
+			final LinearLayout l = new LinearLayout(this);
 			l.setOrientation(LinearLayout.HORIZONTAL);
 			bm40 = BitmapFactory.decodeResource(getResources(), R.drawable.s40)
 					.copy(Bitmap.Config.ARGB_8888, true);
@@ -923,24 +925,26 @@ public class MainActivity extends ActionBarActivity {
 			icon.setMaxHeight(10);
 			icon.setMaxWidth(10);
 			txt = new TextView(this);
-			txt.setText(plans.get(i).getName()
+			txt.setText(plans.get(i).getTitle()
 					+ "("
-					+ new BigDecimal(plans.get(i).getScale() * 100.0 / 360)
-							.setScale(2, BigDecimal.ROUND_HALF_EVEN).toString()
-					+ "%)");
+					+ DateUtil.format(DateUtil.H时_m分, plans.get(i)
+							.getStartTime())
+					+ " ~ "
+					+ DateUtil
+							.format(DateUtil.H时_m分, plans.get(i).getEndTime())
+					+ ")");
 			l.addView(icon);
 			l.addView(txt);
+			l.setId(i);
+			l.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					Toast.makeText(MainActivity.this,plans.get(l.getId()).getTitle(), Toast.LENGTH_SHORT).show();
+				}
+			});
 			linearLayout.addView(l);
 		}
 		imageView.setImageBitmap(bm400);
-		// imageView.setOnClickListener(new OnClickListener() {
-		// @Override
-		// public void onClick(View view) {
-		// Intent intent = new Intent(MainActivity.this,
-		// TargetManageOptionActivity.class);
-		// startActivity(intent);
-		// }
-		// });
 	}
 
 	private void initTargetManage(View v) {

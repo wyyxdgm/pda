@@ -39,7 +39,17 @@ public class DrawUtil {
 	public static Paint getBlank() {
 		return paints[5];
 	}
+
 	public static Paint getGap() {
 		return paints[4];
+	}
+
+	public static int parseAngleByDayTime(long startTime, long endTime,
+			long time) {
+		if (time > endTime)
+			return 360;
+		if (time < startTime)
+			return 0;
+		return (int) (360.0 * (time - startTime) / (endTime - startTime));
 	}
 }
