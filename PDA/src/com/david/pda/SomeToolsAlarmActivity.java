@@ -2,7 +2,12 @@ package com.david.pda;
 
 import java.util.List;
 
+import org.json.JSONException;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +15,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.david.pda.adapter.AlarmListAdapter;
 import com.david.pda.sqlite.model.Alarm;
+import com.david.pda.sqlite.model.CycleDetailsForAlarm;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
 import com.david.pda.weather.model.util.L;
@@ -30,8 +38,9 @@ public class SomeToolsAlarmActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setContentView(R.layout.main_some_tools_alarm);
-	//	DemoDB<CycleDetailsForAlarm>db = new DemoDB<CycleDetailsForAlarm>(new CycleDetailsForAlarm());
-	//	db.insert(CycleDetailsForAlarm.getTest(12), this);
+		// DemoDB<CycleDetailsForAlarm>db = new DemoDB<CycleDetailsForAlarm>(new
+		// CycleDetailsForAlarm());
+		// db.insert(CycleDetailsForAlarm.getTest(12), this);
 		addButton = (Button) findViewById(R.id.addAlarm);
 		listView = (ListView) findViewById(R.id.main_some_tools_alarm_listview);
 		backward = (ImageButton) findViewById(R.id.main_some_tools_alarm_topbar_backward);
@@ -64,6 +73,66 @@ public class SomeToolsAlarmActivity extends Activity {
 				i.putExtra("alarm", a);
 				i.setFlags(SomeToolsAlarmOptionActivity.FLAG_UPDATE);
 				SomeToolsAlarmActivity.this.startActivity(i);
+			}
+		});
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					final int index, long arg3) {
+				AlertDialog.Builder builder = new Builder(
+						SomeToolsAlarmActivity.this);
+				builder.setMessage("确认删除吗？");
+				builder.setTitle("提示");
+				builder.setPositiveButton("确认",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+								DemoDB<Alarm> db = new DemoDB<Alarm>(
+										new Alarm());
+								try {
+									DemoDB<CycleDetailsForAlarm> db2 = new DemoDB<CycleDetailsForAlarm>(
+											new CycleDetailsForAlarm());
+									List<CycleDetailsForAlarm> details = db2
+											.getList(
+													SomeToolsAlarmActivity.this,
+													CycleDetailsForAlarm.CYLEFOR
+															+ "=?",
+													new String[] { alarms.get(
+															index).get_id()
+															+ "" }, null);
+									for (CycleDetailsForAlarm d : details) {
+										db2.realRemove(d.get_id() + "",
+												SomeToolsAlarmActivity.this);
+									}
+									db.realRemove(alarms.get(index).get_id()
+											+ "", SomeToolsAlarmActivity.this);
+									Toast.makeText(
+											SomeToolsAlarmActivity.this,
+											"删除《"
+													+ alarms.get(index)
+															.getTitle()
+													+ "》成功！",
+											Toast.LENGTH_SHORT).show();
+									// alarms.remove(index);
+									initView();
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+							}
+						});
+				builder.setNegativeButton("取消",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+				builder.create().show();
+				return true;
 			}
 		});
 	}

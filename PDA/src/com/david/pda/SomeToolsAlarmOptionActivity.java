@@ -103,6 +103,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 		} else if (FLAG_ADD == super.getIntent().getFlags()) {// add
 			yesButton.setOnClickListener(new AddListenr());
 			Log.i(L.t, "add");
+			flagOption = FLAG_ADD;
 		}
 		cycleTypes
 				.setAdapter(new ArrayAdapter<String>(this,
@@ -286,6 +287,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 				Log.i(L.t, "add");
 				getCycleDetailFromPopup();
 				mAdapter.add(currentDetail);
+				currentDetail = null;
 				mAdapter.notifyDataSetChanged();
 				hideWindow();
 			}
@@ -293,6 +295,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 	}
 
 	// update layout
+	private int updateDetailsIndexWhenAddAlarm = 0;
 
 	private void initUpdateLayoutContent() {
 		fillPopupByCurrentDetail();
@@ -317,13 +320,25 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 						e.printStackTrace();
 					}
 				} else {// add
-					currentDetail.setCycleFor(alarm.get_id());
-					db.insert(currentDetail, SomeToolsAlarmOptionActivity.this);
+					if (SomeToolsAlarmOptionActivity.FLAG_UPDATE == flagOption) {
+						currentDetail.setCycleFor(alarm.get_id());
+						db.insert(currentDetail,
+								SomeToolsAlarmOptionActivity.this);
+					} else {
+						mAdapter.remove(mAdapter
+								.getItem(updateDetailsIndexWhenAddAlarm));
+						getCycleDetailFromPopup();
+						mAdapter.add(currentDetail);
+						mAdapter.notifyDataSetChanged();
+					}
 				}
-				refreshDetails();
+				if (SomeToolsAlarmOptionActivity.FLAG_UPDATE == flagOption) {
+					refreshDetails();
+				}
 				Toast.makeText(SomeToolsAlarmOptionActivity.this,
 						currentDetail.get_id() == null ? "添加成功！" : "更新成功！",
 						Toast.LENGTH_SHORT).show();
+				currentDetail = null;
 				hideWindow();
 			}
 		});
@@ -518,6 +533,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 			if (dialog != null && dialog.isShowing()) {
 				return;
 			}
+			updateDetailsIndexWhenAddAlarm = position;
 			currentDetail = mAdapter.getItem(position);
 			showWindowForUpdate();
 		}
@@ -565,6 +581,5 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 			dialog.show();
 			return false;
 		}
-
 	}
 }

@@ -104,7 +104,9 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
         </activity>
-        <!-- <activity android:screenOrientation="portrait" android:name="org.achartengine.GraphicalActivity" /> -->
+        <activity
+            android:name="org.achartengine.GraphicalActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.david.pda.TargetManageComparedToFact"
             android:screenOrientation="portrait"
