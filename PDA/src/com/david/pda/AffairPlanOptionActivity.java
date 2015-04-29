@@ -66,14 +66,13 @@ public class AffairPlanOptionActivity extends Activity {
 	private List<Target> targets;
 	private int targetIndex;
 	private CycleDetailsForPlan detail;
+	private int from = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_affair_plan_option);
 		backward = (ImageButton) findViewById(R.id.main_affair_plan_option_topbar_backward);
-		Bind.bindReturn(backward, AffairPlanOptionActivity.this,
-				MainActivity.class, MainActivity.POSTION_AFFAIR_PLAN);
 		targetListSP = (Spinner) findViewById(R.id.main_affair_plan_option_target_list);
 		title = (EditText) findViewById(R.id.main_affair_plan_option_title);
 		startDP = (EditText) findViewById(R.id.main_affair_plan_option_target_start_date_et);
@@ -145,11 +144,19 @@ public class AffairPlanOptionActivity extends Activity {
 		});
 		if (getIntent().getFlags() == FLAG_ADD) {// add option
 			confirmBT.setOnClickListener(new AddPlanListener());
+			from = MainActivity.POSTION_AFFAIR_PLAN;
 		} else if (getIntent().getFlags() == FLAG_UPDATE) {// update
+			from = MainActivity.POSTION_AFFAIR_PLAN;// 默认plan
+			if (MainActivity.POSTION_FOUR_CLASSES == getIntent().getIntExtra(
+					"from", -1)) {
+				from = MainActivity.POSTION_FOUR_CLASSES;
+			}
 			this.plan = (Plan) getIntent().getSerializableExtra("plan");
 			initViewWithModelWhenUpdate();
 			confirmBT.setOnClickListener(new UpdatePlanListener());
 		}
+		Bind.bindReturn(backward, AffairPlanOptionActivity.this,
+				MainActivity.class, from);
 	}
 
 	public void getModelByViewWhenUpdate() {
@@ -158,6 +165,7 @@ public class AffairPlanOptionActivity extends Activity {
 					Toast.LENGTH_SHORT).show();
 		} else {
 			getPlanFromView();
+			getDetailFromDB();
 			getDetailFromView();
 		}
 	}
@@ -207,7 +215,11 @@ public class AffairPlanOptionActivity extends Activity {
 	public void goBack() {
 		Intent intent = new Intent(AffairPlanOptionActivity.this,
 				MainActivity.class);
-		intent.setFlags(MainActivity.POSTION_AFFAIR_PLAN);
+		if (from != -1) {
+			intent.setFlags(from);
+		} else {
+			intent.setFlags(MainActivity.POSTION_AFFAIR_PLAN);
+		}
 		startActivity(intent);
 		AffairPlanOptionActivity.this.finish();
 	}

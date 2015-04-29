@@ -3,6 +3,7 @@ package com.david.pda;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.json.JSONException;
 
@@ -20,7 +21,12 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -31,6 +37,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -48,6 +55,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -212,6 +220,185 @@ public class MainActivity extends ActionBarActivity {
 		plan_listview.setAdapter(new MainAffairPlanAdapter(this, planList));
 	}
 
+	private ViewPager mViewPager;
+	private TabWidget mTabWidget;
+	private static String[] addresses = { "紧急&重要", "紧急&不重要", "重要&不紧急",
+			"不紧急&不重要" };
+	private Button[] mBtnTabs = new Button[addresses.length];
+
+	private OnClickListener mTabClickListener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			if (v == mBtnTabs[0]) {
+				mViewPager.setCurrentItem(0);
+			} else if (v == mBtnTabs[1]) {
+				mViewPager.setCurrentItem(1);
+			} else if (v == mBtnTabs[2]) {
+				mViewPager.setCurrentItem(2);
+			} else if (v == mBtnTabs[3]) {
+				mViewPager.setCurrentItem(3);
+			}
+		}
+	};
+
+	private OnPageChangeListener mPageChangeListener = new OnPageChangeListener() {
+
+		@Override
+		public void onPageSelected(int arg0) {
+			mTabWidget.setCurrentTab(arg0);
+		}
+
+		@Override
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+		}
+
+		@Override
+		public void onPageScrollStateChanged(int arg0) {
+
+		}
+	};
+
+	private class MyPagerAdapter extends FragmentStatePagerAdapter {
+		public MyPagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			return MyFragment.create(MainActivity.this, addresses[position]);
+		}
+
+		@Override
+		public int getCount() {
+			return addresses.length;
+		}
+	}
+
+	public static class MyFragment extends Fragment {
+		static Context context = null;
+
+		public static MyFragment create(Context context, String address) {
+			MyFragment f = new MyFragment();
+			if (MyFragment.context == null) {
+				MyFragment.context = context;
+			}
+			Bundle b = new Bundle();
+			b.putString("address", address);
+			f.setArguments(b);
+			return f;
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			Random r = new Random(System.currentTimeMillis());
+			Bundle b = getArguments();
+			View v = inflater.inflate(R.layout.main_four_classes_pager, null);
+			v.setBackgroundColor(r.nextInt() >> 8 | 0xFF << 24);
+			final ListView plan_listview = (ListView) v
+					.findViewById(R.id.main_four_classes_pager_list_view);
+			DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
+			String ui = b.getString("address");
+			for (int i = 0; i < addresses.length; i++) {
+				if (addresses[i].equals(ui)) {// 00,01,10,11
+					ui = "" + (3 - i);
+					break;
+				}
+			}
+			final List<Plan> planList = db.getList(context,
+					Plan.URGENCYIMPORTANT + "=?", new String[] { ui }, null);
+			MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(
+					context, planList);
+			plan_listview.setAdapter(planadapter);
+			plan_listview.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+					Intent intent = new Intent(context,
+							AffairPlanOptionActivity.class);
+					intent.setFlags(AffairPlanOptionActivity.FLAG_UPDATE);
+					intent.putExtra("from", MainActivity.POSTION_FOUR_CLASSES);
+					intent.putExtra("plan", planList.get(position));
+					context.startActivity(intent);
+				}
+			});
+			plan_listview
+					.setOnItemLongClickListener(new OnItemLongClickListener() {
+						@Override
+						public boolean onItemLongClick(AdapterView<?> arg0,
+								View arg1, final int position, long arg3) {
+							AlertDialog.Builder builder = new Builder(context);
+							builder.setMessage("确认删除吗？");
+							builder.setTitle("提示");
+							builder.setPositiveButton("确认",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											dialog.dismiss();
+											DemoDB<Plan> db = new DemoDB<Plan>(
+													new Plan());
+											List<Plan> list = db
+													.getList(context);
+											try {
+												DemoDB<CycleDetailsForPlan> detailsDb = new DemoDB<CycleDetailsForPlan>(
+														new CycleDetailsForPlan());
+												List<CycleDetailsForPlan> ds = detailsDb
+														.getList(
+																context,
+																CycleDetailsForPlan.CYLEFOR
+																		+ "=?",
+																new String[] { list
+																		.get(position)
+																		.get_id()
+																		+ "" },
+																null);
+												if (ds.size() > 0) {
+													detailsDb.realRemove(ds
+															.get(0).get_id()
+															+ "", context);
+												}
+												db.realRemove(list
+														.get(position).get_id()
+														+ "", context);
+												Toast.makeText(
+														context,
+														"删除《"
+																+ list.get(
+																		position)
+																		.getTitle()
+																+ "》成功！",
+														Toast.LENGTH_SHORT)
+														.show();
+												list.remove(position);
+												plan_listview
+														.setAdapter(new MainAffairPlanAdapter(
+																context,
+																db.getList(context)));
+											} catch (JSONException e) {
+												e.printStackTrace();
+											}
+										}
+									});
+							builder.setNegativeButton("取消",
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											dialog.dismiss();
+										}
+									});
+							builder.create().show();
+							return true;
+						}
+					});
+			return v;
+		}
+	}
+
 	private void initMainView(int position, View v) {
 		if (position == POSTION_SOME_TOOLS) {
 			ImageButton alarm = (ImageButton) v
@@ -366,10 +553,6 @@ public class MainActivity extends ActionBarActivity {
 							checked);
 				}
 			});
-			plan_listview = (ListView) findViewById(R.id.main_affair_plan_listview);
-			MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(this,
-					planList);
-			plan_listview.setAdapter(planadapter);
 			go.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
@@ -379,6 +562,10 @@ public class MainActivity extends ActionBarActivity {
 					startActivity(intent);
 				}
 			});
+			plan_listview = (ListView) findViewById(R.id.main_affair_plan_listview);
+			MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(this,
+					planList);
+			plan_listview.setAdapter(planadapter);
 			plan_listview.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
@@ -466,6 +653,48 @@ public class MainActivity extends ActionBarActivity {
 						}
 					});
 		} else if (position == POSTION_FOUR_CLASSES) {
+			mTabWidget = (TabWidget) v.findViewById(R.id.tabWidget1);
+			mTabWidget.setStripEnabled(false);
+			mBtnTabs[0] = new Button(this);
+			mBtnTabs[0].setFocusable(true);
+			mBtnTabs[0].setText(addresses[0]);
+			mBtnTabs[0].setTextColor(getResources().getColorStateList(
+					R.color.abc_search_url_text_holo));
+			mTabWidget.addView(mBtnTabs[0]);
+			/*
+			 * Listener必须在mTabWidget.addView()之后再加入，用于覆盖默认的Listener，
+			 * mTabWidget.addView()中默认的Listener没有NullPointer检测。
+			 */
+			mBtnTabs[0].setOnClickListener(mTabClickListener);
+			mBtnTabs[1] = new Button(this);
+			mBtnTabs[1].setFocusable(true);
+			mBtnTabs[1].setText(addresses[1]);
+			mBtnTabs[1].setTextColor(getResources().getColorStateList(
+					R.color.abc_search_url_text_holo));
+			mTabWidget.addView(mBtnTabs[1]);
+			mBtnTabs[1].setOnClickListener(mTabClickListener);
+			mBtnTabs[2] = new Button(this);
+			mBtnTabs[2].setFocusable(true);
+			mBtnTabs[2].setText(addresses[2]);
+			mBtnTabs[2].setTextColor(getResources().getColorStateList(
+					R.color.abc_search_url_text_holo));
+			mTabWidget.addView(mBtnTabs[2]);
+			mBtnTabs[2].setOnClickListener(mTabClickListener);
+
+			mBtnTabs[3] = new Button(this);
+			mBtnTabs[3].setFocusable(true);
+			mBtnTabs[3].setText(addresses[3]);
+			mBtnTabs[3].setTextColor(getResources().getColorStateList(
+					R.color.abc_search_url_text_holo));
+			mTabWidget.addView(mBtnTabs[3]);
+			mBtnTabs[3].setOnClickListener(mTabClickListener);
+
+			mViewPager = (ViewPager) v.findViewById(R.id.viewPager1);
+			mViewPager.setAdapter(new MyPagerAdapter(
+					getSupportFragmentManager()));
+			mViewPager.setOnPageChangeListener(mPageChangeListener);
+
+			mTabWidget.setCurrentTab(0);
 
 		} else if (position == POSTION_SELF_PRINCIPLE) {
 

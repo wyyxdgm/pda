@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
@@ -69,6 +70,12 @@ public class MainAffairPlanAdapter extends BaseAdapter {
 				+ DateUtil.formatyyyy_MM_dd_HH_mm(plan.getEndTime()));
 		ImageView imageView = (ImageView) row
 				.findViewById(R.id.affair_plan_scale_image);
+		CheckBox jj = (CheckBox) row
+				.findViewById(R.id.affair_plan_item_left_jj);
+		CheckBox zy = (CheckBox) row
+				.findViewById(R.id.affair_plan_item_left_zy);
+		jj.setChecked(plan.getUrgencyimportant() >> 1 == 1);
+		zy.setChecked(plan.getUrgencyimportant() % 2 == 1);
 		Canvas c;
 		Paint p;
 		RectF rectf = new RectF(0, 0, 80, 80);// 380/2=190
