@@ -193,4 +193,19 @@ public class CycleDetailsForPrinciple extends CycleDetails {
 		return new CycleDetailsForPrinciple(c);
 	}
 
+	@Override
+	public CycleDetails clone() {
+		CycleDetailsForPrinciple c = new CycleDetailsForPrinciple();
+		c.setAheadTime(this.aheadTime);
+		c.setCycleFor(this.cycleFor);
+		c.setDelFlag(this.delFlag);
+		c.setDiscription(this.discription);
+		c.setEndTime(this.endTime);
+		c.setIsAhead(this.isAhead);
+		c.setIsTip(this.isTip);
+		c.setStartTime(this.startTime);
+		c.setWeatherSensitivity(this.weatherSensitivity);
+		return c;
+	}
+
 }

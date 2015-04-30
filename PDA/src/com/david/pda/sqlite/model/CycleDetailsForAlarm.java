@@ -30,7 +30,7 @@ public class CycleDetailsForAlarm extends CycleDetails {
 
 	public static CycleDetailsForAlarm getTest(int i) {
 		CycleDetailsForAlarm c = new CycleDetailsForAlarm();
-		c.setCycleFor((long)i);
+		c.setCycleFor((long) i);
 		c.setAheadTime(111111111l);
 		c.setDelFlag(Model.FLAG_EXISTS);
 		c.setDiscription("hhe");
@@ -214,6 +214,21 @@ public class CycleDetailsForAlarm extends CycleDetails {
 	@Override
 	public Model getInstance(Cursor c) {
 		return new CycleDetailsForAlarm(c);
+	}
+
+	@Override
+	public CycleDetails clone() {
+		CycleDetailsForAlarm c = new CycleDetailsForAlarm();
+		c.setAheadTime(this.aheadTime);
+		c.setCycleFor(this.cycleFor);
+		c.setDelFlag(this.delFlag);
+		c.setDiscription(this.discription);
+		c.setEndTime(this.endTime);
+		c.setIsAhead(this.isAhead);
+		c.setIsTip(this.isTip);
+		c.setStartTime(this.startTime);
+		c.setWeatherSensitivity(this.weatherSensitivity);
+		return c;
 	}
 
 }
