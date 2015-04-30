@@ -8,12 +8,13 @@ import android.text.TextUtils;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.privider.ModelProvider;
 
-public abstract class CycleDetails extends Model {
+public abstract class CycleDetails extends Model implements
+		Comparable<CycleDetails> {
 	public static final int DETAIL_FOR_PLAN = 1;
 	public static final int DETAIL_FOR_PRINCIPLE = 2;
 	public static final int DETAIL_FOR_ALARM = 3;
 
-	private static final long serialVersionUID = 36361417733489344L;
+	protected static final long serialVersionUID = 36361417733489344L;
 	public static final String TABLE_NAME = "cycledetails";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
 			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
@@ -26,10 +27,21 @@ public abstract class CycleDetails extends Model {
 	public final static String ISAHEAD = "isAhead";
 	public final static String AHEADTIME = "aheadTime";
 	public final static String DISCRIPTION = "discription";
+	protected Model father;
+
+	public Model getFather() {
+		return father;
+	}
+
+	public void setFather(Model father) {
+		this.father = father;
+	}
 
 	public CycleDetails() {
 	}
+
 	public abstract CycleDetails clone();
+
 	public static String CREATE_TABLE() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("CREATE TABLE ");
@@ -47,16 +59,16 @@ public abstract class CycleDetails extends Model {
 		return sb.toString();
 	}
 
-	private Long _id;
-	private Long cycleFor;
-	private Integer isTip;
-	private Integer isAhead;
-	private Long aheadTime;
-	private String discription;
-	private String weatherSensitivity;
-	private Long startTime;
-	private Long endTime;
-	private Integer delFlag;
+	protected Long _id;
+	protected Long cycleFor;
+	protected Integer isTip;
+	protected Integer isAhead;
+	protected Long aheadTime;
+	protected String discription;
+	protected String weatherSensitivity;
+	protected Long startTime;
+	protected Long endTime;
+	protected Integer delFlag;
 
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
@@ -101,6 +113,7 @@ public abstract class CycleDetails extends Model {
 		this.discription = c.getString(c.getColumnIndex(DISCRIPTION));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
 	}
+
 	public Long get_id() {
 		return _id;
 	}
@@ -186,4 +199,15 @@ public abstract class CycleDetails extends Model {
 		return CONTENT_URI;
 	}
 
+	@Override
+	public int compareTo(CycleDetails other) {
+		if (other != null) {
+			CycleDetails c2 = other;
+			if (this.getStartTime() < c2.getStartTime()) {
+				return -1;
+			} else
+				return 1;
+		}
+		return 0;
+	}
 }

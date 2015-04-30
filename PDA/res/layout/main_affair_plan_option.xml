@@ -161,21 +161,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
+                    android:layout_marginRight="20dp"
                     android:orientation="horizontal" >
 
                     <CheckBox
                         android:id="@+id/main_affair_plan_option_target_jj"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
+                        android:layout_margin="10dp"
                         android:text="紧急" />
 
                     <CheckBox
                         android:id="@+id/main_affair_plan_option_target_zy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
+                        android:layout_margin="10dp"
                         android:text="重要" />
+
+                    <CheckBox
+                        android:id="@+id/main_affair_plan_option_istip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="是否提示" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -339,12 +347,11 @@
 
                     <!-- android:hint="提前时间，单位分钟" -->
 
-                    <CheckBox
-                        android:id="@+id/main_affair_plan_option_istip"
+                    <Spinner
+                        android:id="@+id/main_affair_plan_option_cycle_type_spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:text="是否提示" />
+                        android:layout_marginLeft="10dp" />
 
                     <CheckBox
                         android:id="@+id/main_affair_plan_option_isaheadtime"

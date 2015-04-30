@@ -27,6 +27,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.david.pda.sqlite.model.CycleDetailsForPlan;
+import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.Plan;
 import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.base.Model;
@@ -40,6 +41,7 @@ public class AffairPlanOptionActivity extends Activity {
 	public final static int FLAG_ADD = 1;
 	public final static int FLAG_UPDATE = 2;
 	Spinner targetListSP;
+	Spinner cycleTypeSP;
 	EditText startDP;
 	EditText startTP;
 	EditText endDP;
@@ -64,7 +66,9 @@ public class AffairPlanOptionActivity extends Activity {
 	Button cancelBT;
 	Button confirmBT;
 	private List<Target> targets;
+	private List<CycleType> cycleTypes;
 	private int targetIndex;
+	private int cycleTypeIndex;
 	private CycleDetailsForPlan detail;
 	private int from = -1;
 
@@ -74,6 +78,7 @@ public class AffairPlanOptionActivity extends Activity {
 		setContentView(R.layout.main_affair_plan_option);
 		backward = (ImageButton) findViewById(R.id.main_affair_plan_option_topbar_backward);
 		targetListSP = (Spinner) findViewById(R.id.main_affair_plan_option_target_list);
+		cycleTypeSP = (Spinner) findViewById(R.id.main_affair_plan_option_cycle_type_spinner);
 		title = (EditText) findViewById(R.id.main_affair_plan_option_title);
 		startDP = (EditText) findViewById(R.id.main_affair_plan_option_target_start_date_et);
 		startTP = (EditText) findViewById(R.id.main_affair_plan_option_target_start_time_et);
@@ -100,6 +105,9 @@ public class AffairPlanOptionActivity extends Activity {
 				.setAdapter(new ArrayAdapter<String>(this,
 						android.R.layout.simple_spinner_dropdown_item,
 						getTargetList()));
+		cycleTypeSP.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_dropdown_item,
+				getCycleTypeList()));
 		startDP.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -273,6 +281,22 @@ public class AffairPlanOptionActivity extends Activity {
 		}
 	}
 
+	private void getCycleTypeIndex() {
+		if (cycleTypes != null && cycleTypes != null
+				&& plan.getCycleType() != null) {
+			int i = 0;
+			for (CycleType c : cycleTypes) {
+				if (c.get_id().intValue() == plan.getCycleType().intValue()) {
+					cycleTypeIndex = i;
+					return;
+				}
+				i++;
+			}
+		} else {
+			cycleTypeIndex = 0;
+		}
+	}
+
 	private String[] getTargetList() {
 		DemoDB<Target> db = new DemoDB<Target>(new Target());
 		targets = db.getList(this);
@@ -280,6 +304,18 @@ public class AffairPlanOptionActivity extends Activity {
 		int i = 0;
 		for (Target t : targets) {
 			names[i] = t.getName();
+			i++;
+		}
+		return names;
+	}
+
+	private String[] getCycleTypeList() {
+		DemoDB<CycleType> db = new DemoDB<CycleType>(new CycleType());
+		cycleTypes = db.getList(this);
+		String[] names = new String[cycleTypes.size()];
+		int i = 0;
+		for (CycleType c : cycleTypes) {
+			names[i] = c.getName();
 			i++;
 		}
 		return names;
@@ -363,7 +399,9 @@ public class AffairPlanOptionActivity extends Activity {
 
 	private void fillCommonAttrViewFromPlan() {
 		getTargetIndex();
+		getCycleTypeIndex();
 		targetListSP.setSelection(targetIndex);
+		cycleTypeSP.setSelection(cycleTypeIndex);
 		title.setText(plan.getTitle());
 		startDP.setText(DateUtil.format(DateUtil.yyyy_MM_dd,
 				plan.getStartTime()));
@@ -376,16 +414,10 @@ public class AffairPlanOptionActivity extends Activity {
 	}
 
 	public void getPlanFromView() {
-		// if (TextUtils.isEmpty(endTP.getText().toString())
-		// || TextUtils.isEmpty(endDP.getText().toString())
-		// || TextUtils.isEmpty(startTP.getText().toString())
-		// || TextUtils.isEmpty(startDP.getText().toString())) {
-		// Toast.makeText(AffairPlanOptionActivity.this, "日期不能为空！",
-		// Toast.LENGTH_SHORT).show();
-		// return;
-		// }
 		targetIndex = targetListSP.getSelectedItemPosition();
+		cycleTypeIndex = cycleTypeSP.getSelectedItemPosition();
 		plan.setTarget(targets.get(targetIndex).get_id().intValue());
+		plan.setCycleType(cycleTypes.get(cycleTypeIndex).get_id());
 		plan.setStartTime(DateUtil.parsePT(DateUtil.yyyy_MM_dd_HH_mm, startDP
 				.getText().toString() + " " + startTP.getText().toString()));
 		plan.setEndTime(DateUtil.parsePT(DateUtil.yyyy_MM_dd_HH_mm, endDP

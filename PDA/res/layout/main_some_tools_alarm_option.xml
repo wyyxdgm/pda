@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
-            android:text="更新便签"
+            android:text="@string/alarm_option_title"
             android:textSize="18sp" />
     </RelativeLayout>
 
@@ -37,25 +37,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="标题" />
+            android:text="@string/title" />
 
         <EditText
             android:id="@+id/main_some_tools_alarm_option_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:inputType="text" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="内容" />
+            android:text="@string/content" />
 
         <EditText
             android:id="@+id/main_some_tools_alarm_option_content"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
+            android:inputType="text"
             android:minLines="3"
             android:textSize="15sp" />
 
@@ -70,14 +72,21 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:checked="true"
-                android:text="是否启用" />
+                android:text="@string/is_on" />
+
+            <TextView
+                android:id="@+id/main_some_tools_alarm_option_cycle_type_spinner_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/main_some_tools_alarm_option_flag_checkbox"
+                android:text="@string/cycle" />
 
             <Spinner
                 android:id="@+id/main_some_tools_alarm_option_cycle_type_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/main_some_tools_alarm_option_flag_checkbox" />
+                android:layout_toRightOf="@id/main_some_tools_alarm_option_cycle_type_spinner_label" />
 
             <Button
                 android:id="@+id/main_some_tools_alarm_option_addforlist"
@@ -85,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
-                android:text="添加" />
+                android:text="@string/add" />
         </RelativeLayout>
 
         <ListView
@@ -95,6 +104,7 @@
         </ListView>
 
         <LinearLayout
+            style="?android:attr/buttonBarStyle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -102,6 +112,7 @@
 
             <Button
                 android:id="@+id/main_some_tools_alarm_option_cancle_button"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -110,6 +121,7 @@
 
             <Button
                 android:id="@+id/main_some_tools_alarm_option_yes_button"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"

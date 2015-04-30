@@ -47,7 +47,9 @@
     <!-- main_target_manage -->
     <string name="please_input_scryed">请输入分身</string>
 
-    <string-array name="cityarray">
+    <!-- main_some_tools_alarm -->
+    <string name="alarm_option_title">更新闹钟</string>
+    <string-array name="cityarray">
         <item>北京</item>
         <item>江苏</item>
         <item>浙江</item>
@@ -76,10 +78,15 @@
     <string name="year">年</string>
     <!-- common -->
     <string name="title">标题:</string>
+    <string name="content">内容:</string>
     <string name="cycle">周期:</string>
     <string name="remarks">备注:</string>
     <string name="last_tip_time">最近提醒时间:</string>
     <string name="is_tip">是否提示:</string>
+    <string name="is_on">是否启用:</string>
     <string name="is_aheadtime">是否提前提醒:</string>
+    <string name="add">添加</string>
+    <string name="update">修改</string>
+    <string name="delete">删除</string>
 
 </resources>

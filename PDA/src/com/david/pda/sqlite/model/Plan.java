@@ -8,10 +8,7 @@ import android.text.TextUtils;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.privider.ModelProvider;
 
-public class Plan extends Model implements Comparable<Plan> {
-	/**
-	 * 
-	 */
+public class Plan extends Model {
 	private static final long serialVersionUID = -2583549883517195823L;
 	public static final String TABLE_NAME = "plan";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
@@ -30,6 +27,15 @@ public class Plan extends Model implements Comparable<Plan> {
 	public final static String ENDTIME = "endTime";
 	public final static String DOAFTERSUCCESS = "doAfterSuccess";
 	private CycleDetailsForPlan detail;
+	private CycleType cycleTypeObj;
+
+	public CycleType getCycleTypeObj() {
+		return cycleTypeObj;
+	}
+
+	public void setCycleTypeObj(CycleType cycleTypeObj) {
+		this.cycleTypeObj = cycleTypeObj;
+	}
 
 	public void setDetail(CycleDetailsForPlan detail) {
 		this.detail = detail;
@@ -266,17 +272,5 @@ public class Plan extends Model implements Comparable<Plan> {
 
 	public void setCycleType(Long cycleType) {
 		this.cycleType = cycleType;
-	}
-
-	@Override
-	public int compareTo(Plan other) {
-		if (this.getDetail() != null && other.getDetail() != null) {
-			CycleDetailsForPlan c2 = other.getDetail();
-			if (detail.getStartTime() < c2.getStartTime()) {
-				return -1;
-			} else
-				return 1;
-		}
-		return 0;
 	}
 }

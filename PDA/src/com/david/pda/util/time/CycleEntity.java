@@ -15,11 +15,11 @@ import com.david.pda.sqlite.model.Plan;
  * 
  * @author Administrator
  */
-public class CycleEntity {
+public class CycleEntity<T extends CycleDetails> {
 	private long currentEndTime;
 	private long currentStartTime;
-	private List<CycleDetails> details = new ArrayList<CycleDetails>();
-	private CycleDetails curDetail = null;
+	private List<T> details = new ArrayList<T>();
+	private T curDetail = null;
 	private long realMin;
 	private long realMax;
 	private long gapFromNext;
@@ -81,7 +81,7 @@ public class CycleEntity {
 				.getDateType(), cycle.getCycleLength().intValue(), details);
 	}
 
-	public List<CycleDetails> getTimes() {// get absolute time list
+	public List<T> getTimes() {// get absolute time list
 		// 1指定的周期求取区间在事务执行期间的两侧，时间上没有交集
 		if (leftTime > endTime || rightTime < endTime) {// L--R--start---end
 			return details;
@@ -91,7 +91,7 @@ public class CycleEntity {
 		return getDetailsBettweenMaxAndMin();
 	}
 
-	private List<CycleDetails> getDetailsBettweenMaxAndMin() {
+	private List<T> getDetailsBettweenMaxAndMin() {
 		while (currentEndTime < realMin) {
 			nextCycle();
 		}
@@ -161,16 +161,18 @@ public class CycleEntity {
 				+ (this.endTime - this.startTime);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void AddCurrentToDetails() {
-		curDetail = detail.clone();
+		curDetail = (T) detail.clone();
 		curDetail.setStartTime(currentStartTime);
 		curDetail.setEndTime(currentEndTime);
 		details.add(curDetail);
 		curDetail = null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void AddCurrentToDetails(long startTime, long endTime) {
-		curDetail = detail.clone();
+		curDetail = (T) detail.clone();
 		curDetail.setStartTime(startTime);
 		curDetail.setEndTime(endTime);
 		details.add(curDetail);
@@ -193,11 +195,11 @@ public class CycleEntity {
 		this.currentStartTime = currentStartTime;
 	}
 
-	public List<CycleDetails> getDetails() {
+	public List<T> getDetails() {
 		return details;
 	}
 
-	public void setDetails(List<CycleDetails> details) {
+	public void setDetails(List<T> details) {
 		this.details = details;
 	}
 
@@ -205,7 +207,7 @@ public class CycleEntity {
 		return curDetail;
 	}
 
-	public void setCurDetail(CycleDetails curDetail) {
+	public void setCurDetail(T curDetail) {
 		this.curDetail = curDetail;
 	}
 

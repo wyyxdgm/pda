@@ -74,6 +74,7 @@ import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DateUtil;
 import com.david.pda.util.other.DrawUtil;
+import com.david.pda.util.time.CycleEntity;
 import com.david.pda.weather.model.util.L;
 
 public class MainActivity extends ActionBarActivity {
@@ -459,14 +460,14 @@ public class MainActivity extends ActionBarActivity {
 			selectOption = new String[] { ((jj ? 2 * 1 : 2 * 0) + (zy ? 1 : 0))
 					+ "" };
 			if (title != null && !title.equals("")) {
-				select = Plan.TITLE + " like %" + title + "% and "
+				select = Plan.TITLE + " like '%" + title + "%' and "
 						+ Plan.URGENCYIMPORTANT + "=? ";
 			} else {
 				select = Plan.URGENCYIMPORTANT + "=? ";
 			}
 		} else {
 			if (title != null && !title.equals("")) {
-				select = Plan.TITLE + " like %" + title + "% and "
+				select = Plan.TITLE + " like '%" + title + "%' and "
 						+ Plan.TARGET + "=? and " + Plan.URGENCYIMPORTANT
 						+ "=? ";
 			} else {
@@ -888,30 +889,34 @@ public class MainActivity extends ActionBarActivity {
 		DemoDB<CycleDetailsForPlan> ddb = new DemoDB<CycleDetailsForPlan>(
 				new CycleDetailsForPlan());
 		Long startTime = DateUtil.getTodayStartTime();
-		String start = startTime + "";
 		Long endTime = DateUtil.getTodayEndTime();
-		String end = endTime + "";
-		String q = "(" + CycleDetailsForPlan.STARTTIME + "<=? and "
-				+ CycleDetailsForPlan.STARTTIME + ">=?) or ("
-				+ CycleDetailsForPlan.ENDTIME + "<=? and "
-				+ CycleDetailsForPlan.ENDTIME + ">=?)";
-		List<CycleDetailsForPlan> pDetails = ddb.getList(this, q, new String[] {
-				end, start, end, start }, CycleDetailsForPlan.STARTTIME
-				+ " asc");
+		List<CycleDetailsForPlan> details = ddb.getList(this, null, null,
+				CycleDetailsForPlan.STARTTIME + " asc");
 		Plan plan = null;
+		DemoDB<CycleType> cdb = new DemoDB<CycleType>(new CycleType());
 		final List<Plan> plans = new ArrayList<Plan>();
-		for (CycleDetailsForPlan d : pDetails) {
+		for (CycleDetailsForPlan d : details) {
 			plan = db.get(d.getCycleFor() + "", this);
 			plan.setDetail(d);
+			plan.setCycleTypeObj(cdb.get(plan.getCycleType() + "", this));
 			plans.add(plan);
 		}
-		Collections.sort(plans);
+		Plan pl = null;
+		final List<CycleDetailsForPlan> ds = new ArrayList<CycleDetailsForPlan>();
 		for (int i = 0; i < plans.size(); i++) {
+			pl = plans.get(i);
+			CycleEntity<CycleDetailsForPlan> ce = new CycleEntity<CycleDetailsForPlan>(
+					startTime, endTime, pl, pl.getCycleTypeObj(),
+					pl.getDetail());
+			ds.addAll(ce.getTimes());
+		}
+		Collections.sort(ds);
+		for (int i = 0; i < ds.size(); i++) {
 			int startAngle = DrawUtil.parseAngleByDayTime(startTime, endTime,
-					plans.get(i).getStartTime());
-			int endAngle = DrawUtil.parseAngleByDayTime(startTime, endTime,
-					plans.get(i).getStartTime());
-			p = DrawUtil.getPaint(i, i + 1 == plans.size());
+					ds.get(i).getStartTime());
+			int endAngle = DrawUtil.parseAngleByDayTime(startTime, endTime, ds
+					.get(i).getStartTime());
+			p = DrawUtil.getPaint(i, i + 1 == ds.size());
 			c400.drawArc(rectf, startAngle, endAngle - startAngle, true, p);
 			final LinearLayout l = new LinearLayout(this);
 			l.setOrientation(LinearLayout.HORIZONTAL);
@@ -921,17 +926,14 @@ public class MainActivity extends ActionBarActivity {
 			c40.drawCircle(20, 20, 10, p);
 			icon = new ImageView(this);
 			icon.setImageBitmap(bm40);
-			icon.setScaleType(ScaleType.CENTER);
+			icon.setScaleType(ScaleType.CENTER_INSIDE);
 			icon.setMaxHeight(10);
 			icon.setMaxWidth(10);
 			txt = new TextView(this);
-			txt.setText(plans.get(i).getTitle()
-					+ "("
-					+ DateUtil.format(DateUtil.H时_m分, plans.get(i)
-							.getStartTime())
+			txt.setText(((Plan) ds.get(i).getFather()).getTitle() + "("
+					+ DateUtil.format(DateUtil.H时_m分, ds.get(i).getStartTime())
 					+ " ~ "
-					+ DateUtil
-							.format(DateUtil.H时_m分, plans.get(i).getEndTime())
+					+ DateUtil.format(DateUtil.H时_m分, ds.get(i).getEndTime())
 					+ ")");
 			l.addView(icon);
 			l.addView(txt);
@@ -939,7 +941,9 @@ public class MainActivity extends ActionBarActivity {
 			l.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
-					Toast.makeText(MainActivity.this,plans.get(l.getId()).getTitle(), Toast.LENGTH_SHORT).show();
+					Toast.makeText(MainActivity.this,
+							((Plan) ds.get(l.getId()).getFather()).getTitle(),
+							Toast.LENGTH_SHORT).show();
 				}
 			});
 			linearLayout.addView(l);
