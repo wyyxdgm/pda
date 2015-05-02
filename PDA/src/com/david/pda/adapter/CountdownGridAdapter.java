@@ -21,6 +21,7 @@ import com.david.pda.SomeToolsCountdownActivity;
 import com.david.pda.sqlite.model.Countdown;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.util.other.DateUtil;
+import com.david.pda.util.other.DrawUtil;
 import com.david.pda.weather.model.util.L;
 
 public class CountdownGridAdapter extends BaseAdapter {
@@ -80,7 +81,7 @@ public class CountdownGridAdapter extends BaseAdapter {
 		Canvas c = new Canvas(bm);
 		int angle = DateUtil.getSweepAngle(countdown.getEndTime(),
 				((SomeToolsCountdownActivity) context).getCompareBy());
-		Paint p = DateUtil.getPaint(angle);
+		Paint p = DrawUtil.getPaintByAndgle(angle);
 		Log.i(L.t, angle + "");
 		c.drawArc(new RectF(10, 10, 190, 190), 100, 360 - angle, true, p);
 		endTime.setImageBitmap(bm);

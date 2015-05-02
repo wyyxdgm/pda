@@ -44,6 +44,33 @@ public class DrawUtil {
 		return paints[4];
 	}
 
+	public static Paint getPaintByAndgle(int angle) {
+		Paint p = new Paint();
+		if (angle > 360) {
+			p.setARGB(80, 5, 55, 5);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
+		} else if (angle > 180) {
+			p.setARGB(130, 0, 50, 255);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
+		} else if (angle > 90) {
+			p.setARGB(150, 250, 215, 0);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
+		} else if (angle > 50) {
+			p.setARGB(150, 205, 50, 50);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
+		} else if (angle > 20) {
+			p.setARGB(200, 250, 10, 10);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
+		} else if (angle >= 0) {
+			p.setARGB(255, 255, 0, 0);
+			p.setStyle(Paint.Style.FILL_AND_STROKE);
+		} else {// 比当前早，kill it shuld be
+			p.setARGB(40, 0, 0, 0);
+			p.setStyle(Paint.Style.STROKE);
+		}
+		return p;
+	}
+
 	public static int parseAngleByDayTime(long startTime, long endTime,
 			long time) {
 		if (time > endTime)

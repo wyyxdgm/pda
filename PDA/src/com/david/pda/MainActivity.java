@@ -3,11 +3,14 @@ package com.david.pda;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.json.JSONException;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -65,6 +68,7 @@ import com.david.pda.adapter.BataanAdapter;
 import com.david.pda.adapter.MainAffairPlanAdapter;
 import com.david.pda.adapter.SelfPrincipleListAdapter;
 import com.david.pda.adapter.SystemSettingListAdapter;
+import com.david.pda.adapter.TodayScheduleListAdapter;
 import com.david.pda.sqlite.model.CycleDetailsForPlan;
 import com.david.pda.sqlite.model.CycleDetailsForPrinciple;
 import com.david.pda.sqlite.model.CycleType;
@@ -870,21 +874,11 @@ public class MainActivity extends ActionBarActivity {
 
 	}
 
+	@SuppressLint("UseSparseArrays")
 	private void initTodaySchedule(View v) {
 		// TODO ..
-		ImageView imageView = (ImageView) v
-				.findViewById(R.id.main_today_shedule_imageview);
-		Bitmap bm400 = BitmapFactory.decodeResource(getResources(),
-				R.drawable.s400).copy(Bitmap.Config.ARGB_8888, true);
-		Canvas c400 = new Canvas(bm400);
-		LinearLayout linearLayout = (LinearLayout) v
-				.findViewById(R.id.main_today_shedule_linear_layout);
-		Canvas c40;
-		Bitmap bm40;
-		TextView txt;
-		ImageView icon;
-		Paint p;
-		RectF rectf = new RectF(0, 0, 400, 400);
+		ListView listView = (ListView) v
+				.findViewById(R.id.main_today_schedule_list);
 		DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
 		DemoDB<CycleDetailsForPlan> ddb = new DemoDB<CycleDetailsForPlan>(
 				new CycleDetailsForPlan());
@@ -903,7 +897,9 @@ public class MainActivity extends ActionBarActivity {
 		}
 		Plan pl = null;
 		final List<CycleDetailsForPlan> ds = new ArrayList<CycleDetailsForPlan>();
+		final Map<Long, Plan> planMap = new HashMap<Long, Plan>();
 		for (int i = 0; i < plans.size(); i++) {
+			planMap.put(plans.get(i).get_id(), plans.get(i));
 			pl = plans.get(i);
 			CycleEntity<CycleDetailsForPlan> ce = new CycleEntity<CycleDetailsForPlan>(
 					startTime, endTime, pl, pl.getCycleTypeObj(),
@@ -911,44 +907,21 @@ public class MainActivity extends ActionBarActivity {
 			ds.addAll(ce.getTimes());
 		}
 		Collections.sort(ds);
-		for (int i = 0; i < ds.size(); i++) {
-			int startAngle = DrawUtil.parseAngleByDayTime(startTime, endTime,
-					ds.get(i).getStartTime());
-			int endAngle = DrawUtil.parseAngleByDayTime(startTime, endTime, ds
-					.get(i).getStartTime());
-			p = DrawUtil.getPaint(i, i + 1 == ds.size());
-			c400.drawArc(rectf, startAngle, endAngle - startAngle, true, p);
-			final LinearLayout l = new LinearLayout(this);
-			l.setOrientation(LinearLayout.HORIZONTAL);
-			bm40 = BitmapFactory.decodeResource(getResources(), R.drawable.s40)
-					.copy(Bitmap.Config.ARGB_8888, true);
-			c40 = new Canvas(bm40);
-			c40.drawCircle(20, 20, 10, p);
-			icon = new ImageView(this);
-			icon.setImageBitmap(bm40);
-			icon.setScaleType(ScaleType.CENTER_INSIDE);
-			icon.setMaxHeight(10);
-			icon.setMaxWidth(10);
-			txt = new TextView(this);
-			txt.setText(((Plan) ds.get(i).getFather()).getTitle() + "("
-					+ DateUtil.format(DateUtil.H时_m分, ds.get(i).getStartTime())
-					+ " ~ "
-					+ DateUtil.format(DateUtil.H时_m分, ds.get(i).getEndTime())
-					+ ")");
-			l.addView(icon);
-			l.addView(txt);
-			l.setId(i);
-			l.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					Toast.makeText(MainActivity.this,
-							((Plan) ds.get(l.getId()).getFather()).getTitle(),
-							Toast.LENGTH_SHORT).show();
-				}
-			});
-			linearLayout.addView(l);
-		}
-		imageView.setImageBitmap(bm400);
+		listView.setAdapter(new TodayScheduleListAdapter(planMap, ds, this));
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Intent intent = new Intent(MainActivity.this,
+						AffairPlanOptionActivity.class);
+				intent.setFlags(AffairPlanOptionActivity.FLAG_UPDATE);
+				intent.putExtra("plan",
+						planMap.get(ds.get(position).getCycleFor()));
+				intent.putExtra("from", MainActivity.POSTION_TODAY_SCHEDULE);// for
+				MainActivity.this.startActivity(intent);
+			}
+		});
+
 	}
 
 	private void initTargetManage(View v) {

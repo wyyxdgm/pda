@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_some_tools_weather_headpic"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:padding="10dp" >
+
+    <RelativeLayout
+        android:id="@+id/list_item_today_schedule_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/list_item_today_schedule_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#aaaaaa" />
+
+        <CheckBox
+            android:id="@+id/list_item_today_schedule_jj"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/list_item_today_schedule_title"
+            android:layout_marginTop="20dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="紧急" />
+
+        <CheckBox
+            android:id="@+id/list_item_today_schedule_zy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/list_item_today_schedule_jj"
+            android:layout_toRightOf="@id/list_item_today_schedule_jj"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="重要" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/list_item_today_schedule_mid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/list_item_today_schedule_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/list_item_today_schedule_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/list_item_today_schedule_time"
+            android:layout_marginTop="20dp"
+            android:text="" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/list_item_today_schedule_right"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/list_item_today_schedule_scale_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerInside" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -23,6 +23,7 @@ public class CycleEntity<T extends CycleDetails> {
 	private long realMin;
 	private long realMax;
 	private long gapFromNext;
+	private long gapFromStartToEnd = 0;
 	/**
 	 * absolute time:left
 	 */
@@ -60,18 +61,17 @@ public class CycleEntity<T extends CycleDetails> {
 			long rightTime, DateType dateType, int cycleLength,
 			CycleDetails detail) {
 		super();
-		this.startTime = startTime;
-		this.endTime = endTime;
+		this.startTime = startTime;//plan startTime
+		this.endTime = endTime;//plan endTime
 		this.dateType = dateType;
 		this.cycleLength = cycleLength;
-		this.detail = detail;
+		this.detail = detail;//detail
 		this.leftTime = leftTime;
 		this.rightTime = rightTime;
-
 		// init
 		this.cycleNumber = 1;// 第一个周期
-		this.currentStartTime = startTime + detail.getStartTime();
-		this.currentEndTime = startTime + detail.getEndTime();
+		this.currentStartTime = startTime + detail.getStartTime();//first start time after plan
+		this.currentEndTime = startTime + detail.getEndTime();//first end time after plan
 		c.setTimeInMillis(this.currentStartTime);
 	}
 
@@ -83,7 +83,7 @@ public class CycleEntity<T extends CycleDetails> {
 
 	public List<T> getTimes() {// get absolute time list
 		// 1指定的周期求取区间在事务执行期间的两侧，时间上没有交集
-		if (leftTime > endTime || rightTime < endTime) {// L--R--start---end
+		if (leftTime > endTime || rightTime < startTime) {// L--R--start---end
 			return details;
 		}
 		this.realMin = leftTime > startTime ? leftTime : startTime;
@@ -95,11 +95,11 @@ public class CycleEntity<T extends CycleDetails> {
 		while (currentEndTime < realMin) {
 			nextCycle();
 		}
-		fixWhenRightBLMin(currentStartTime, currentEndTime);
+		fixWhenRightBLMin();
 		return details;
 	}
 
-	private void fixWhenRightBLMin(long currentStartTime, long currentEndTime) {
+	private void fixWhenRightBLMin() {
 		if (currentStartTime >= realMax) {// --R--cs1
 			return;
 		}
@@ -114,6 +114,9 @@ public class CycleEntity<T extends CycleDetails> {
 			while (currentEndTime < realMax) {
 				AddCurrentToDetails();
 				nextCycle();
+			}
+			if (currentStartTime < realMax) {
+				AddCurrentToDetails(currentStartTime, realMax);
 			}
 		} else if (currentStartTime < realMin && currentEndTime > realMin) {// 2
 			AddCurrentToDetails(realMin, currentEndTime);
@@ -156,9 +159,9 @@ public class CycleEntity<T extends CycleDetails> {
 			break;
 		}
 		this.cycleNumber++;
-		this.currentStartTime += c.getTimeInMillis();
-		this.currentEndTime += this.currentEndTime
-				+ (this.endTime - this.startTime);
+		this.currentStartTime = c.getTimeInMillis();
+		this.currentEndTime = this.currentStartTime
+				+ (this.detail.getEndTime() - this.detail.getStartTime());
 	}
 
 	@SuppressWarnings("unchecked")

@@ -158,6 +158,9 @@ public class AffairPlanOptionActivity extends Activity {
 			if (MainActivity.POSTION_FOUR_CLASSES == getIntent().getIntExtra(
 					"from", -1)) {
 				from = MainActivity.POSTION_FOUR_CLASSES;
+			} else if (MainActivity.POSTION_TODAY_SCHEDULE == getIntent()
+					.getIntExtra("from", -1)) {
+				from = MainActivity.POSTION_TODAY_SCHEDULE;
 			}
 			this.plan = (Plan) getIntent().getSerializableExtra("plan");
 			initViewWithModelWhenUpdate();

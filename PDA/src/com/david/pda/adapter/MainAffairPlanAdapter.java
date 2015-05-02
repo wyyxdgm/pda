@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.david.pda.R;
 import com.david.pda.sqlite.model.Plan;
 import com.david.pda.util.other.DateUtil;
+import com.david.pda.util.other.DrawUtil;
 
 public class MainAffairPlanAdapter extends BaseAdapter {
 	private Context context;
@@ -86,7 +87,7 @@ public class MainAffairPlanAdapter extends BaseAdapter {
 		c = new Canvas(currentBitmap);
 		int scale = (int) ((plan.getEndTime() - System.currentTimeMillis()) * 360.0 / (plan
 				.getEndTime() - plan.getStartTime()));
-		p = DateUtil.getPaint(scale);
+		p = DrawUtil.getPaintByAndgle(scale);
 		c.drawArc(rectf, 180, scale, true, p);
 		p.setStyle(Paint.Style.STROKE);
 		c.drawArc(rectf, 180 + scale, 360 - scale, true, p);
