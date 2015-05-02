@@ -56,11 +56,7 @@ public class ModelProvider extends ContentProvider {
 		TABLES.add(Target.TABLE_NAME);
 
 		for (int i = 0; i < TABLES.size(); i++) {
-			if (TABLES.get(i).indexOf("for") != -1) {
-				String s = CycleDetails.TABLE_NAME + "/#/" + TABLES.get(i);
-				URI_MATHER.addURI(AUTHORITY, "/" + s, i);
-			} else
-				URI_MATHER.addURI(AUTHORITY, "/" + TABLES.get(i), i);
+			URI_MATHER.addURI(AUTHORITY, TABLES.get(i), i);
 		}
 		CREATE_TABLE.put(Alarm.TABLE_NAME, Alarm.CREATE_TABLE());
 		CREATE_TABLE.put(Countdown.TABLE_NAME, Countdown.CREATE_TABLE());

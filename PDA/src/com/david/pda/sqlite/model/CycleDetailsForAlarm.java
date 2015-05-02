@@ -14,10 +14,9 @@ public class CycleDetailsForAlarm extends CycleDetails {
 	public static final int DETAIL_FOR_ALARM = 3;
 
 	private static final long serialVersionUID = 36361417733489344L;
-	public static final String TABLE_NAME = "foralarm";
+	public static final String TABLE_NAME = "cycledetailsforalarm";
 	public final static Uri CONTENT_URI = Uri.parse("content://"
-			+ ModelProvider.AUTHORITY + "/" + CycleDetails.TABLE_NAME + "/#/"
-			+ TABLE_NAME);
+			+ ModelProvider.AUTHORITY + "/" + TABLE_NAME);
 	public final static String _ID = "_id";
 	public final static String CYLEFOR = "cycleFor";
 	public final static String STARTTIME = "startTime";
