@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -140,8 +141,22 @@
         <activity
             android:name="com.david.pda.TestActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+            android:theme="@style/Translucent" >
+             <intent-filter>
+                <action android:name="com.david.pda.recevier.action.play" />
+            </intent-filter>
         </activity>
+
+        <receiver android:name="com.david.pda.service.AlarmReceiver" >
+            <intent-filter>
+                <action android:name="com.david.pda.recevier.action.play" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.david.pda.service.AlarmService"
+            android:singleUser="true" >
+        </service>
 
         <provider
             android:name="com.david.pda.sqlite.privider.ModelProvider"

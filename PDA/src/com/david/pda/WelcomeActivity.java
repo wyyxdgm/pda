@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.david.pda.service.AlarmService;
 import com.david.pda.weather.model.util.L;
 
 public class WelcomeActivity extends Activity {
@@ -38,8 +39,14 @@ public class WelcomeActivity extends Activity {
 				return false;
 			}
 		});
+		startService();
 		// initHandler.postDelayed(initThread, 3000);
 		initHandler.post(initThread);
+	}
+
+	public void startService() {
+		Intent i = new Intent(WelcomeActivity.this, AlarmService.class);
+		this.startService(i);
 	}
 
 	Runnable initThread = new Runnable() {

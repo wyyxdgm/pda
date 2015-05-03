@@ -23,7 +23,6 @@ public class CycleEntity<T extends CycleDetails> {
 	private long realMin;
 	private long realMax;
 	private long gapFromNext;
-	private long gapFromStartToEnd = 0;
 	/**
 	 * absolute time:left
 	 */

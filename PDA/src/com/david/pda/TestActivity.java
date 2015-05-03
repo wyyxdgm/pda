@@ -1,47 +1,66 @@
 package com.david.pda;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.david.pda.adapter.MainAffairPlanAdapter;
+import com.david.pda.service.AlarmService;
 import com.david.pda.sqlite.model.Plan;
 
 public class TestActivity extends Activity {
-	private Button btnShowCity = null;  
-	   private Spinner spCityStatic = null;  
-	    private Spinner spCity = null;  
-    private ArrayAdapter<CharSequence> adapterCity = null;  
-	    private static String[] cityInfo={"北京","江苏","浙江","上海"};  
-	    @Override  
-	    protected void onCreate(Bundle savedInstanceState) {  
-        super.onCreate(savedInstanceState);  
-	        setContentView(R.layout.main_affair_plan);  
-	        ListView plan_listview = (ListView) findViewById(R.id.main_affair_plan_listview);
-	        MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(this,getItems()); 
-	        plan_listview.setAdapter(planadapter);
+	public static String ACTION_PALY = "com.david.pda.PLAY_ACTION";
+	private Button bpause, bstop;
+	Intent intent;
+	private TextView title;
+	private TextView content;
 
-	    }  
-	  
-	public List<Plan> getItems(){
-		List<Plan> list = new ArrayList<Plan>();
-		Plan plan = null;
-		for(int i=0;i<5;i++){
-			plan = new Plan();
-			plan.setTitle("title"+(i+1));
-			plan.setCreateTime(2222l);
-			list.add(plan);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.test);
+		intent = getIntent();
+		title = (TextView) findViewById(R.id.test_title);
+		content = (TextView) findViewById(R.id.test_content);
+		if (intent.hasExtra("plan")) {
+			Plan p = (Plan) intent.getSerializableExtra("plan");
+			title.setText(p.getTitle());
+			content.setText(p.getCycleTypeObj().getDescription());
 		}
-		return list;
-	}   
+
+		// 动态注册广播接收器
+		bpause = (Button) findViewById(R.id.pause);
+		bstop = (Button) findViewById(R.id.stop);
+
+		bpause.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setFlags(2);
+				intent.setClass(TestActivity.this, AlarmService.class);
+				TestActivity.this.startService(intent);
+				TestActivity.this.finish();
+			}
+		});
+
+		bstop.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setFlags(2);
+				intent.setClass(TestActivity.this, AlarmService.class);
+				TestActivity.this.startService(intent);
+				TestActivity.this.finish();
+			}
+		});
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
 
 }

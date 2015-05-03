@@ -44,6 +44,20 @@ public class DrawUtil {
 		return paints[4];
 	}
 
+	public static Paint getVisualPaint() {
+		Paint p = new Paint();
+		p.setARGB(40, 23, 55, 180);
+		p.setStyle(Paint.Style.STROKE);
+		return p;
+	}
+
+	public static Paint getNomalPaint() {
+		Paint p = new Paint();
+		p.setARGB(100, 180, 51, 150);
+		p.setStyle(Paint.Style.FILL_AND_STROKE);
+		return p;
+	}
+
 	public static Paint getPaintByAndgle(int angle) {
 		Paint p = new Paint();
 		if (angle > 360) {

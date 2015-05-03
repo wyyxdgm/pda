@@ -150,15 +150,33 @@ public class MainActivity extends ActionBarActivity {
 		firstBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Button b = (Button) view;
-				Log.i(L.t, b.getText() + "");
+				AlertDialog.Builder builder = new Builder(MainActivity.this);
+				builder.setMessage("确认退出？");
+				builder.setTitle("提示");
+				builder.setPositiveButton("确认",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								System.exit(0);
+							}
+						});
+				builder.setNegativeButton("取消",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						});
+				builder.create().show();
 			}
 		});
 		secondBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Button b = (Button) view;
-				Log.i(L.t, b.getText() + "");
+				Intent i = new Intent(MainActivity.this, TestActivity.class);
+				MainActivity.this.startActivity(i);
 			}
 		});
 		Intent intent = getIntent();
@@ -879,11 +897,11 @@ public class MainActivity extends ActionBarActivity {
 		// TODO ..
 		ListView listView = (ListView) v
 				.findViewById(R.id.main_today_schedule_list);
+		Long startTime = DateUtil.getTodayStartTime();
+		Long endTime = DateUtil.getTodayEndTime();
 		DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
 		DemoDB<CycleDetailsForPlan> ddb = new DemoDB<CycleDetailsForPlan>(
 				new CycleDetailsForPlan());
-		Long startTime = DateUtil.getTodayStartTime();
-		Long endTime = DateUtil.getTodayEndTime();
 		List<CycleDetailsForPlan> details = ddb.getList(this, null, null,
 				CycleDetailsForPlan.STARTTIME + " asc");
 		Plan plan = null;
