@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.david.pda.R;
 import com.david.pda.TestActivity;
@@ -23,7 +24,7 @@ import com.david.pda.weather.model.util.L;
 
 public class AlarmService extends Service {
 	private int i = 0;
-	boolean isPlaying = true;
+	boolean isPlaying = false;
 	MediaPlayer mediaPlayer = null;
 	private int start;
 
@@ -44,7 +45,7 @@ public class AlarmService extends Service {
 		if (isPlaying) {
 			mediaPlayer.pause();
 			mediaPlayer.seekTo(start);
-			isPlaying = false;
+			isPlaying = !isPlaying;
 		}
 	}
 
@@ -53,7 +54,7 @@ public class AlarmService extends Service {
 			if (!isPlaying) {
 				mediaPlayer.start();
 				start = mediaPlayer.getCurrentPosition();
-				isPlaying = true;
+				isPlaying = !isPlaying;
 			}
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
@@ -83,12 +84,15 @@ public class AlarmService extends Service {
 				Log.i(L.t, "第" + ++i + "次循环查询！");
 				Plan p = GetTipPlan();
 				if (p != null) {
+					play();
 					Intent intentv = new Intent(AlarmService.this,
 							TestActivity.class);
 					intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intentv.putExtra("plan", p);
 					startActivity(intentv);
-					play();
+				} else {
+					Toast.makeText(AlarmService.this, "ds size:" + ds.size(),
+							Toast.LENGTH_SHORT).show();
 				}
 				try {
 					Thread.sleep(60 * 1000);
@@ -106,6 +110,13 @@ public class AlarmService extends Service {
 		doGet(System.currentTimeMillis(),
 				System.currentTimeMillis() + 60 * 60 * 1000l);// 1 hour
 		for (CycleDetailsForPlan c : ds) {
+			Log.i(L.t,
+					c.getDiscription()
+							+ ",id:"
+							+ c.get_id()
+							+ ",plan:"
+							+ (planMap.get(c.getCycleFor()) != null ? planMap
+									.get(c.getCycleFor()).getTitle() : ""));
 			if (c.getStartTime() - c.getAheadTime() < System
 					.currentTimeMillis() + 119 * 1000l) {
 				cc = c;
