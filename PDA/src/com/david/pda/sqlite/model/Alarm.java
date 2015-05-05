@@ -1,5 +1,8 @@
 package com.david.pda.sqlite.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -148,5 +151,31 @@ public class Alarm extends Model {
 	@Override
 	public Model getInstance(Cursor c) {
 		return new Alarm(c);
+	}
+
+	public List<CycleDetailsForAlarm> getDetails() {
+		return details;
+	}
+
+	public void setDetails(List<CycleDetailsForAlarm> details) {
+		this.details = details;
+	}
+
+	public CycleType getCycleTypeObj() {
+		return cycleTypeObj;
+	}
+
+	public void setCycleTypeObj(CycleType cycleTypeObj) {
+		this.cycleTypeObj = cycleTypeObj;
+	}
+
+	private List<CycleDetailsForAlarm> details;
+	private CycleType cycleTypeObj;
+
+	public void addDetail(CycleDetailsForAlarm c) {
+		if (details == null) {
+			details = new ArrayList<CycleDetailsForAlarm>();
+		}
+		details.add(c);
 	}
 }

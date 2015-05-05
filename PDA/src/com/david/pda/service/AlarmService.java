@@ -11,10 +11,11 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.david.pda.R;
 import com.david.pda.TestActivity;
+import com.david.pda.sqlite.model.Alarm;
+import com.david.pda.sqlite.model.CycleDetailsForAlarm;
 import com.david.pda.sqlite.model.CycleDetailsForPlan;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.Plan;
@@ -67,10 +68,10 @@ public class AlarmService extends Service {
 			thread.start();
 		}
 		int i = intent.getFlags();
-		if (i == 1) {
-			play();
-		} else if (i == 2) {
+		if (i == 1 || i == 2) {
 			stop();
+		} else if (i == 3) {
+			play();
 		}
 		Log.i(L.t, "flag from intent:" + i + "flags:" + flags + ",startId:"
 				+ startId);
@@ -91,8 +92,7 @@ public class AlarmService extends Service {
 					intentv.putExtra("plan", p);
 					startActivity(intentv);
 				} else {
-					Toast.makeText(AlarmService.this, "ds size:" + ds.size(),
-							Toast.LENGTH_SHORT).show();
+					Log.i(L.t, "ds size:" + ds.size());
 				}
 				try {
 					Thread.sleep(60 * 1000);
@@ -103,7 +103,9 @@ public class AlarmService extends Service {
 		}
 	});
 	List<CycleDetailsForPlan> ds;
+	List<CycleDetailsForAlarm> alarmDetailList;
 	Map<Long, Plan> planMap;
+	Map<Long, Alarm> alarmMap;
 
 	public Plan GetTipPlan() {
 		CycleDetailsForPlan cc = null;
@@ -125,6 +127,31 @@ public class AlarmService extends Service {
 		}
 		if (cc != null) {
 			return planMap.get(cc.getCycleFor());
+		} else {
+			return null;
+		}
+	}
+
+	public Alarm GetTipAlarm() {
+		CycleDetailsForAlarm cc = null;
+		doGetAlarm(System.currentTimeMillis(),
+				System.currentTimeMillis() + 60 * 60 * 1000l);// 1 hour
+		for (CycleDetailsForAlarm c : alarmDetailList) {
+			Log.i(L.t,
+					c.getDiscription()
+							+ ",id:"
+							+ c.get_id()
+							+ ",plan:"
+							+ (alarmMap.get(c.getCycleFor()) != null ? alarmMap
+									.get(c.getCycleFor()).getTitle() : ""));
+			if (c.getStartTime() - c.getAheadTime() < System
+					.currentTimeMillis() + 119 * 1000l) {
+				cc = c;
+				break;
+			}
+		}
+		if (cc != null) {
+			return alarmMap.get(cc.getCycleFor());
 		} else {
 			return null;
 		}
@@ -161,6 +188,41 @@ public class AlarmService extends Service {
 			ds.addAll(ce.getTimes());
 		}
 		Collections.sort(ds);
+	}
+
+	public void doGetAlarm(long startTime, long endTime) {// 支持一个小时提前提醒?????????????????????????????
+		DemoDB<Alarm> db = new DemoDB<Alarm>(new Alarm());
+		DemoDB<CycleDetailsForAlarm> ddb = new DemoDB<CycleDetailsForAlarm>(
+				new CycleDetailsForAlarm());
+		List<CycleDetailsForAlarm> details = ddb.getList(this, null, null,
+				CycleDetailsForAlarm.STARTTIME + " asc");
+		Alarm alarm = null;
+		DemoDB<CycleType> cdb = new DemoDB<CycleType>(new CycleType());
+		List<Alarm> alarms = new ArrayList<Alarm>();
+		alarmMap = new HashMap<Long, Alarm>();
+		alarms = db.getList(this);
+		if (alarmDetailList == null) {
+			alarmDetailList = new ArrayList<CycleDetailsForAlarm>();
+		} else {
+			alarmDetailList.clear();
+		}
+		for (Alarm a : alarms) {
+			alarmMap.put(a.get_id(), a);
+		}
+		for (CycleDetailsForAlarm d : details) {
+			alarm = alarmMap.get(d.getCycleFor());
+			alarm.addDetail(d);
+			alarm.setCycleTypeObj(cdb.get(alarm.getCycleType() + "", this));
+		}// add details,cycleType to alarm
+		for (Long key : alarmMap.keySet()) {
+			alarm = alarmMap.get(key);
+			for (CycleDetailsForAlarm d : alarm.getDetails()) {
+				CycleEntity<CycleDetailsForAlarm> ce = new CycleEntity<CycleDetailsForAlarm>(
+						startTime, endTime, alarm.getCycleTypeObj(), d);
+				alarmDetailList.addAll(ce.getTimes());
+			}
+		}
+		Collections.sort(alarmDetailList);
 	}
 
 }

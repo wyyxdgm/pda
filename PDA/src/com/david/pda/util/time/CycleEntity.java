@@ -60,17 +60,21 @@ public class CycleEntity<T extends CycleDetails> {
 			long rightTime, DateType dateType, int cycleLength,
 			CycleDetails detail) {
 		super();
-		this.startTime = startTime;//plan startTime
-		this.endTime = endTime;//plan endTime
+		this.startTime = startTime;// plan startTime
+		this.endTime = endTime;// plan endTime
 		this.dateType = dateType;
 		this.cycleLength = cycleLength;
-		this.detail = detail;//detail
+		this.detail = detail;// detail
 		this.leftTime = leftTime;
 		this.rightTime = rightTime;
 		// init
 		this.cycleNumber = 1;// 第一个周期
-		this.currentStartTime = startTime + detail.getStartTime();//first start time after plan
-		this.currentEndTime = startTime + detail.getEndTime();//first end time after plan
+		this.currentStartTime = startTime + detail.getStartTime();// first start
+																	// time
+																	// after
+																	// plan
+		this.currentEndTime = startTime + detail.getEndTime();// first end time
+																// after plan
 		c.setTimeInMillis(this.currentStartTime);
 	}
 
@@ -78,6 +82,14 @@ public class CycleEntity<T extends CycleDetails> {
 			CycleDetails details) {
 		this(m.getStartTime(), m.getEndTime(), leftTime, rightTime, cycle
 				.getDateType(), cycle.getCycleLength().intValue(), details);
+	}
+
+	public CycleEntity(long leftTime, long rightTime, CycleType cycle,
+			CycleDetails details) {// one hour
+		this(System.currentTimeMillis(),
+				System.currentTimeMillis() + 60 * 60 * 1000l, leftTime,
+				rightTime, cycle.getDateType(), cycle.getCycleLength()
+						.intValue(), details);
 	}
 
 	public List<T> getTimes() {// get absolute time list
