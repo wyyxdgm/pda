@@ -142,16 +142,18 @@
             android:name="com.david.pda.TestActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Translucent" >
-             <intent-filter>
+            <intent-filter>
                 <action android:name="com.david.pda.recevier.action.play" />
             </intent-filter>
         </activity>
 
+        <!--
         <receiver android:name="com.david.pda.service.AlarmReceiver" >
             <intent-filter>
                 <action android:name="com.david.pda.recevier.action.play" />
             </intent-filter>
         </receiver>
+        -->
 
         <service
             android:name="com.david.pda.service.AlarmService"
@@ -160,7 +162,8 @@
 
         <provider
             android:name="com.david.pda.sqlite.privider.ModelProvider"
-            android:authorities="com.david.pda.model" />
+            android:authorities="com.david.pda.model"
+            android:exported="false" />
     </application>
 
 </manifest>

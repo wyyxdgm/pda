@@ -1,9 +1,9 @@
 package com.david.pda.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,25 +12,17 @@ import android.widget.TextView;
 
 import com.david.pda.R;
 import com.david.pda.sqlite.model.CycleType;
-import com.david.pda.sqlite.model.DateType;
 import com.david.pda.sqlite.model.util.DemoDB;
-import com.david.pda.weather.model.util.L;
 
 public class SystemSettingListAdapter extends BaseAdapter {
 	private Context context;
-	private List<CycleType> data;
+	private List<CycleType> data = null;
 
 	public SystemSettingListAdapter(Context context) {
 		this.context = context;
 		this.data = new DemoDB<CycleType>(new CycleType()).getList(context);
-		Log.i(L.t, data.size() + "");
-		if (data.size() == 0) {
-			int i = 100;
-			while (i > 0) {
-				data.add(new CycleType(null, null, "a", 1, 1l, DateType.DAY));
-				data.add(new CycleType(null, null, "a", 1, 1l, DateType.DAY));
-				i--;
-			}
+		if (this.data == null) {
+			this.data = new ArrayList<CycleType>();
 		}
 	}
 

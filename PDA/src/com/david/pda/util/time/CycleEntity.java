@@ -8,6 +8,7 @@ import com.david.pda.sqlite.model.CycleDetails;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.DateType;
 import com.david.pda.sqlite.model.Plan;
+import com.david.pda.sqlite.model.base.Model;
 
 /**
  * 根据给定的时间区间，和周期中的某个时间片，给出所有关于这个定义好的周期时间片的所有具体时间段列表，列表为空表示在给定区间内没有轮到该给定时间片
@@ -85,11 +86,9 @@ public class CycleEntity<T extends CycleDetails> {
 	}
 
 	public CycleEntity(long leftTime, long rightTime, CycleType cycle,
-			CycleDetails details) {// one hour
-		this(System.currentTimeMillis(),
-				System.currentTimeMillis() + 60 * 60 * 1000l, leftTime,
-				rightTime, cycle.getDateType(), cycle.getCycleLength()
-						.intValue(), details);
+			CycleDetails details) {
+		this(leftTime, rightTime, leftTime, rightTime, cycle.getDateType(),
+				cycle.getCycleLength().intValue(), details);
 	}
 
 	public List<T> getTimes() {// get absolute time list
@@ -177,6 +176,10 @@ public class CycleEntity<T extends CycleDetails> {
 
 	@SuppressWarnings("unchecked")
 	private void AddCurrentToDetails() {
+		if (detail.getIsTip() == null
+				|| detail.getIsTip().intValue() == Model.IS_NO) {// 直接过滤掉不提示的
+			return;
+		}
 		curDetail = (T) detail.clone();
 		curDetail.setStartTime(currentStartTime);
 		curDetail.setEndTime(currentEndTime);

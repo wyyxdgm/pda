@@ -78,27 +78,50 @@ public class AlarmService extends Service {
 		return START_NOT_STICKY;
 	}
 
+	private void tipPlan() {
+		Plan p = GetTipPlan();
+		if (p != null) {
+			play();
+			Intent intentv = new Intent(AlarmService.this, TestActivity.class);
+			intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intentv.putExtra("plan", p);
+			startActivity(intentv);
+		} else {
+			Log.i(L.t, "ds size:" + ds.size());
+		}
+		try {
+			Thread.sleep(30 * 1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	private void tipAlarm() {
+		CycleDetailsForAlarm ca = GetTipAlarm();
+		if (ca != null) {
+			play();
+			Intent intentv = new Intent(AlarmService.this, TestActivity.class);
+			intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intentv.putExtra("cycledetailsforalarm", ca);
+			intentv.putExtra("alarm", alarmMap.get(ca.getCycleFor()));
+			startActivity(intentv);
+		} else {
+			Log.i(L.t, "alarmDetailList size:" + alarmDetailList.size());
+		}
+		try {
+			Thread.sleep(30 * 1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	
+		
+	}
 	Thread thread = new Thread(new Runnable() {
 		@Override
 		public void run() {
 			while (true) {
 				Log.i(L.t, "第" + ++i + "次循环查询！");
-				Plan p = GetTipPlan();
-				if (p != null) {
-					play();
-					Intent intentv = new Intent(AlarmService.this,
-							TestActivity.class);
-					intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					intentv.putExtra("plan", p);
-					startActivity(intentv);
-				} else {
-					Log.i(L.t, "ds size:" + ds.size());
-				}
-				try {
-					Thread.sleep(60 * 1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				tipPlan();
+				tipAlarm();
 			}
 		}
 	});
@@ -132,7 +155,7 @@ public class AlarmService extends Service {
 		}
 	}
 
-	public Alarm GetTipAlarm() {
+	public CycleDetailsForAlarm GetTipAlarm() {
 		CycleDetailsForAlarm cc = null;
 		doGetAlarm(System.currentTimeMillis(),
 				System.currentTimeMillis() + 60 * 60 * 1000l);// 1 hour
@@ -150,11 +173,7 @@ public class AlarmService extends Service {
 				break;
 			}
 		}
-		if (cc != null) {
-			return alarmMap.get(cc.getCycleFor());
-		} else {
-			return null;
-		}
+		return cc;
 	}
 
 	public void doGet(long startTime, long endTime) {// 支持一个小时提前提醒
@@ -166,7 +185,7 @@ public class AlarmService extends Service {
 		Plan plan = null;
 		DemoDB<CycleType> cdb = new DemoDB<CycleType>(new CycleType());
 		List<Plan> plans = new ArrayList<Plan>();
-		for (CycleDetailsForPlan d : details) {
+		for (CycleDetailsForPlan d : details) {// FILL TO ALARM
 			plan = db.get(d.getCycleFor() + "", this);
 			plan.setDetail(d);
 			plan.setCycleTypeObj(cdb.get(plan.getCycleType() + "", this));
