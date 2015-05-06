@@ -30,7 +30,10 @@
     <string name="main_btn_logout">Logout</string>
     <string name="main_btn_register">Register</string>
     <string name="main_btn_exit">Exit</string>
+    <!-- main_affair_plan -->
 
+    <string name="important">重要</string>
+    <string name="urgency">紧急</string>
     <!-- main_some_tools -->
     <string name="main_some_tools_weather">天气</string>
     <string name="main_some_tools_note">便签</string>

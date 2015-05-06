@@ -17,7 +17,7 @@ import com.david.pda.sqlite.model.Plan;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
 
-public class TestActivity extends Activity {
+public class TipActivity extends Activity {
 	public static String ACTION_PALY = "com.david.pda.PLAY_ACTION";
 	private Button bpause, bstop;
 	Intent intent;
@@ -38,7 +38,7 @@ public class TestActivity extends Activity {
 		title = (TextView) findViewById(R.id.test_title);
 		content = (TextView) findViewById(R.id.test_content);
 		if (intent.hasExtra("plan")) {
-			Plan p = (Plan) intent.getSerializableExtra("plan");
+			p = (Plan) intent.getSerializableExtra("plan");
 			title.setText(p.getTitle());
 			content.setText(p.getCycleTypeObj().getDescription());
 		} else if (intent.hasExtra("alarm")
@@ -60,10 +60,10 @@ public class TestActivity extends Activity {
 				if (isFromService()) {
 					Intent intent = new Intent();
 					intent.setFlags(2);
-					intent.setClass(TestActivity.this, AlarmService.class);
-					TestActivity.this.startService(intent);
+					intent.setClass(TipActivity.this, AlarmService.class);
+					TipActivity.this.startService(intent);
 				}
-				TestActivity.this.finish();
+				TipActivity.this.finish();
 			}
 		});
 
@@ -75,7 +75,7 @@ public class TestActivity extends Activity {
 					DemoDB<CycleDetailsForAlarm> cadb = new DemoDB<CycleDetailsForAlarm>(
 							ca);
 					try {
-						cadb.update(ca, TestActivity.this);
+						cadb.update(ca, TipActivity.this);
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -83,7 +83,7 @@ public class TestActivity extends Activity {
 					DemoDB<Plan> pdb = new DemoDB<Plan>(p);
 					p.setIsTip(Model.IS_NO);
 					try {
-						pdb.update(p, TestActivity.this);
+						pdb.update(p, TipActivity.this);
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -91,10 +91,10 @@ public class TestActivity extends Activity {
 				if (isFromService()) {
 					Intent intent = new Intent();
 					intent.setFlags(2);
-					intent.setClass(TestActivity.this, AlarmService.class);
-					TestActivity.this.startService(intent);
+					intent.setClass(TipActivity.this, AlarmService.class);
+					TipActivity.this.startService(intent);
 				}
-				TestActivity.this.finish();
+				TipActivity.this.finish();
 			}
 		});
 	}

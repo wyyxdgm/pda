@@ -175,7 +175,7 @@ public class MainActivity extends ActionBarActivity {
 		secondBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Intent i = new Intent(MainActivity.this, TestActivity.class);
+				Intent i = new Intent(MainActivity.this, TipActivity.class);
 				MainActivity.this.startActivity(i);
 			}
 		});

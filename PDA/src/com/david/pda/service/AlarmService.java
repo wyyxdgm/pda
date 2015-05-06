@@ -13,7 +13,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.david.pda.R;
-import com.david.pda.TestActivity;
+import com.david.pda.TipActivity;
 import com.david.pda.sqlite.model.Alarm;
 import com.david.pda.sqlite.model.CycleDetailsForAlarm;
 import com.david.pda.sqlite.model.CycleDetailsForPlan;
@@ -82,7 +82,7 @@ public class AlarmService extends Service {
 		Plan p = GetTipPlan();
 		if (p != null) {
 			play();
-			Intent intentv = new Intent(AlarmService.this, TestActivity.class);
+			Intent intentv = new Intent(AlarmService.this, TipActivity.class);
 			intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intentv.putExtra("plan", p);
 			startActivity(intentv);
@@ -99,7 +99,7 @@ public class AlarmService extends Service {
 		CycleDetailsForAlarm ca = GetTipAlarm();
 		if (ca != null) {
 			play();
-			Intent intentv = new Intent(AlarmService.this, TestActivity.class);
+			Intent intentv = new Intent(AlarmService.this, TipActivity.class);
 			intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intentv.putExtra("cycledetailsforalarm", ca);
 			intentv.putExtra("alarm", alarmMap.get(ca.getCycleFor()));

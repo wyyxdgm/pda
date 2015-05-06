@@ -139,7 +139,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.david.pda.TestActivity"
+            android:name="com.david.pda.TipActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Translucent" >
             <intent-filter>
