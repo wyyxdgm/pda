@@ -25,7 +25,9 @@ public class CycleTipUtil {
 		super();
 		this.details = details;
 		this.cycleType = cycleType;
-		this.cycleLength = cycleType.getCycleLength().intValue();
+		this.cycleLength = cycleType == null
+				|| cycleType.getCycleLength() == null ? 0 : cycleType
+				.getCycleLength().intValue();
 		this.createTime = createTime;
 		getCurrentCycle();
 	}

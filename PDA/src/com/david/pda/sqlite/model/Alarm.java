@@ -45,7 +45,7 @@ public class Alarm extends Model {
 	private Integer isOn = Model.IS_ON;
 	private Long cycleType;
 	private Integer delFlag = Model.FLAG_EXISTS;
-	private Long createTime = System.currentTimeMillis();
+	private Long createTime;
 
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();

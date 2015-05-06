@@ -73,11 +73,12 @@ public class AlarmListAdapter extends BaseAdapter {
 				new CycleDetailsForAlarm());
 		List<CycleDetailsForAlarm> details = db.getList(ctx, " cycleFor=?",
 				new String[] { i.get_id() + "" }, null);
-		CycleTipUtil ctu = new CycleTipUtil(details, i.getCycleTypeObj(),
-				i.getCreateTime());
+		CycleType ct = new DemoDB<CycleType>(new CycleType()).get(
+				i.getCycleType() + "", ctx);
+		CycleTipUtil ctu = new CycleTipUtil(details, ct, i.getCreateTime());
 		CycleDetailsForAlarm cd = ctu.getNextTipDetail();
 		t4.setText(DateUtil.formatMM_dd_HH_mm(cd.getStartTime()
-				- cd.getAheadTime()));
+				- cd.getAheadTime())+";"+DateUtil.formatyyyy_MM_dd_HH_mm(i.getCreateTime())+"//"+DateUtil.formatMM_dd_HH_mm(i.getCreateTime()));
 		return row;
 	}
 }

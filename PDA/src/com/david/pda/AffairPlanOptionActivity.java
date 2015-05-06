@@ -433,6 +433,7 @@ public class AffairPlanOptionActivity extends Activity {
 						+ " "
 						+ (TextUtils.isEmpty(endTP.getText().toString()) ? "00:00"
 								: endTP.getText().toString())));
+		plan.setCreateTime(System.currentTimeMillis());
 		plan.setUrgencyimportant((jjCB.isChecked() ? 1 * 2 : 0 * 2)
 				+ (zyCB.isChecked() ? 1 * 1 : 0 * 1));
 		plan.setDoAfterSuccess(afterSuccessET.getText().toString());

@@ -152,7 +152,7 @@
             <intent-filter>
                 <action android:name="com.david.pda.recevier.action.play" />
             </intent-filter>
-        </receiver>
+        </receiver>
         -->
 
         <service
