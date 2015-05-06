@@ -114,8 +114,8 @@ public class SomeToolsCountdownOptionActivity extends Activity {
 				: Model.IS_OFF);
 		countdown.setDelFlag(Model.FLAG_EXISTS);
 		if (!endDate.getText().toString().equals(""))
-			countdown.setEndTime(DateUtil.parsePT(
-					DateUtil.yyyy_MM_dd_HH_mm,endDate.getText().toString()));
+			countdown.setEndTime(DateUtil.parsePT(DateUtil.yyyy_MM_dd_HH_mm,
+					endDate.getText().toString()));
 	}
 
 	class UpdateListenr implements OnClickListener {

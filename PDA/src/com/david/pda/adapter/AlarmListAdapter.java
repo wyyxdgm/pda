@@ -15,6 +15,8 @@ import com.david.pda.sqlite.model.Alarm;
 import com.david.pda.sqlite.model.CycleDetailsForAlarm;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.util.DemoDB;
+import com.david.pda.util.other.DateUtil;
+import com.david.pda.util.time.CycleTipUtil;
 
 public class AlarmListAdapter extends BaseAdapter {
 	List<Alarm> alarms = null;
@@ -69,12 +71,13 @@ public class AlarmListAdapter extends BaseAdapter {
 				.findViewById(R.id.list_item_alarm_next_time);
 		DemoDB<CycleDetailsForAlarm> db = new DemoDB<CycleDetailsForAlarm>(
 				new CycleDetailsForAlarm());
-		// List<CycleDetailsForAlarm> detials = db.getList(ctx, "", new String[]
-		// {}, null);
 		List<CycleDetailsForAlarm> details = db.getList(ctx, " cycleFor=?",
 				new String[] { i.get_id() + "" }, null);
-		t4.setText(c.getName() + ":" + c.getDescription() + "("
-				+ details.size() + ")");
+		CycleTipUtil ctu = new CycleTipUtil(details, i.getCycleTypeObj(),
+				i.getCreateTime());
+		CycleDetailsForAlarm cd = ctu.getNextTipDetail();
+		t4.setText(DateUtil.formatMM_dd_HH_mm(cd.getStartTime()
+				- cd.getAheadTime()));
 		return row;
 	}
 }

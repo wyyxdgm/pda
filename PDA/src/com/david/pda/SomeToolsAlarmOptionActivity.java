@@ -216,6 +216,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 		alarm.setTitle(titleEditText.getText().toString());
 		alarm.setRemarks(contentEditText.getText().toString());
 		alarm.setIsOn(checkBox.isChecked() ? Model.IS_ON : Model.IS_OFF);
+		alarm.setCreateTime(System.currentTimeMillis());
 		CycleType c = cycleTypeList.get(cycleTypes.getSelectedItemPosition());
 		alarm.setCycleType(c.get_id());
 	}

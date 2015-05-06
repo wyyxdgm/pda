@@ -80,7 +80,7 @@ public class Plan extends Model {
 	private Long createTime;
 	private Integer target;
 	private Integer isTip;
-	private Integer weatherSensitivity;
+	private String weatherSensitivity;
 	private Long totalTime;
 	private Long totalUsed;
 	private Long cycleType;
@@ -137,8 +137,8 @@ public class Plan extends Model {
 		this.createTime = c.getLong(c.getColumnIndex(CREATETIME));
 		this.target = c.getInt(c.getColumnIndex(TARGET));
 		this.isTip = c.getInt(c.getColumnIndex(ISTIP));
-		this.weatherSensitivity = c
-				.getInt(c.getColumnIndex(WEATHERSENSITIVITY));
+		this.weatherSensitivity = c.getString(c
+				.getColumnIndex(WEATHERSENSITIVITY));
 		this.totalTime = c.getLong(c.getColumnIndex(TOTALTIME));
 		this.totalUsed = c.getLong(c.getColumnIndex(TOTALUSED));
 		this.startTime = c.getLong(c.getColumnIndex(STARTTIME));
@@ -200,11 +200,11 @@ public class Plan extends Model {
 		this.isTip = isTip;
 	}
 
-	public Integer getWeatherSensitivity() {
+	public String getWeatherSensitivity() {
 		return weatherSensitivity;
 	}
 
-	public void setWeatherSensitivity(Integer weatherSensitivity) {
+	public void setWeatherSensitivity(String weatherSensitivity) {
 		this.weatherSensitivity = weatherSensitivity;
 	}
 

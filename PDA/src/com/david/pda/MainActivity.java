@@ -894,7 +894,6 @@ public class MainActivity extends ActionBarActivity {
 
 	@SuppressLint("UseSparseArrays")
 	private void initTodaySchedule(View v) {
-		// TODO ..
 		ListView listView = (ListView) v
 				.findViewById(R.id.main_today_schedule_list);
 		Long startTime = DateUtil.getTodayStartTime();

@@ -45,8 +45,8 @@ public class Countdown extends Model {
 	private String title;
 	private String remarks;
 	private Long endTime;
-	private Integer delFlag;
-	private Integer isOn;
+	private Integer delFlag=Model.FLAG_EXISTS;
+	private Integer isOn=Model.IS_ON;
 
 	public Countdown(Bundle b) {
 		if (b.containsKey(_ID))

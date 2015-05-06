@@ -421,10 +421,18 @@ public class AffairPlanOptionActivity extends Activity {
 		cycleTypeIndex = cycleTypeSP.getSelectedItemPosition();
 		plan.setTarget(targets.get(targetIndex).get_id().intValue());
 		plan.setCycleType(cycleTypes.get(cycleTypeIndex).get_id());
-		plan.setStartTime(DateUtil.parsePT(DateUtil.yyyy_MM_dd_HH_mm, startDP
-				.getText().toString() + " " + startTP.getText().toString()));
-		plan.setEndTime(DateUtil.parsePT(DateUtil.yyyy_MM_dd_HH_mm, endDP
-				.getText().toString() + " " + endTP.getText().toString()));
+		plan.setStartTime(DateUtil.parsePT(
+				DateUtil.yyyy_MM_dd_HH_mm,
+				startDP.getText().toString()
+						+ " "
+						+ (TextUtils.isEmpty(startTP.getText().toString()) ? "00:00"
+								: startTP.getText().toString())));
+		plan.setEndTime(DateUtil.parsePT(
+				DateUtil.yyyy_MM_dd_HH_mm,
+				endDP.getText().toString()
+						+ " "
+						+ (TextUtils.isEmpty(endTP.getText().toString()) ? "00:00"
+								: endTP.getText().toString())));
 		plan.setUrgencyimportant((jjCB.isChecked() ? 1 * 2 : 0 * 2)
 				+ (zyCB.isChecked() ? 1 * 1 : 0 * 1));
 		plan.setDoAfterSuccess(afterSuccessET.getText().toString());

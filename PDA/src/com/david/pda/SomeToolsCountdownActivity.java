@@ -71,7 +71,6 @@ public class SomeToolsCountdownActivity extends Activity {
 
 					@Override
 					public void onNothingSelected(AdapterView<?> arg0) {
-						// TODO Auto-generated method stub
 
 					}
 				});
@@ -92,6 +91,7 @@ public class SomeToolsCountdownActivity extends Activity {
 			}
 		});
 		resolveIntent();
+		refreshView.start();
 	}
 
 	@SuppressLint("ShowToast")
@@ -120,10 +120,33 @@ public class SomeToolsCountdownActivity extends Activity {
 	}
 
 	public void initGrid() {
+		initAdapter();
+		initEvent();
+	}
+
+	Thread refreshView = new Thread(new Runnable() {
+
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(30 * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			initAdapter();
+		}
+	});
+
+	public void initAdapter() {
 		DemoDB<Countdown> db = new DemoDB<Countdown>(new Countdown());
 		countdownList = db.getList(SomeToolsCountdownActivity.this);
-		countdownGridView.setAdapter(new CountdownGridAdapter(
-				SomeToolsCountdownActivity.this));
+		if (countdownGridView != null) {
+			countdownGridView.setAdapter(new CountdownGridAdapter(
+					SomeToolsCountdownActivity.this));
+		}
+	}
+
+	public void initEvent() {
 		countdownGridView
 				.setOnItemClickListener(new CountdownGridItemClickListener());
 		countdownGridView

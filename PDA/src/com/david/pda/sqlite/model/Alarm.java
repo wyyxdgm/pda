@@ -22,6 +22,7 @@ public class Alarm extends Model {
 	public final static String REMARKS = "remarks";
 	public final static String ISON = "ISON";
 	public final static String CYCLETYPE = "cycleType";
+	public final static String CREATE_TIME = "createTime";
 
 	public static String CREATE_TABLE() {
 		StringBuffer sb = new StringBuffer();
@@ -33,6 +34,7 @@ public class Alarm extends Model {
 		sb.append(REMARKS).append(" TEXT,");
 		sb.append(ISON).append(" INTEGER,");
 		sb.append(CYCLETYPE).append(" INTEGER,");
+		sb.append(CREATE_TIME).append(" TEXT,");
 		sb.append(DELFLAG).append(" INTEGER)");
 		return sb.toString();
 	}
@@ -40,14 +42,17 @@ public class Alarm extends Model {
 	private Long _id;
 	private String title;
 	private String remarks;
-	private Integer isOn;
+	private Integer isOn = Model.IS_ON;
 	private Long cycleType;
-	private Integer delFlag;
+	private Integer delFlag = Model.FLAG_EXISTS;
+	private Long createTime = System.currentTimeMillis();
 
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
 		if (_id != null)
 			cv.put(_ID, _id);
+		if (createTime != null)
+			cv.put(CREATE_TIME, createTime);
 		if (delFlag != null)
 			cv.put(DELFLAG, delFlag);
 		if (!TextUtils.isEmpty(title))
@@ -73,6 +78,7 @@ public class Alarm extends Model {
 		this.isOn = c.getInt(c.getColumnIndex(ISON));
 		this.cycleType = c.getLong(c.getColumnIndex(CYCLETYPE));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
+		this.createTime = c.getLong(c.getColumnIndex(CREATE_TIME));
 	}
 
 	public Alarm(Bundle b) {
@@ -82,17 +88,23 @@ public class Alarm extends Model {
 		this.isOn = b.getInt(ISON);
 		this.cycleType = b.getLong(CYCLETYPE);
 		this.delFlag = b.getInt(DELFLAG);
+		this.createTime = b.getLong(CREATE_TIME);
 	}
 
 	public Bundle toBundle() {
 		Bundle b = new Bundle();
 		b.putLong(_ID, _id);
 		b.putString(TITLE, title);
+		b.putLong(CREATE_TIME, createTime);
 		b.putString(REMARKS, remarks);
 		b.putInt(ISON, isOn);
 		b.putLong(CYCLETYPE, cycleType);
 		b.putInt(DELFLAG, delFlag);
 		return b;
+	}
+
+	public void setCreateTime(Long createTime) {
+		this.createTime = createTime;
 	}
 
 	public Long get_id() {
@@ -177,5 +189,9 @@ public class Alarm extends Model {
 			details = new ArrayList<CycleDetailsForAlarm>();
 		}
 		details.add(c);
+	}
+
+	public long getCreateTime() {
+		return 0;
 	}
 }

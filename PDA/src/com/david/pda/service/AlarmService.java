@@ -8,11 +8,14 @@ import java.util.Map;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.util.Log;
 
 import com.david.pda.R;
+import com.david.pda.SomeToolsAlarmActivity;
+import com.david.pda.SomeToolsWeatherActivity;
 import com.david.pda.TipActivity;
 import com.david.pda.sqlite.model.Alarm;
 import com.david.pda.sqlite.model.CycleDetailsForAlarm;
@@ -22,12 +25,14 @@ import com.david.pda.sqlite.model.Plan;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.time.CycleEntity;
 import com.david.pda.weather.model.util.L;
+import com.david.pda.weather.model.util.WeatherResultUtil;
 
 public class AlarmService extends Service {
 	private int i = 0;
 	boolean isPlaying = false;
 	MediaPlayer mediaPlayer = null;
 	private int start;
+	private static String weatherInfo = "";
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -37,9 +42,21 @@ public class AlarmService extends Service {
 
 	@Override
 	public void onCreate() {
+		super.onCreate();
 		mediaPlayer = MediaPlayer.create(this, R.raw.music);
 		mediaPlayer.setLooping(false);
-		super.onCreate();
+		refreshWeatherThread.start();// 一直更新天气、per hour
+	}
+
+	public void getWeather() {
+		SharedPreferences sp = getSharedPreferences(
+				SomeToolsAlarmActivity.class.getName(), MODE_MULTI_PROCESS);
+		String city = sp.getString(SomeToolsWeatherActivity.DEFAULT_CITY,
+				SomeToolsWeatherActivity.DEFAULTCYTY);
+		String w = WeatherResultUtil.getWeatherStr(city);
+		if (w != null) {
+			weatherInfo = w;
+		}
 	}
 
 	public void stop() {
@@ -85,6 +102,7 @@ public class AlarmService extends Service {
 			Intent intentv = new Intent(AlarmService.this, TipActivity.class);
 			intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intentv.putExtra("plan", p);
+			intentv.putExtra("weather", weatherInfo);
 			startActivity(intentv);
 		} else {
 			Log.i(L.t, "ds size:" + ds.size());
@@ -95,6 +113,7 @@ public class AlarmService extends Service {
 			e.printStackTrace();
 		}
 	}
+
 	private void tipAlarm() {
 		CycleDetailsForAlarm ca = GetTipAlarm();
 		if (ca != null) {
@@ -103,6 +122,7 @@ public class AlarmService extends Service {
 			intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intentv.putExtra("cycledetailsforalarm", ca);
 			intentv.putExtra("alarm", alarmMap.get(ca.getCycleFor()));
+			intentv.putExtra("weather", weatherInfo);
 			startActivity(intentv);
 		} else {
 			Log.i(L.t, "alarmDetailList size:" + alarmDetailList.size());
@@ -112,9 +132,21 @@ public class AlarmService extends Service {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	
-		
+
 	}
+
+	Thread refreshWeatherThread = new Thread(new Runnable() {
+
+		@Override
+		public void run() {
+			getWeather();
+			try {
+				Thread.sleep(1000 * 60 * 60);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	});
 	Thread thread = new Thread(new Runnable() {
 		@Override
 		public void run() {

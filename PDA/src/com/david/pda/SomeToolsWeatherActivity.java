@@ -61,6 +61,7 @@ public class SomeToolsWeatherActivity extends Activity {
 	AutoCompleteTextView searchAutoText;
 	ImageView refreshButton;
 	private String defaultCity = "上海";
+	public static final String DEFAULTCYTY = "上海";
 	private String defaultWeather = "";
 	SharedPreferences sp;
 	TextView title;
@@ -104,7 +105,7 @@ public class SomeToolsWeatherActivity extends Activity {
 		defaultCity = sp.getString(DEFAULT_CITY, null);
 		defaultWeather = sp.getString(DEFAULT_WEATHER, null);
 		if (defaultCity == null) {
-			defaultCity = "北京";
+			defaultCity = "上海";
 			Toast.makeText(SomeToolsWeatherActivity.this,
 					"您还没有设置城市，将默认" + defaultCity, Toast.LENGTH_SHORT).show();
 			sp.edit().putString(DEFAULT_CITY, defaultCity).commit();
@@ -116,8 +117,10 @@ public class SomeToolsWeatherActivity extends Activity {
 				// 从文件读取
 				weatherResult = WeatherResultUtil.convertBean(defaultWeather);
 				showWeatherToView();
-				if (!DateUtil.formatYYYY_MM_DD(System.currentTimeMillis())
-						.equals(weatherResult.getDate())) {
+				if (weatherResult.getDate() != null
+						&& !DateUtil.formatYYYY_MM_DD(
+								System.currentTimeMillis()).equals(
+								weatherResult.getDate().trim())) {
 					Toast.makeText(this, "数据已经过时，请更新！", Toast.LENGTH_SHORT)
 							.show();
 				}
