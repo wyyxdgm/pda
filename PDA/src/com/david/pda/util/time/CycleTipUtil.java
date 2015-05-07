@@ -79,7 +79,7 @@ public class CycleTipUtil {
 							+ DateUtil.formatyyyy_MM_dd_HH_mm_ss(ac
 									.getStartTime() - ac.getAheadTime()));
 			if (ac.getStartTime()
-					- (ac.getIsAhead() == Model.IS_YES ? ac.getAheadTime() : 0) < now) {// 时间已经过去
+					- (ac.getIsAhead() == Model.IS_YES ? ac.getAheadTime() : 0) < now-60000) {// 时间已经过去
 				continue;
 			}
 			Log.i(L.t, "t:" + DateUtil.formatyyyy_MM_dd_HH_mm_ss(t));

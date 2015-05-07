@@ -147,7 +147,7 @@ public class DateUtil {
 	}
 
 	public static boolean isInOneMinute(long t, long currentTimeMillis) {
-		Log.i(L.t, "true of isInOneMinute");
-		return (long) (1.0 * t / (1000 * 60)) == (long) (1.0 * currentTimeMillis / (1000 * 60));
+		return DateUtil.formatyyyy_MM_dd_HH_mm(t).equals(
+				DateUtil.formatyyyy_MM_dd_HH_mm(currentTimeMillis));
 	}
 }

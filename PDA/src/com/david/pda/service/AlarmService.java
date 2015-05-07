@@ -126,8 +126,9 @@ public class AlarmService extends Service {
 			Intent intentv = new Intent(AlarmService.this, TipActivity.class);
 			intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intentv.putExtra("cycledetailsforalarm", ca);
-			intentv.putExtra("alarm", alarmMap.get(ca.getCycleFor()));
-			intentv.putExtra("weather", weatherInfo);
+			DemoDB<Alarm> db = new DemoDB<Alarm>(new Alarm());
+			intentv.putExtra("alarm", db.get(ca.getCycleFor() + "", this));
+			intentv.putExtra("weather", weatherInfo == null ? "" : weatherInfo);
 			startActivity(intentv);
 		} else {
 			Log.i(L.t, "no alarm。。should be tiped");
@@ -210,8 +211,15 @@ public class AlarmService extends Service {
 									.currentTimeMillis()));
 			CycleTipUtil ctu = new CycleTipUtil(details, ct, i.getCreateTime());
 			CycleDetailsForAlarm cd = ctu.getNextTipDetail();
-			long t = cd.getIsAhead() == Model.IS_YES ? cd.getStartTime()
-					- cd.getAheadTime() : cd.getStartTime();
+			long t = (cd.getIsAhead() == Model.IS_YES ? (cd.getStartTime() - cd
+					.getAheadTime()) : cd.getStartTime());
+			Log.i(L.t, "xxxx" + DateUtil.formatyyyy_MM_dd_HH_mm(t));
+			Log.i(L.t,
+					DateUtil.formatyyyy_MM_dd_HH_mm(System.currentTimeMillis()));
+			Log.i(L.t,
+					"true?:"
+							+ DateUtil.isInOneMinute(t,
+									System.currentTimeMillis()));
 			if (cd != null
 					&& DateUtil.isInOneMinute(t, System.currentTimeMillis()))
 				return cd;
