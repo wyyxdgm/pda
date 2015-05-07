@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.david.pda.R;
@@ -20,16 +20,14 @@ import com.david.pda.util.other.DateUtil;
 import com.david.pda.util.time.CycleTipUtil;
 import com.david.pda.weather.model.util.L;
 
-public class AlarmListAdapter extends BaseAdapter {
-	List<Alarm> alarms = null;
+public class AlarmListAdapter extends ArrayAdapter<Alarm> {
+	final List<Alarm> alarms = new ArrayList<Alarm>();
 	Context ctx;
 
-	public AlarmListAdapter() {
-		alarms = new ArrayList<Alarm>();
-	}
-
 	public AlarmListAdapter(Context ctx, List<Alarm> alarms) {
-		this.alarms = alarms;
+		super(ctx, R.id.list_item_alarm_title);
+		this.alarms.clear();
+		this.alarms.addAll(alarms);
 		this.ctx = ctx;
 	}
 
@@ -39,7 +37,7 @@ public class AlarmListAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int arg0) {
+	public Alarm getItem(int arg0) {
 		return alarms.get(arg0);
 	}
 
@@ -86,6 +84,10 @@ public class AlarmListAdapter extends BaseAdapter {
 		CycleDetailsForAlarm cd = ctu.getNextTipDetail();
 		t4.setText(DateUtil.formatMM_dd_HH_mm(cd.getStartTime()
 				- cd.getAheadTime()));
+		Log.i(L.t,
+				"hh2:"
+						+ DateUtil.formatyyyy_MM_dd_HH_mm(cd.getStartTime()
+								- cd.getAheadTime()));
 		return row;
 	}
 }

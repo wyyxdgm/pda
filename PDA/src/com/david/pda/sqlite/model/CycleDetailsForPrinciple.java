@@ -139,7 +139,7 @@ public class CycleDetailsForPrinciple extends CycleDetails {
 	}
 
 	public void setAheadTime(Long aheadTime) {
-		this.aheadTime = aheadTime;
+		this.aheadTime = aheadTime*60l*1000l;
 	}
 
 	public String getDiscription() {
