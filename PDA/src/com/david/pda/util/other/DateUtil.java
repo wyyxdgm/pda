@@ -36,7 +36,7 @@ public class DateUtil {
 		return sdf.format(new Date(mi));
 	}
 
-	public static Long getTodayStartTime() {
+	public static long getTodayStartTime() {
 		Calendar c = Calendar.getInstance();
 		c.setTime(new Date());
 		c.set(Calendar.MINUTE, 0);
@@ -45,7 +45,7 @@ public class DateUtil {
 		return c.getTimeInMillis();
 	}
 
-	public static Long getTodayEndTime() {
+	public static long getTodayEndTime() {
 		Calendar c = Calendar.getInstance();
 		c.setTime(new Date());
 		c.set(Calendar.MINUTE, 0);
@@ -77,12 +77,12 @@ public class DateUtil {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static String formatMM_dd_HH_mm(Long createTime) {
+	public static String formatMM_dd_HH_mm(long createTime) {
 		return new SimpleDateFormat(MM_dd_HH_mm).format(new Date(createTime));
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static String formatyyyy_MM_dd_HH_mm(Long createTime) {
+	public static String formatyyyy_MM_dd_HH_mm(long createTime) {
 		return new SimpleDateFormat(yyyy_MM_dd_HH_mm).format(new Date(
 				createTime));
 	}
@@ -107,7 +107,7 @@ public class DateUtil {
 	}
 
 	@SuppressLint("SimpleDateFormat")
-	public static Long parsePT(String yyyyMmDdHHMm, String text) {
+	public static long parsePT(String yyyyMmDdHHMm, String text) {
 		if (yyyyMmDdHHMm != null && !yyyyMmDdHHMm.equals("")) {
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat(yyyyMmDdHHMm);
@@ -120,7 +120,7 @@ public class DateUtil {
 		return new Date().getTime();
 	}
 
-	public static String formatYMWD(Long cycleLength) {
+	public static String formatYMWD(long cycleLength) {
 		if (cycleLength > DAY)
 			return new BigDecimal(cycleLength * 1.0 / DAY).setScale(2,
 					BigDecimal.ROUND_HALF_EVEN).toString()
@@ -130,8 +130,8 @@ public class DateUtil {
 		}
 	}
 
-	public static int[] getDHM(Long mi) {
-		if (mi == null)
+	public static int[] getDHM(long mi) {
+		if (mi == 0)
 			return new int[] { 0, 0, 0 };
 		int[] a = new int[3];
 		long t = mi / (1000 * 60);// m is m

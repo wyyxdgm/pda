@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DateUtil;
 import com.david.pda.util.time.CycleTipUtil;
+import com.david.pda.weather.model.util.L;
 
 public class AlarmListAdapter extends BaseAdapter {
 	List<Alarm> alarms = null;
@@ -75,10 +77,15 @@ public class AlarmListAdapter extends BaseAdapter {
 				new String[] { i.get_id() + "" }, null);
 		CycleType ct = new DemoDB<CycleType>(new CycleType()).get(
 				i.getCycleType() + "", ctx);
+		Log.i(L.t, "hh:" + DateUtil.formatyyyy_MM_dd_HH_mm(i.getCreateTime()));
+		Log.i(L.t,
+				"now:"
+						+ DateUtil.formatyyyy_MM_dd_HH_mm(System
+								.currentTimeMillis()));
 		CycleTipUtil ctu = new CycleTipUtil(details, ct, i.getCreateTime());
 		CycleDetailsForAlarm cd = ctu.getNextTipDetail();
 		t4.setText(DateUtil.formatMM_dd_HH_mm(cd.getStartTime()
-				- cd.getAheadTime())+";"+DateUtil.formatyyyy_MM_dd_HH_mm(i.getCreateTime())+"//"+DateUtil.formatMM_dd_HH_mm(i.getCreateTime()));
+				- cd.getAheadTime()));
 		return row;
 	}
 }

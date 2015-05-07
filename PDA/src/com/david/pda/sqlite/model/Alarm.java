@@ -191,7 +191,8 @@ public class Alarm extends Model {
 		details.add(c);
 	}
 
-	public long getCreateTime() {
-		return 0;
+	public Long getCreateTime() {
+		return createTime;
 	}
+
 }
