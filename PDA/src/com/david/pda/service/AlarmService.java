@@ -22,8 +22,11 @@ import com.david.pda.sqlite.model.CycleDetailsForAlarm;
 import com.david.pda.sqlite.model.CycleDetailsForPlan;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.Plan;
+import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
+import com.david.pda.util.other.DateUtil;
 import com.david.pda.util.time.CycleEntity;
+import com.david.pda.util.time.CycleTipUtil;
 import com.david.pda.weather.model.util.L;
 import com.david.pda.weather.model.util.WeatherResultUtil;
 
@@ -56,6 +59,8 @@ public class AlarmService extends Service {
 		String w = WeatherResultUtil.getWeatherStr(city);
 		if (w != null) {
 			weatherInfo = w;
+		} else {
+			Log.i(L.t, "无法访问网络，天气查询失败@AlarmService");
 		}
 	}
 
@@ -125,7 +130,7 @@ public class AlarmService extends Service {
 			intentv.putExtra("weather", weatherInfo);
 			startActivity(intentv);
 		} else {
-			Log.i(L.t, "alarmDetailList size:" + alarmDetailList.size());
+			Log.i(L.t, "no alarm。。should be tiped");
 		}
 		try {
 			Thread.sleep(30 * 1000);
@@ -187,26 +192,53 @@ public class AlarmService extends Service {
 		}
 	}
 
-	public CycleDetailsForAlarm GetTipAlarm() {
-		CycleDetailsForAlarm cc = null;
-		doGetAlarm(System.currentTimeMillis(),
-				System.currentTimeMillis() + 60 * 60 * 1000l);// 1 hour
-		for (CycleDetailsForAlarm c : alarmDetailList) {
+	private CycleDetailsForAlarm GetTipAlarm() {
+		DemoDB<Alarm> db = new DemoDB<Alarm>(new Alarm());
+		List<Alarm> list = db.getList(this);
+		DemoDB<CycleDetailsForAlarm> db2 = new DemoDB<CycleDetailsForAlarm>(
+				new CycleDetailsForAlarm());
+		for (Alarm i : list) {
+			List<CycleDetailsForAlarm> details = db2.getList(this,
+					" cycleFor=?", new String[] { i.get_id() + "" }, null);
+			CycleType ct = new DemoDB<CycleType>(new CycleType()).get(
+					i.getCycleType() + "", this);
 			Log.i(L.t,
-					c.getDiscription()
-							+ ",id:"
-							+ c.get_id()
-							+ ",plan:"
-							+ (alarmMap.get(c.getCycleFor()) != null ? alarmMap
-									.get(c.getCycleFor()).getTitle() : ""));
-			if (c.getStartTime() - c.getAheadTime() < System
-					.currentTimeMillis() + 119 * 1000l) {
-				cc = c;
-				break;
-			}
+					"hh:" + DateUtil.formatyyyy_MM_dd_HH_mm(i.getCreateTime()));
+			Log.i(L.t,
+					"now:"
+							+ DateUtil.formatyyyy_MM_dd_HH_mm(System
+									.currentTimeMillis()));
+			CycleTipUtil ctu = new CycleTipUtil(details, ct, i.getCreateTime());
+			CycleDetailsForAlarm cd = ctu.getNextTipDetail();
+			long t = cd.getIsAhead() == Model.IS_YES ? cd.getStartTime()
+					- cd.getAheadTime() : cd.getStartTime();
+			if (cd != null
+					&& DateUtil.isInOneMinute(t, System.currentTimeMillis()))
+				return cd;
 		}
-		return cc;
+		return null;
 	}
+
+	// public CycleDetailsForAlarm GetTipAlarm() {
+	// CycleDetailsForAlarm cc = null;
+	// doGetAlarm(System.currentTimeMillis(),
+	// System.currentTimeMillis() + 60 * 60 * 1000l);// 1 hour
+	// for (CycleDetailsForAlarm c : alarmDetailList) {
+	// Log.i(L.t,
+	// c.getDiscription()
+	// + ",id:"
+	// + c.get_id()
+	// + ",plan:"
+	// + (alarmMap.get(c.getCycleFor()) != null ? alarmMap
+	// .get(c.getCycleFor()).getTitle() : ""));
+	// if (c.getStartTime() - c.getAheadTime() < System
+	// .currentTimeMillis() + 119 * 1000l) {
+	// cc = c;
+	// break;
+	// }
+	// }
+	// return cc;
+	// }
 
 	public void doGet(long startTime, long endTime) {// 支持一个小时提前提醒
 		DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
@@ -241,39 +273,41 @@ public class AlarmService extends Service {
 		Collections.sort(ds);
 	}
 
-	public void doGetAlarm(long startTime, long endTime) {// 支持一个小时提前提醒?????????????????????????????
-		DemoDB<Alarm> db = new DemoDB<Alarm>(new Alarm());
-		DemoDB<CycleDetailsForAlarm> ddb = new DemoDB<CycleDetailsForAlarm>(
-				new CycleDetailsForAlarm());
-		List<CycleDetailsForAlarm> details = ddb.getList(this, null, null,
-				CycleDetailsForAlarm.STARTTIME + " asc");
-		Alarm alarm = null;
-		DemoDB<CycleType> cdb = new DemoDB<CycleType>(new CycleType());
-		List<Alarm> alarms = new ArrayList<Alarm>();
-		alarmMap = new HashMap<Long, Alarm>();
-		alarms = db.getList(this);
-		if (alarmDetailList == null) {
-			alarmDetailList = new ArrayList<CycleDetailsForAlarm>();
-		} else {
-			alarmDetailList.clear();
-		}
-		for (Alarm a : alarms) {
-			alarmMap.put(a.get_id(), a);
-		}
-		for (CycleDetailsForAlarm d : details) {
-			alarm = alarmMap.get(d.getCycleFor());
-			alarm.addDetail(d);
-			alarm.setCycleTypeObj(cdb.get(alarm.getCycleType() + "", this));
-		}// add details,cycleType to alarm
-		for (Long key : alarmMap.keySet()) {
-			alarm = alarmMap.get(key);
-			for (CycleDetailsForAlarm d : alarm.getDetails()) {
-				CycleEntity<CycleDetailsForAlarm> ce = new CycleEntity<CycleDetailsForAlarm>(
-						startTime, endTime, alarm.getCycleTypeObj(), d);
-				alarmDetailList.addAll(ce.getTimes());
-			}
-		}
-		Collections.sort(alarmDetailList);
-	}
+	// public void doGetAlarm(long startTime, long endTime) {//
+	// 支持一个小时提前提醒?????????????????????????????
+	// DemoDB<Alarm> db = new DemoDB<Alarm>(new Alarm());
+	// DemoDB<CycleDetailsForAlarm> ddb = new DemoDB<CycleDetailsForAlarm>(
+	// new CycleDetailsForAlarm());
+	// List<CycleDetailsForAlarm> details = ddb.getList(this, null, null,
+	// CycleDetailsForAlarm.STARTTIME + " asc");
+	// Alarm alarm = null;
+	// DemoDB<CycleType> cdb = new DemoDB<CycleType>(new CycleType());
+	// List<Alarm> alarms = new ArrayList<Alarm>();
+	// alarmMap = new HashMap<Long, Alarm>();
+	// alarms = db.getList(this);
+	// if (alarmDetailList == null) {
+	// alarmDetailList = new ArrayList<CycleDetailsForAlarm>();
+	// } else {
+	// alarmDetailList.clear();
+	// }
+	// for (Alarm a : alarms) {
+	// alarmMap.put(a.get_id(), a);
+	// }
+	// for (CycleDetailsForAlarm d : details) {
+	// alarm = alarmMap.get(d.getCycleFor());
+	// alarm.addDetail(d);
+	// alarm.setCycleTypeObj(cdb.get(alarm.getCycleType() + "", this));
+	// }// add details,cycleType to alarm
+	// for (Long key : alarmMap.keySet()) {
+	// alarm = alarmMap.get(key);
+	// for (CycleDetailsForAlarm d : alarm.getDetails()) {
+	// CycleEntity<CycleDetailsForAlarm> ce = new
+	// CycleEntity<CycleDetailsForAlarm>(
+	// startTime, endTime, alarm.getCycleTypeObj(), d);
+	// alarmDetailList.addAll(ce.getTimes());
+	// }
+	// }
+	// Collections.sort(alarmDetailList);
+	// }
 
 }

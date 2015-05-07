@@ -162,7 +162,7 @@ public class CycleDetailsForAlarm extends CycleDetails {
 	 * 单位分钟
 	 */
 	public void setAheadTime(Long aheadTime) {
-		this.aheadTime = aheadTime*60l*1000l;
+		this.aheadTime = aheadTime;
 	}
 
 	public String getDiscription() {

@@ -122,7 +122,7 @@ public class CycleDetailsArrayAdapter extends ArrayAdapter<CycleDetails> {
 		detail.setIsAhead(isahead.isChecked() ? Model.IS_YES : Model.IS_NO);
 		detail.setIsTip(istip.isChecked() ? Model.IS_YES : Model.IS_NO);
 		detail.setDiscription(content.getText().toString());
-		detail.setAheadTime(getNumber(aheadtime.getText().toString()));
+		detail.setAheadTime(60l*1000l*getNumber(aheadtime.getText().toString()));
 		detail.setWeatherSensitivity(weatherSensitive.getText().toString());
 		return detail;
 	}
@@ -182,7 +182,7 @@ public class CycleDetailsArrayAdapter extends ArrayAdapter<CycleDetails> {
 		isahead.setChecked(detail.getIsAhead() == Model.IS_YES);
 		istip.setChecked(detail.getIsTip() == Model.IS_YES);
 		content.setText(detail.getDiscription());
-		aheadtime.setText(detail.getAheadTime() + "");
+		aheadtime.setText(detail.getAheadTime()/60/1000 + "");
 		weatherSensitive.setText(detail.getWeatherSensitivity());
 		return row;
 	}

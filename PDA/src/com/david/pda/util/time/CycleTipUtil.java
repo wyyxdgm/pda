@@ -5,14 +5,19 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import android.util.Log;
+
 import com.david.pda.sqlite.model.CycleDetails;
 import com.david.pda.sqlite.model.CycleDetailsForAlarm;
 import com.david.pda.sqlite.model.CycleType;
+import com.david.pda.sqlite.model.base.Model;
+import com.david.pda.util.other.DateUtil;
+import com.david.pda.weather.model.util.L;
 
 public class CycleTipUtil {
 	private List<CycleDetailsForAlarm> details;
 	private CycleType cycleType;
-	private long now = System.currentTimeMillis();
+	private long now = 0;
 	private Calendar c = Calendar.getInstance();
 	private Calendar cycleStart = Calendar.getInstance();// zhou qi qi shi
 	private Calendar cycleEnd = Calendar.getInstance();// xia yi ge zhou qi jie
@@ -23,6 +28,8 @@ public class CycleTipUtil {
 	public CycleTipUtil(List<CycleDetailsForAlarm> details,
 			CycleType cycleType, long createTime) {
 		super();
+		now = System.currentTimeMillis();
+		Log.i(L.t, "now:" + DateUtil.formatyyyy_MM_dd_HH_mm_ss(now));
 		this.details = details;
 		this.cycleType = cycleType;
 		this.cycleLength = cycleType == null
@@ -66,10 +73,20 @@ public class CycleTipUtil {
 		CycleDetailsForAlarm c = null;
 		getCycleList();
 		for (CycleDetailsForAlarm ac : details) {
-			if (ac.getStartTime() - ac.getAheadTime() < now) {// 时间已经过去
+			Log.i(L.t,
+					DateUtil.formatyyyy_MM_dd_HH_mm_ss(ac.getStartTime())
+							+ ";"
+							+ DateUtil.formatyyyy_MM_dd_HH_mm_ss(ac
+									.getStartTime() - ac.getAheadTime()));
+			if (ac.getStartTime()
+					- (ac.getIsAhead() == Model.IS_YES ? ac.getAheadTime() : 0) < now) {// 时间已经过去
 				continue;
 			}
-			if (ac.getStartTime() - ac.getAheadTime() < t) {// get the smallest
+			Log.i(L.t, "t:" + DateUtil.formatyyyy_MM_dd_HH_mm_ss(t));
+			if (ac.getStartTime()
+					- (ac.getIsAhead() == Model.IS_YES ? ac.getAheadTime() : 0) < t) {// get
+																						// the
+																						// smallest
 				t = ac.getStartTime() - ac.getAheadTime();
 				c = ac;
 			}
@@ -81,17 +98,27 @@ public class CycleTipUtil {
 		c.setTimeInMillis(createTime);
 		switch (cycleType.getDateType()) {
 		case DAY:// day start
-			c.set(Calendar.HOUR, 0);
+			c.set(Calendar.HOUR_OF_DAY, 0);
 			c.set(Calendar.MINUTE, 0);
 			c.set(Calendar.SECOND, 0);
 			c.set(Calendar.MILLISECOND, 0);
 			cycleStart.setTimeInMillis(c.getTimeInMillis());
+			Log.i(L.t,
+					"cycle Start:"
+							+ DateUtil.formatyyyy_MM_dd_HH_mm_ss(cycleStart
+									.getTimeInMillis()));
+			;
 			c.add(Calendar.DATE, cycleLength);
 			cycleEnd.setTimeInMillis(c.getTimeInMillis());
+			Log.i(L.t,
+					"cycle End:"
+							+ DateUtil.formatyyyy_MM_dd_HH_mm_ss(cycleEnd
+									.getTimeInMillis()));
+			;
 			break;
 		case MONTH:// date of month start
 			c.set(Calendar.DAY_OF_MONTH, 0);
-			c.set(Calendar.HOUR, 0);
+			c.set(Calendar.HOUR_OF_DAY, 0);
 			c.set(Calendar.MINUTE, 0);
 			c.set(Calendar.SECOND, 0);
 			c.set(Calendar.MILLISECOND, 0);
@@ -101,7 +128,7 @@ public class CycleTipUtil {
 			break;
 		case QUARTER:
 			c.set(Calendar.DAY_OF_MONTH, 0);
-			c.set(Calendar.HOUR, 0);
+			c.set(Calendar.HOUR_OF_DAY, 0);
 			c.set(Calendar.MINUTE, 0);
 			c.set(Calendar.SECOND, 0);
 			c.set(Calendar.MILLISECOND, 0);
@@ -114,11 +141,11 @@ public class CycleTipUtil {
 			c.set(Calendar.SECOND, 0);
 			c.set(Calendar.MILLISECOND, 0);
 			cycleStart.setTimeInMillis(c.getTimeInMillis());
-			c.add(Calendar.HOUR, cycleLength);
+			c.add(Calendar.HOUR_OF_DAY, cycleLength);
 			cycleEnd.setTimeInMillis(c.getTimeInMillis());
 			break;
 		case WEEK:
-			c.set(Calendar.HOUR, 0);
+			c.set(Calendar.HOUR_OF_DAY, 0);
 			c.set(Calendar.MINUTE, 0);
 			c.set(Calendar.SECOND, 0);
 			c.set(Calendar.MILLISECOND, 0);
@@ -130,7 +157,7 @@ public class CycleTipUtil {
 			cycleEnd.setTimeInMillis(c.getTimeInMillis());
 			break;
 		case YEAR:
-			c.set(Calendar.HOUR, 0);
+			c.set(Calendar.HOUR_OF_DAY, 0);
 			c.set(Calendar.MINUTE, 0);
 			c.set(Calendar.SECOND, 0);
 			c.set(Calendar.MILLISECOND, 0);

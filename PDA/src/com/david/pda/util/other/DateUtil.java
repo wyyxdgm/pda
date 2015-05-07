@@ -145,4 +145,9 @@ public class DateUtil {
 	public static long getLongByDHM(int d, int h, int m) {
 		return ((d * 24 + h) * 60 + m) * 60l * 1000l;
 	}
+
+	public static boolean isInOneMinute(long t, long currentTimeMillis) {
+		Log.i(L.t, "true of isInOneMinute");
+		return (long) (1.0 * t / (1000 * 60)) == (long) (1.0 * currentTimeMillis / (1000 * 60));
+	}
 }

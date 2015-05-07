@@ -17,7 +17,8 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="18dp"
-            android:background="@drawable/backward" />
+            android:background="@drawable/backward"
+            android:contentDescription="@string/week" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -117,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:text="取消" />
+                android:text="@string/cancel" />
 
             <Button
                 android:id="@+id/main_some_tools_alarm_option_yes_button"
@@ -126,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:text="確定" />
+                android:text="@string/confirm" />
         </LinearLayout>
     </LinearLayout>
 

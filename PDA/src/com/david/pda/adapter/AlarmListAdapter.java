@@ -15,6 +15,7 @@ import com.david.pda.R;
 import com.david.pda.sqlite.model.Alarm;
 import com.david.pda.sqlite.model.CycleDetailsForAlarm;
 import com.david.pda.sqlite.model.CycleType;
+import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DateUtil;
 import com.david.pda.util.time.CycleTipUtil;
@@ -83,7 +84,9 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
 		CycleTipUtil ctu = new CycleTipUtil(details, ct, i.getCreateTime());
 		CycleDetailsForAlarm cd = ctu.getNextTipDetail();
 		t4.setText(DateUtil.formatMM_dd_HH_mm(cd.getStartTime()
-				- cd.getAheadTime()));
+				- cd.getAheadTime())
+				+ (cd.getIsAhead() == Model.IS_YES ? "(提前" + cd.getAheadTime()
+						/ 1000l / 60 + "分钟)" : ""));
 		Log.i(L.t,
 				"hh2:"
 						+ DateUtil.formatyyyy_MM_dd_HH_mm(cd.getStartTime()
