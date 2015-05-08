@@ -146,7 +146,7 @@ public class CycleEntity<T extends CycleDetails> {
 	private void nextCycle() {
 		switch (this.dateType) {
 		case DAY:
-			c.add(Calendar.DATE, cycleLength);
+			c.add(Calendar.DAY_OF_MONTH, cycleLength);
 			break;
 		case MONTH:
 			c.add(Calendar.MONTH, cycleLength);
@@ -155,7 +155,7 @@ public class CycleEntity<T extends CycleDetails> {
 			c.add(Calendar.MONTH, (cycleLength * 3));
 			break;
 		case HOUR:
-			c.add(Calendar.HOUR, cycleLength);
+			c.add(Calendar.HOUR_OF_DAY, cycleLength);
 			break;
 		case WEEK:
 			c.add(Calendar.DATE, 7 * cycleLength);

@@ -18,6 +18,7 @@ import com.david.pda.SomeToolsAlarmActivity;
 import com.david.pda.SomeToolsWeatherActivity;
 import com.david.pda.TipActivity;
 import com.david.pda.sqlite.model.Alarm;
+import com.david.pda.sqlite.model.Countdown;
 import com.david.pda.sqlite.model.CycleDetailsForAlarm;
 import com.david.pda.sqlite.model.CycleDetailsForPlan;
 import com.david.pda.sqlite.model.CycleType;
@@ -49,6 +50,7 @@ public class AlarmService extends Service {
 		mediaPlayer = MediaPlayer.create(this, R.raw.music);
 		mediaPlayer.setLooping(false);
 		refreshWeatherThread.start();// 一直更新天气、per hour
+		tipCountDownThread.start();
 	}
 
 	public void getWeather() {
@@ -160,6 +162,21 @@ public class AlarmService extends Service {
 				Log.i(L.t, "第" + ++i + "次循环查询！");
 				tipPlan();
 				tipAlarm();
+			}
+		}
+	});
+	Thread tipCountDownThread = new Thread(new Runnable() {
+		@Override
+		public void run() {
+			while (true) {
+				Countdown c = getCountDown();
+				if (c != null) {
+					play();
+					Intent intentv = new Intent(AlarmService.this, TipActivity.class);
+					intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intentv.putExtra("countdown", c);
+					startActivity(intentv);
+				}
 			}
 		}
 	});
@@ -281,6 +298,18 @@ public class AlarmService extends Service {
 		Collections.sort(ds);
 	}
 
+	public Countdown getCountDown() {
+		DemoDB<Countdown> db = new DemoDB<Countdown>(new Countdown());
+		List<Countdown> ct = db.getList(this);
+		for (Countdown countdown : ct) {
+			if (countdown.getIsOn() == Model.IS_YES
+					&& DateUtil.isInOneMinute(countdown.getEndTime(),
+							System.currentTimeMillis())) {
+				return countdown;
+			}
+		}
+		return null;
+	}
 	// public void doGetAlarm(long startTime, long endTime) {//
 	// 支持一个小时提前提醒?????????????????????????????
 	// DemoDB<Alarm> db = new DemoDB<Alarm>(new Alarm());

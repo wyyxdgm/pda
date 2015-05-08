@@ -74,7 +74,7 @@ public class CountdownGridAdapter extends BaseAdapter {
 		}
 		Log.i(L.t, "isOn:" + countdown.getIsOn());
 		flagView.setBackgroundResource(countdown.getIsOn() != null
-				&& countdown.getIsOn() == Model.IS_ON ? R.drawable.radio_button_on
+				&& countdown.getIsOn() == Model.IS_YES ? R.drawable.radio_button_on
 				: R.drawable.radio_button_off);
 		Bitmap bm = BitmapFactory.decodeResource(context.getResources(),
 				R.drawable.s200).copy(Bitmap.Config.ARGB_8888, true);

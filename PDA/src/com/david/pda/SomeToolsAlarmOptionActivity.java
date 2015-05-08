@@ -215,7 +215,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 		}
 		alarm.setTitle(titleEditText.getText().toString());
 		alarm.setRemarks(contentEditText.getText().toString());
-		alarm.setIsOn(checkBox.isChecked() ? Model.IS_ON : Model.IS_OFF);
+		alarm.setIsOn(checkBox.isChecked() ? Model.IS_YES : Model.IS_NO);
 		alarm.setCreateTime(System.currentTimeMillis());
 		CycleType c = cycleTypeList.get(cycleTypes.getSelectedItemPosition());
 		alarm.setCycleType(c.get_id());
@@ -235,7 +235,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 
 	// 更新的时候，将数据显示到视图上
 	public void showModelToView() {
-		this.checkBox.setChecked(alarm.getIsOn() == Model.IS_ON);
+		this.checkBox.setChecked(alarm.getIsOn() == Model.IS_YES);
 		this.contentEditText.setText(alarm.getRemarks());
 		this.titleEditText.setText(alarm.getTitle());
 		this.cycleTypes.setSelection(selectionOfCycleTyp);

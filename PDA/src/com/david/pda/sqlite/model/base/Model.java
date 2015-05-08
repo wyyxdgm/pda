@@ -17,8 +17,6 @@ public abstract class Model implements IModel<Model>, Serializable {
 	public static final int FLAG_DELETED = 1;
 	public static final int FLAG_EXISTS = 2;
 	public static final String DELFLAG = "delFlag";
-	public static int IS_ON = 1;
-	public static final int IS_OFF = 0;
 
 	public abstract Uri CONTEN_URI();
 

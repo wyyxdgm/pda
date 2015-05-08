@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.david.pda.service.AlarmService;
 import com.david.pda.sqlite.model.Alarm;
+import com.david.pda.sqlite.model.Countdown;
 import com.david.pda.sqlite.model.CycleDetailsForAlarm;
 import com.david.pda.sqlite.model.Plan;
 import com.david.pda.sqlite.model.base.Model;
@@ -21,13 +22,14 @@ import com.david.pda.weather.model.util.WeatherResultUtil;
 
 public class TipActivity extends Activity {
 	public static String ACTION_PALY = "com.david.pda.PLAY_ACTION";
-	private Button bpause, bstop;
+	private Button cancelBtn, confirmBtn;
 	Intent intent;
 	private TextView title;
 	private TextView content;
 	private TextView weatherText;
 	Plan p;
 	Alarm a;
+	Countdown cd;
 	CycleDetailsForAlarm ca;
 	private String weather = "";
 
@@ -58,6 +60,10 @@ public class TipActivity extends Activity {
 			title.setText(a.getTitle());
 			content.setText(ca.getDiscription());
 			ew = p.getWeatherSensitivity();
+		} else if (intent.hasExtra("countdown")) {
+			cd = (Countdown) intent.getSerializableExtra("countdown");
+			title.setText("倒计时提醒：" + cd.getTitle());
+			content.setText(cd.getRemarks());
 		}
 		String wt = "";// weather text view text
 		if (ew != null && !"".equals(ew) && weather != null
@@ -78,10 +84,10 @@ public class TipActivity extends Activity {
 			weatherText.setText(wt);
 		}
 		// 动态注册广播接收器
-		bpause = (Button) findViewById(R.id.pause);// cancel
-		bstop = (Button) findViewById(R.id.stop);
+		cancelBtn = (Button) findViewById(R.id.tip_cancel);// cancel
+		confirmBtn = (Button) findViewById(R.id.tip_confirm);
 
-		bpause.setOnClickListener(new OnClickListener() {
+		cancelBtn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (isFromService()) {
@@ -94,45 +100,56 @@ public class TipActivity extends Activity {
 			}
 		});
 
-		bstop.setOnClickListener(new OnClickListener() {// update
-			@Override
-			public void onClick(View v) {
-				if (a != null && ca != null) {
-					ca.setIsTip(Model.IS_NO);
-					DemoDB<CycleDetailsForAlarm> cadb = new DemoDB<CycleDetailsForAlarm>(
-							ca);
-					try {
-						cadb.update(ca, TipActivity.this);
-					} catch (JSONException e) {
-						e.printStackTrace();
+		confirmBtn.setOnClickListener(new OnClickListener() {// update
+					@Override
+					public void onClick(View v) {
+						if (a != null && ca != null) {
+							p = null;
+							cd = null;
+							ca.setIsTip(Model.IS_NO);
+							DemoDB<CycleDetailsForAlarm> cadb = new DemoDB<CycleDetailsForAlarm>(
+									ca);
+							try {
+								cadb.update(ca, TipActivity.this);
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						} else if (p != null) {
+							cd = null;
+							a = null;
+							DemoDB<Plan> pdb = new DemoDB<Plan>(p);
+							p.setIsTip(Model.IS_NO);
+							try {
+								pdb.update(p, TipActivity.this);
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						} else if (cd != null) {
+							a = null;
+							p = null;
+							DemoDB<Countdown> cddb = new DemoDB<Countdown>(
+									new Countdown());
+							cd.setIsOn(Model.IS_NO);
+							try {
+								cddb.update(a, TipActivity.this);
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						}
+						if (isFromService()) {
+							Intent intent = new Intent();
+							intent.setFlags(2);
+							intent.setClass(TipActivity.this,
+									AlarmService.class);
+							TipActivity.this.startService(intent);
+						}
+						TipActivity.this.finish();
 					}
-				} else if (p != null) {
-					DemoDB<Plan> pdb = new DemoDB<Plan>(p);
-					p.setIsTip(Model.IS_NO);
-					try {
-						pdb.update(p, TipActivity.this);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				}
-				if (isFromService()) {
-					Intent intent = new Intent();
-					intent.setFlags(2);
-					intent.setClass(TipActivity.this, AlarmService.class);
-					TipActivity.this.startService(intent);
-				}
-				TipActivity.this.finish();
-			}
-		});
+				});
 	}
 
 	boolean isFromService() {
-		return (a != null && ca != null || p != null);
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+		return (a != null && ca != null || p != null || cd != null);
 	}
 
 }

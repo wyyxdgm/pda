@@ -42,7 +42,7 @@ public class Alarm extends Model {
 	private Long _id;
 	private String title;
 	private String remarks;
-	private Integer isOn = Model.IS_ON;
+	private Integer isOn = Model.IS_YES;
 	private Long cycleType;
 	private Integer delFlag = Model.FLAG_EXISTS;
 	private Long createTime;

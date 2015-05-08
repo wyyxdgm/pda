@@ -92,7 +92,7 @@ public class SomeToolsCountdownOptionActivity extends Activity {
 			titleEditText.setText(countdown.getTitle());
 			remarksEditText.setText(countdown.getRemarks());
 			boolean checked = countdown.getIsOn() != null
-					&& countdown.getIsOn() == Model.IS_ON;
+					&& countdown.getIsOn() == Model.IS_YES;
 			flagToggleButton.setChecked(checked);
 			Calendar c = Calendar.getInstance();
 			c.setTimeInMillis(countdown.getEndTime() != null ? countdown
@@ -110,8 +110,8 @@ public class SomeToolsCountdownOptionActivity extends Activity {
 		}
 		countdown.setRemarks(remarksEditText.getText().toString());
 		countdown.setTitle(titleEditText.getText().toString());
-		countdown.setIsOn(flagToggleButton.isChecked() ? Model.IS_ON
-				: Model.IS_OFF);
+		countdown.setIsOn(flagToggleButton.isChecked() ? Model.IS_YES
+				: Model.IS_NO);
 		countdown.setDelFlag(Model.FLAG_EXISTS);
 		if (!endDate.getText().toString().equals(""))
 			countdown.setEndTime(DateUtil.parsePT(DateUtil.yyyy_MM_dd_HH_mm,
