@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.david.pda.application.SysApplication;
 import com.david.pda.service.AlarmService;
 import com.david.pda.weather.model.util.L;
 
@@ -26,6 +27,7 @@ public class WelcomeActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_welcome);
+		SysApplication.getInstance().addActivity(this);
 		welcomeImageView = (ImageView) findViewById(R.id.welcome_welcome_image);
 		welcomeImageView.setOnTouchListener(new OnTouchListener() {
 			@Override

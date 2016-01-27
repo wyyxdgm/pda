@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.david.pda.adapter.CountdownGridAdapter;
+import com.david.pda.application.SysApplication;
 import com.david.pda.sqlite.model.Countdown;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
@@ -50,6 +51,7 @@ public class SomeToolsCountdownActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_some_tools_countdown);
+		SysApplication.getInstance().addActivity(this);
 		countdownGridView = (GridView) findViewById(R.id.main_some_tools_countdown_grid);
 		add = (Button) findViewById(R.id.addCountdown);
 		backward = (ImageButton) findViewById(R.id.main_some_tools_countdown_topbar_backward);

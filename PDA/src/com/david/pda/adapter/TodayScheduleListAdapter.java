@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.david.pda.R;
 import com.david.pda.sqlite.model.CycleDetailsForPlan;
 import com.david.pda.sqlite.model.Plan;
+import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.util.other.DateUtil;
 import com.david.pda.util.other.DrawUtil;
 
@@ -77,8 +78,9 @@ public class TodayScheduleListAdapter extends BaseAdapter {
 		ImageView imageView = (ImageView) row
 				.findViewById(R.id.list_item_today_schedule_scale_image);
 		// set to view
-		time.setText("时间：" + DateUtil.format("HH:mm:ss", cs.getStartTime())
-				+ "-" + DateUtil.format("HH:mm:ss", cs.getEndTime()));
+		time.setText(DateUtil.format(DateUtil.MM_dd_HH_mm, cs.getStartTime())
+				+ "-" + DateUtil.format(DateUtil.MM_dd_HH_mm, cs.getEndTime())
+				+ (cs.getIsTip() == Model.IS_NO ? "(已提示)" : ""));
 		jj.setChecked(plan.getUrgencyimportant() == null ? false : plan
 				.getUrgencyimportant() >> 1 == 1);
 		zy.setChecked(plan.getUrgencyimportant() == null ? false : plan

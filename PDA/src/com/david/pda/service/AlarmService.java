@@ -9,12 +9,12 @@ import java.util.Map;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.util.Log;
 
-import com.david.pda.R;
-import com.david.pda.SomeToolsAlarmActivity;
 import com.david.pda.SomeToolsWeatherActivity;
 import com.david.pda.TipActivity;
 import com.david.pda.sqlite.model.Alarm;
@@ -26,8 +26,8 @@ import com.david.pda.sqlite.model.Plan;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DateUtil;
-import com.david.pda.util.time.CycleEntity;
-import com.david.pda.util.time.CycleTipUtil;
+import com.david.pda.util.time.AlarmCycleUtil;
+import com.david.pda.util.time.PlanCycleUtil;
 import com.david.pda.weather.model.util.L;
 import com.david.pda.weather.model.util.WeatherResultUtil;
 
@@ -44,20 +44,50 @@ public class AlarmService extends Service {
 		return null;
 	}
 
+	// private static final int VIBRATE_DURATION_SHORT = 15;
+	private static final int VIBRATE_DURATION = 30;
+	// private static final float BEEP_VOLUME = 0.6f;
+	Vibrator vibrator;
+	AudioManager audioService;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		mediaPlayer = MediaPlayer.create(this, R.raw.music);
-		mediaPlayer.setLooping(false);
-		refreshWeatherThread.start();// 一直更新天气、per hour
-		tipCountDownThread.start();
+		// mediaPlayer = new MediaPlayer();
+		// mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		// try {
+		// AssetFileDescriptor fileDescriptor = getAssets()
+		// .openFd("music.mp3");
+		// mediaPlayer
+		// .setDataSource(fileDescriptor.getFileDescriptor(),
+		// fileDescriptor.getStartOffset(),
+		// fileDescriptor.getLength());
+		// mediaPlayer.setLooping(false);
+		// audioService = (AudioManager)
+		// getSystemService(Context.AUDIO_SERVICE);
+		// vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		// mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
+		// mediaPlayer.prepare();
+		// vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		// vibrator.vibrate(VIBRATE_DURATION_SHORT);
+		// 震动一次
+		// refreshWeatherThread.start();// 一直更新天气、per hour
+		// tipCountDownThread.start();
+		// } catch (IllegalArgumentException e) {
+		// e.printStackTrace();
+		// } catch (IllegalStateException e) {
+		// e.printStackTrace();
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
 	}
 
 	public void getWeather() {
 		SharedPreferences sp = getSharedPreferences(
-				SomeToolsAlarmActivity.class.getName(), MODE_MULTI_PROCESS);
+				SomeToolsWeatherActivity.class.getName(), MODE_MULTI_PROCESS);
 		String city = sp.getString(SomeToolsWeatherActivity.DEFAULT_CITY,
 				SomeToolsWeatherActivity.DEFAULTCYTY);
+		Log.i(L.t, "city:" + city);
 		String w = WeatherResultUtil.getWeatherStr(city);
 		if (w != null) {
 			weatherInfo = w;
@@ -71,6 +101,7 @@ public class AlarmService extends Service {
 			mediaPlayer.pause();
 			mediaPlayer.seekTo(start);
 			isPlaying = !isPlaying;
+			vibrator.cancel();
 		}
 	}
 
@@ -80,6 +111,11 @@ public class AlarmService extends Service {
 				mediaPlayer.start();
 				start = mediaPlayer.getCurrentPosition();
 				isPlaying = !isPlaying;
+				if (audioService.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) {
+					return;
+				} else {
+					vibrator.vibrate(VIBRATE_DURATION);
+				}
 			}
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
@@ -109,13 +145,14 @@ public class AlarmService extends Service {
 			Intent intentv = new Intent(AlarmService.this, TipActivity.class);
 			intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			intentv.putExtra("plan", p);
+			intentv.putExtra("cycledetailsforplan", cp);
 			intentv.putExtra("weather", weatherInfo);
 			startActivity(intentv);
 		} else {
 			Log.i(L.t, "ds size:" + ds.size());
 		}
 		try {
-			Thread.sleep(30 * 1000);
+			Thread.sleep(45 * 1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -130,7 +167,7 @@ public class AlarmService extends Service {
 			intentv.putExtra("cycledetailsforalarm", ca);
 			DemoDB<Alarm> db = new DemoDB<Alarm>(new Alarm());
 			intentv.putExtra("alarm", db.get(ca.getCycleFor() + "", this));
-			intentv.putExtra("weather", weatherInfo == null ? "" : weatherInfo);
+			intentv.putExtra("weather", weatherInfo);
 			startActivity(intentv);
 		} else {
 			Log.i(L.t, "no alarm。。should be tiped");
@@ -149,7 +186,7 @@ public class AlarmService extends Service {
 		public void run() {
 			getWeather();
 			try {
-				Thread.sleep(1000 * 60 * 60);
+				Thread.sleep(1000 * 60 * 30l);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -172,7 +209,8 @@ public class AlarmService extends Service {
 				Countdown c = getCountDown();
 				if (c != null) {
 					play();
-					Intent intentv = new Intent(AlarmService.this, TipActivity.class);
+					Intent intentv = new Intent(AlarmService.this,
+							TipActivity.class);
 					intentv.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intentv.putExtra("countdown", c);
 					startActivity(intentv);
@@ -181,30 +219,33 @@ public class AlarmService extends Service {
 		}
 	});
 	List<CycleDetailsForPlan> ds;
+	CycleDetailsForPlan cp;
 	List<CycleDetailsForAlarm> alarmDetailList;
 	Map<Long, Plan> planMap;
 	Map<Long, Alarm> alarmMap;
 
 	public Plan GetTipPlan() {
-		CycleDetailsForPlan cc = null;
+		cp = null;
 		doGet(System.currentTimeMillis(),
 				System.currentTimeMillis() + 60 * 60 * 1000l);// 1 hour
 		for (CycleDetailsForPlan c : ds) {
-			Log.i(L.t,
-					c.getDiscription()
-							+ ",id:"
-							+ c.get_id()
-							+ ",plan:"
-							+ (planMap.get(c.getCycleFor()) != null ? planMap
-									.get(c.getCycleFor()).getTitle() : ""));
-			if (c.getStartTime() - c.getAheadTime() < System
-					.currentTimeMillis() + 119 * 1000l) {
-				cc = c;
-				break;
+			if (c.getIsTip() == Model.IS_YES) {
+				Log.i(L.t,
+						c.getDiscription()
+								+ ",id:"
+								+ c.get_id()
+								+ ",plan:"
+								+ (planMap.get(c.getCycleFor()) != null ? planMap
+										.get(c.getCycleFor()).getTitle() : ""));
+				if (c.getStartTime() - c.getAheadTime() < System
+						.currentTimeMillis() + 119 * 1000l) {
+					cp = c;
+					break;
+				}
 			}
 		}
-		if (cc != null) {
-			return planMap.get(cc.getCycleFor());
+		if (cp != null) {
+			return planMap.get(cp.getCycleFor());
 		} else {
 			return null;
 		}
@@ -226,7 +267,8 @@ public class AlarmService extends Service {
 					"now:"
 							+ DateUtil.formatyyyy_MM_dd_HH_mm(System
 									.currentTimeMillis()));
-			CycleTipUtil ctu = new CycleTipUtil(details, ct, i.getCreateTime());
+			AlarmCycleUtil ctu = new AlarmCycleUtil(details, ct,
+					i.getCreateTime());
 			CycleDetailsForAlarm cd = ctu.getNextTipDetail();
 			long t = (cd.getIsAhead() == Model.IS_YES ? (cd.getStartTime() - cd
 					.getAheadTime()) : cd.getStartTime());
@@ -243,27 +285,6 @@ public class AlarmService extends Service {
 		}
 		return null;
 	}
-
-	// public CycleDetailsForAlarm GetTipAlarm() {
-	// CycleDetailsForAlarm cc = null;
-	// doGetAlarm(System.currentTimeMillis(),
-	// System.currentTimeMillis() + 60 * 60 * 1000l);// 1 hour
-	// for (CycleDetailsForAlarm c : alarmDetailList) {
-	// Log.i(L.t,
-	// c.getDiscription()
-	// + ",id:"
-	// + c.get_id()
-	// + ",plan:"
-	// + (alarmMap.get(c.getCycleFor()) != null ? alarmMap
-	// .get(c.getCycleFor()).getTitle() : ""));
-	// if (c.getStartTime() - c.getAheadTime() < System
-	// .currentTimeMillis() + 119 * 1000l) {
-	// cc = c;
-	// break;
-	// }
-	// }
-	// return cc;
-	// }
 
 	public void doGet(long startTime, long endTime) {// 支持一个小时提前提醒
 		DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
@@ -290,9 +311,8 @@ public class AlarmService extends Service {
 		for (int i = 0; i < plans.size(); i++) {
 			planMap.put(plans.get(i).get_id(), plans.get(i));
 			pl = plans.get(i);
-			CycleEntity<CycleDetailsForPlan> ce = new CycleEntity<CycleDetailsForPlan>(
-					startTime, endTime, pl, pl.getCycleTypeObj(),
-					pl.getDetail());
+			PlanCycleUtil ce = new PlanCycleUtil(startTime, endTime, pl,
+					pl.getCycleTypeObj(), pl.getDetail(), pl.getHashTipCycle());
 			ds.addAll(ce.getTimes());
 		}
 		Collections.sort(ds);
@@ -310,41 +330,11 @@ public class AlarmService extends Service {
 		}
 		return null;
 	}
-	// public void doGetAlarm(long startTime, long endTime) {//
-	// 支持一个小时提前提醒?????????????????????????????
-	// DemoDB<Alarm> db = new DemoDB<Alarm>(new Alarm());
-	// DemoDB<CycleDetailsForAlarm> ddb = new DemoDB<CycleDetailsForAlarm>(
-	// new CycleDetailsForAlarm());
-	// List<CycleDetailsForAlarm> details = ddb.getList(this, null, null,
-	// CycleDetailsForAlarm.STARTTIME + " asc");
-	// Alarm alarm = null;
-	// DemoDB<CycleType> cdb = new DemoDB<CycleType>(new CycleType());
-	// List<Alarm> alarms = new ArrayList<Alarm>();
-	// alarmMap = new HashMap<Long, Alarm>();
-	// alarms = db.getList(this);
-	// if (alarmDetailList == null) {
-	// alarmDetailList = new ArrayList<CycleDetailsForAlarm>();
-	// } else {
-	// alarmDetailList.clear();
-	// }
-	// for (Alarm a : alarms) {
-	// alarmMap.put(a.get_id(), a);
-	// }
-	// for (CycleDetailsForAlarm d : details) {
-	// alarm = alarmMap.get(d.getCycleFor());
-	// alarm.addDetail(d);
-	// alarm.setCycleTypeObj(cdb.get(alarm.getCycleType() + "", this));
-	// }// add details,cycleType to alarm
-	// for (Long key : alarmMap.keySet()) {
-	// alarm = alarmMap.get(key);
-	// for (CycleDetailsForAlarm d : alarm.getDetails()) {
-	// CycleEntity<CycleDetailsForAlarm> ce = new
-	// CycleEntity<CycleDetailsForAlarm>(
-	// startTime, endTime, alarm.getCycleTypeObj(), d);
-	// alarmDetailList.addAll(ce.getTimes());
-	// }
-	// }
-	// Collections.sort(alarmDetailList);
-	// }
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		mediaPlayer.release();
+	}
 
 }

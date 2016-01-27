@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.david.pda.adapter.MemoGridAdapter;
+import com.david.pda.application.SysApplication;
 import com.david.pda.sqlite.model.Memo;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
@@ -36,6 +37,7 @@ public class SomeToolsMemoActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_some_tools_memo);
+		SysApplication.getInstance().addActivity(this);
 		memoGridView = (GridView) findViewById(R.id.main_some_tools_memo_grid);
 		add = (Button) findViewById(R.id.addMemo);
 		backward = (ImageButton) findViewById(R.id.main_some_tools_memo_topbar_backward);

@@ -132,7 +132,8 @@ public class TempCycleDetailsArrayAdapter extends ArrayAdapter<CycleDetails> {
 		detail.setIsAhead(isahead.isChecked() ? Model.IS_YES : Model.IS_NO);
 		detail.setIsTip(istip.isChecked() ? Model.IS_YES : Model.IS_NO);
 		detail.setDiscription(content.getText().toString());
-		detail.setAheadTime(60l*1000l*getNumber(aheadtime.getText().toString()));
+		detail.setAheadTime(60l * 1000l * getNumber(aheadtime.getText()
+				.toString()));
 		detail.setWeatherSensitivity(weatherSensitive.getText().toString());
 		return detail;
 	}

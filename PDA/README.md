@@ -1,4 +1,4 @@
-android-SideMenuTemplate
+android-PDA
 ========================
 
-A simple android side menu template. 
+android pda. 

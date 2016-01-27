@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.david.pda.application.SysApplication;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.DateType;
 import com.david.pda.sqlite.model.base.Model;
@@ -38,6 +39,7 @@ public class CycleTypeOptionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_system_setting_cycle_type_option);
+		SysApplication.getInstance().addActivity(this);
 		backward = (ImageButton) findViewById(R.id.main_system_setting_option_topbar_backward);
 		cancelButton = (Button) findViewById(R.id.main_system_setting_option_cancle_button);
 		yesButton = (Button) findViewById(R.id.main_system_setting_option_yes_button);

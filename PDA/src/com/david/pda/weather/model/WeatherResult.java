@@ -9,6 +9,7 @@ public class WeatherResult implements Serializable{
 	private String date;
 	private Weather[] weather;
 
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("error:").append(this.error).append('\n');

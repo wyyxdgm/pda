@@ -35,6 +35,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.david.pda.application.SysApplication;
 import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
@@ -62,6 +63,7 @@ public class TargetManageOptionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_target_manage_option);
+		SysApplication.getInstance().addActivity(this);
 		backward = (ImageButton) findViewById(R.id.main_target_manage_option_topbar_backward);
 		Bind.bindReturn(backward, TargetManageOptionActivity.this,
 				MainActivity.class, MainActivity.POSTION_TARGET_MANAGE);
@@ -98,12 +100,7 @@ public class TargetManageOptionActivity extends Activity {
 		@Override
 		public boolean onTouch(View view, MotionEvent e) {
 			String text = e.getX() + "," + e.getY();
-
-			// Toast.makeText(TargetManageOptionActivity.this, text,
-			// Toast.LENGTH_SHORT).show();
-
 			switch (e.getAction()) {
-
 			case MotionEvent.ACTION_DOWN: {// 按下时触发
 				Log.i(L.mo, "ACTION_DOWN" + text);
 				startTarget = getBlockIndexByXY(e.getX(), e.getY());
@@ -143,9 +140,6 @@ public class TargetManageOptionActivity extends Activity {
 							Toast.LENGTH_SHORT).show();
 				}
 			} else {
-				// Toast.makeText(this,
-				// startTarget.getName() + "->" + endTarget.getName(),
-				// Toast.LENGTH_SHORT).show();
 				showWindowForUpdate();
 			}
 		}

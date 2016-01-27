@@ -40,6 +40,7 @@ public class Memo extends Model {
 		return sb.toString();
 	}
 
+	@Override
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
 		if (_id != null)
@@ -101,6 +102,7 @@ public class Memo extends Model {
 		this.delFlag = b.getInt(DELFLAG);
 	}
 
+	@Override
 	public Long get_id() {
 		return _id;
 	}
@@ -141,10 +143,12 @@ public class Memo extends Model {
 		this.createTime = createTime;
 	}
 
+	@Override
 	public Integer getDelFlag() {
 		return delFlag;
 	}
 
+	@Override
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}

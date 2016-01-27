@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.david.pda.application.SysApplication;
 import com.david.pda.util.other.Bind;
 
 public class TargetManageComparedToFact extends Activity {
@@ -31,6 +32,7 @@ public class TargetManageComparedToFact extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_target_manage_compared_to_fact);
+		SysApplication.getInstance().addActivity(this);
 		backward = (ImageButton) findViewById(R.id.main_target_manage_compared_to_fact_topbar_backward);
 		Bind.bindReturn(backward, TargetManageComparedToFact.this,
 				TargetManageOptionActivity.class);

@@ -7,6 +7,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.david.pda.adapter.WeatherDataListAdapter;
+import com.david.pda.application.SysApplication;
 import com.david.pda.util.other.Bind;
 import com.david.pda.weather.model.WeatherData;
 
@@ -19,6 +20,7 @@ public class SomeToolsWeatherDataActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_some_tools_weather_data);
+		SysApplication.getInstance().addActivity(this);
 		loadData();
 		dataListView = (ListView) findViewById(R.id.main_some_tools_weather_data_list);
 		dataListView.setAdapter(new WeatherDataListAdapter(this));

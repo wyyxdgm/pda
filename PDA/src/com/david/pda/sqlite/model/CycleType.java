@@ -30,10 +30,8 @@ public class CycleType extends Model {
 		super();
 	}
 
-	public CycleType(Cursor c, Long _id, String name, Integer delFlag,
-			Long cycleLength, DateType dateType) {
-		super(c);
-		this._id = _id;
+	public CycleType(String name, Integer delFlag, Long cycleLength,
+			DateType dateType) {
 		this.name = name;
 		this.delFlag = delFlag;
 		this.cycleLength = cycleLength;
@@ -84,6 +82,7 @@ public class CycleType extends Model {
 		this.dateType = DateType.values()[c.getInt(c.getColumnIndex(DATETYPE))];
 	}
 
+	@Override
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
 		if (_id != null)
@@ -112,6 +111,7 @@ public class CycleType extends Model {
 		return jo;
 	}
 
+	@Override
 	public Long get_id() {
 		return _id;
 	}
@@ -128,10 +128,12 @@ public class CycleType extends Model {
 		this.name = name;
 	}
 
+	@Override
 	public Integer getDelFlag() {
 		return delFlag;
 	}
 
+	@Override
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}

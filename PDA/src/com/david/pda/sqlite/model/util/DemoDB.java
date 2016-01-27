@@ -56,7 +56,7 @@ public class DemoDB<T extends Model> {
 
 	public boolean update(Model obj, Context context) throws JSONException {
 		ContentValues values = obj.toContentValues();
-		String where = T._ID + "=?";
+		String where = Model._ID + "=?";
 		int count = context.getContentResolver().update(t.CONTEN_URI(), values,
 				where, new String[] { obj.get_id() + "" });
 		return count > 0;
@@ -70,7 +70,7 @@ public class DemoDB<T extends Model> {
 	@SuppressWarnings("unchecked")
 	public T get(String id, Context context) {
 		Cursor c = context.getContentResolver().query(t.CONTEN_URI(), null,
-				T._ID + " = ?", new String[] { id }, null);
+				Model._ID + " = ?", new String[] { id }, null);
 		T item = null;
 		if (c != null) {
 			if (c.moveToNext()) {
@@ -82,7 +82,7 @@ public class DemoDB<T extends Model> {
 	}
 
 	public boolean remove(String id, Context context) throws JSONException {
-		String where = T._ID + "=?";
+		String where = Model._ID + "=?";
 		T item = get(id, context);
 		item.setDelFlag(Model.FLAG_DELETED);// delete
 		ContentValues values = item.toContentValues();
@@ -92,7 +92,7 @@ public class DemoDB<T extends Model> {
 	}
 
 	public boolean realRemove(String id, Context context) throws JSONException {
-		String where = T._ID + "=?";
+		String where = Model._ID + "=?";
 		int count = context.getContentResolver().delete(t.CONTEN_URI(), where,
 				new String[] { id });
 		return count > 0;

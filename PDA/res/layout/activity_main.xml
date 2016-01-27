@@ -21,12 +21,12 @@
             android:id="@+id/main_image_userhead"
             android:layout_width="200dp"
             android:layout_height="100dp"
-            android:background="@drawable/main_head"
+            android:background="@drawable/user_head2"
             android:contentDescription="@string/main_head"
             android:paddingLeft="35dp"
             android:paddingRight="35dp"
             android:paddingTop="10dp"
-            android:src="@drawable/main_head" >
+            android:src="@null" >
         </ImageView>
 
         <ListView

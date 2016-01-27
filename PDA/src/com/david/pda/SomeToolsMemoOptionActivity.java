@@ -13,6 +13,7 @@ import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.david.pda.application.SysApplication;
 import com.david.pda.sqlite.model.Memo;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
@@ -35,6 +36,7 @@ public class SomeToolsMemoOptionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_some_tools_memo_option);
+		SysApplication.getInstance().addActivity(this);
 		backward = (ImageButton) findViewById(R.id.main_some_tools_memo_option_topbar_backward);
 		Bind.bindReturn(backward, SomeToolsMemoOptionActivity.this, MainActivity.class,
 				MainActivity.POSTION_SOME_TOOLS);

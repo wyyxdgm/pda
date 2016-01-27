@@ -34,6 +34,7 @@ public class Weather {
 		this.weather_data = weather_data;
 	}
 
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("\t").append("city:").append(this.city).append('\n');

@@ -30,7 +30,7 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="紧急" />
+            android:text="@string/urgency" />
 
         <CheckBox
             android:id="@+id/list_item_today_schedule_zy"
@@ -41,7 +41,7 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text="重要" />
+            android:text="@string/important" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -63,6 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/list_item_today_schedule_time"
+            android:maxLength="20"
             android:layout_marginTop="20dp"
             android:text="" />
     </RelativeLayout>
@@ -78,6 +79,7 @@
             android:id="@+id/list_item_today_schedule_scale_image"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:contentDescription="@null"
             android:scaleType="centerInside" />
     </RelativeLayout>
 

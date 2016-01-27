@@ -12,6 +12,8 @@ import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.renderer.SimpleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer;
 
+import com.david.pda.application.SysApplication;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,6 +33,7 @@ public class TestBarActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		// setContentView(R.layout.main);
 		// 加入 ListItem “ 调度查询 ”
+		SysApplication.getInstance().addActivity(this);
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("name", " 柱状图 ");
 		map.put("desc", " 显示柱状图 ");
@@ -49,6 +52,7 @@ public class TestBarActivity extends ListActivity {
 	}
 
 	// ListItem 监听器方法
+	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		XYMultipleSeriesRenderer renderer = getBarDemoRenderer();

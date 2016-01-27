@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ToggleButton;
 
+import com.david.pda.application.SysApplication;
 import com.david.pda.sqlite.model.Countdown;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
@@ -41,6 +42,7 @@ public class SomeToolsCountdownOptionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_some_tools_countdown_option);
+		SysApplication.getInstance().addActivity(this);
 		backward = (ImageButton) findViewById(R.id.main_some_tools_countdown_option_topbar_backward);
 		Bind.bindReturn(backward, SomeToolsCountdownOptionActivity.this,
 				MainActivity.class, MainActivity.POSTION_SOME_TOOLS);

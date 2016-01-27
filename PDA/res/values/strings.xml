@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Personal Assistance</string>
+    <string name="app_name">贴心助理</string>
     <string name="tip">提示</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
 
-    <string-array name="bataan">
+    <string-array name="system_menu">
         <item>Target Manage</item>
         <item>Affair Plan</item>
         <item>TodaySchedule</item>
         <item>Four Classes</item>
-        <item>Self Principle</item>
         <item>Some Tools</item>
         <item>System Setting</item>
     </string-array>
@@ -53,7 +52,8 @@
 
     <!-- main_some_tools_alarm -->
     <string name="alarm_option_title">更新闹钟</string>
-
+	<!-- modules -->
+	<string name="update_memo">更新便签</string>
     <string-array name="cityarray">
         <item>北京</item>
         <item>江苏</item>

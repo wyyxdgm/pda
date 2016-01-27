@@ -10,8 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
-import com.david.pda.SomeToolsMemoActivity;
 import com.david.pda.R;
+import com.david.pda.SomeToolsMemoActivity;
 import com.david.pda.sqlite.model.Memo;
 import com.david.pda.util.other.DateUtil;
 

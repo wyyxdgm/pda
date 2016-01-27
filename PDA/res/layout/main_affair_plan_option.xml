@@ -148,18 +148,6 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:text="具体内容" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="20dp"
                     android:orientation="horizontal" >
@@ -197,8 +185,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="20dp"
                     android:hint="具体内容"
-                    android:maxLines="2"
-                    android:minLines="2" />
+                    android:lines="5" />
             </LinearLayout>
 
             <LinearLayout
@@ -211,6 +198,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="20dp"
                     android:hint="事成之后，奖励自己点什么吧？"
+                    android:lines="3"
                     android:maxLines="2"
                     android:minLines="2" />
             </LinearLayout>
@@ -331,7 +319,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:layout_weight="1"
                         android:hint="使用,风隔天气敏感词汇"
                         android:maxLength="10"
                         android:textSize="15sp" >

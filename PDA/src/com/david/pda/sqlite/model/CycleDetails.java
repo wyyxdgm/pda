@@ -40,6 +40,7 @@ public abstract class CycleDetails extends Model implements
 	public CycleDetails() {
 	}
 
+	@Override
 	public abstract CycleDetails clone();
 
 	public static String CREATE_TABLE() {
@@ -61,15 +62,16 @@ public abstract class CycleDetails extends Model implements
 
 	protected Long _id;
 	protected Long cycleFor;
-	protected Integer isTip;
+	protected Integer isTip = 0;
 	protected Integer isAhead;
-	protected Long aheadTime;
+	protected Long aheadTime = 0l;
 	protected String discription;
 	protected String weatherSensitivity;
-	protected Long startTime;
-	protected Long endTime;
-	protected Integer delFlag;
+	protected Long startTime = 0l;
+	protected Long endTime = 0l;
+	protected Integer delFlag = 0;
 
+	@Override
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
 		if (_id != null)
@@ -114,6 +116,7 @@ public abstract class CycleDetails extends Model implements
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
 	}
 
+	@Override
 	public Long get_id() {
 		return _id;
 	}
@@ -186,10 +189,12 @@ public abstract class CycleDetails extends Model implements
 		this.endTime = endTime;
 	}
 
+	@Override
 	public Integer getDelFlag() {
 		return delFlag;
 	}
 
+	@Override
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}

@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.david.pda.adapter.CycleDetailsArrayAdapter;
+import com.david.pda.application.SysApplication;
 import com.david.pda.sqlite.model.Alarm;
 import com.david.pda.sqlite.model.CycleDetails;
 import com.david.pda.sqlite.model.CycleDetailsForAlarm;
@@ -75,6 +76,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_some_tools_alarm_option);
+		SysApplication.getInstance().addActivity(this);
 		backward = (ImageButton) findViewById(R.id.main_some_tools_alarm_option_topbar_backward);
 		topBar = (RelativeLayout) findViewById(R.id.main_some_tools_alarm_option_topbar);
 		Bind.bindReturn(backward, SomeToolsAlarmOptionActivity.this,
@@ -140,6 +142,8 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 			} else if (flagOption == FLAG_UPDATE) {
 				if (currentDetail != null)
 					currentDetail.set_id(null);
+				else
+					currentDetail = new CycleDetailsForAlarm();
 				showWindowForUpdate();
 			}
 		}
@@ -464,8 +468,8 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 				&& detail.getIsTip() == Model.IS_YES);
 		content.setText(detail.getDiscription() == null ? "" : detail
 				.getDiscription());
-		aheadtime.setText(detail.getAheadTime() != null ? detail.getAheadTime()/1000/60
-				+ "" : "");
+		aheadtime.setText(detail.getAheadTime() != null ? detail.getAheadTime()
+				/ 1000 / 60 + "" : "");
 		weatherSensitive
 				.setText(detail.getWeatherSensitivity() != null ? detail
 						.getWeatherSensitivity() : "");
@@ -514,7 +518,8 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 		detail.setIsAhead(isahead.isChecked() ? Model.IS_YES : Model.IS_NO);
 		detail.setIsTip(istip.isChecked() ? Model.IS_YES : Model.IS_NO);
 		detail.setDiscription(content.getText().toString());
-		detail.setAheadTime(60l*1000l*getNumber(aheadtime.getText().toString()));
+		detail.setAheadTime(60l * 1000l * getNumber(aheadtime.getText()
+				.toString()));
 		detail.setWeatherSensitivity(weatherSensitive.getText().toString());
 		this.currentDetail = detail;
 	}

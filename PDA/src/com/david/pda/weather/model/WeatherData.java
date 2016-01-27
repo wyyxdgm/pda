@@ -11,6 +11,7 @@ public class WeatherData implements Serializable{
 	private String wind;
 	private String temperature;
 
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("\t\t").append("date:").append(this.date).append('\n');

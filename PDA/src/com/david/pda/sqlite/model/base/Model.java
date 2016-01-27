@@ -30,6 +30,7 @@ public abstract class Model implements IModel<Model>, Serializable {
 		super();
 	}
 
+	@Override
 	public abstract Model getInstance(Cursor c);
 
 	@Override
@@ -37,8 +38,10 @@ public abstract class Model implements IModel<Model>, Serializable {
 		return null;
 	}
 
+	@Override
 	public abstract ContentValues toContentValues();
 
+	@Override
 	public Long get_id() {
 		return Long.valueOf(0);
 	}

@@ -6,6 +6,7 @@ public class Index {
 	private String tipt;// "穿衣指数"
 	private String des;// "建议着厚外套加毛衣等服装。年老体弱者宜着大衣、呢外套加羊毛衫。"
 
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("\t\t").append("title:").append(this.title).append('\n');

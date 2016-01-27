@@ -18,7 +18,7 @@ import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DateUtil;
-import com.david.pda.util.time.CycleTipUtil;
+import com.david.pda.util.time.AlarmCycleUtil;
 import com.david.pda.weather.model.util.L;
 
 public class AlarmListAdapter extends ArrayAdapter<Alarm> {
@@ -81,7 +81,7 @@ public class AlarmListAdapter extends ArrayAdapter<Alarm> {
 				"now:"
 						+ DateUtil.formatyyyy_MM_dd_HH_mm(System
 								.currentTimeMillis()));
-		CycleTipUtil ctu = new CycleTipUtil(details, ct, i.getCreateTime());
+		AlarmCycleUtil ctu = new AlarmCycleUtil(details, ct, i.getCreateTime());
 		CycleDetailsForAlarm cd = ctu.getNextTipDetail();
 		t4.setText(DateUtil.formatMM_dd_HH_mm(cd.getStartTime()
 				- cd.getAheadTime())

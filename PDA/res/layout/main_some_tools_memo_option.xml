@@ -17,66 +17,72 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="18dp"
-            android:background="@drawable/backward" />
+            android:background="@drawable/backward"
+            android:contentDescription="@null" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
-            android:text="更新便签"
+            android:text="@string/update_memo"
             android:textSize="18sp" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="标题" />
+        android:text="@string/title" />
 
     <EditText
         android:id="@+id/main_some_tools_memo_option_title"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="@string/title" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="内容" />
+        android:text="@string/content" />
 
     <EditText
         android:id="@+id/main_some_tools_memo_option_content"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/content"
         android:minLines="10" />
 
     <CheckedTextView
         android:id="@+id/main_some_tools_memo_option_flag_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checkMark="@drawable/flag_mark_gray"
         android:layout_margin="20dp"
-        android:text="取消该红旗:" />
+        android:checkMark="@drawable/flag_mark_gray"
+        android:text="@string/cancel" />
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/main_some_tools_memo_option_cancle_button"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="取消" />
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/main_some_tools_memo_option_yes_button"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="確定" />
+            android:text="@string/confirm" />
     </LinearLayout>
 
 </LinearLayout>

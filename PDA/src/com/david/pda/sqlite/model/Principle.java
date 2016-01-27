@@ -43,6 +43,7 @@ public class Principle extends Model {
 		super();
 	}
 
+	@Override
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
 		if (_id != null)
@@ -71,6 +72,7 @@ public class Principle extends Model {
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
 	}
 
+	@Override
 	public Long get_id() {
 		return _id;
 	}
@@ -111,10 +113,12 @@ public class Principle extends Model {
 		this.cycleDetails = cycleDetails;
 	}
 
+	@Override
 	public Integer getDelFlag() {
 		return delFlag;
 	}
 
+	@Override
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}

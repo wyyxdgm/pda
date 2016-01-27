@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.json.JSONException;
 
@@ -21,6 +20,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
@@ -64,21 +64,19 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.david.pda.adapter.BataanAdapter;
 import com.david.pda.adapter.MainAffairPlanAdapter;
-import com.david.pda.adapter.SelfPrincipleListAdapter;
+import com.david.pda.adapter.SystemMenuAdapter;
 import com.david.pda.adapter.SystemSettingListAdapter;
 import com.david.pda.adapter.TodayScheduleListAdapter;
+import com.david.pda.application.SysApplication;
 import com.david.pda.sqlite.model.CycleDetailsForPlan;
-import com.david.pda.sqlite.model.CycleDetailsForPrinciple;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.Plan;
-import com.david.pda.sqlite.model.Principle;
 import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DateUtil;
 import com.david.pda.util.other.DrawUtil;
-import com.david.pda.util.time.CycleEntity;
+import com.david.pda.util.time.PlanCycleUtil;
 import com.david.pda.weather.model.util.L;
 
 public class MainActivity extends ActionBarActivity {
@@ -86,34 +84,43 @@ public class MainActivity extends ActionBarActivity {
 	public static final int POSTION_TARGET_MANAGE = 0;
 	public static final int POSTION_AFFAIR_PLAN = 1;
 	public static final int POSTION_TODAY_SCHEDULE = 2;
-	public static final int POSTION_FOUR_CLASSES = 3;
-	public static final int POSTION_SELF_PRINCIPLE = 4;
-	public static final int POSTION_SOME_TOOLS = 5;
-	public static final int POSTION_SYSTEM_SETTIONG = 6;
+	public static final int POSTION_FOUR_CLASSES = 3;/*
+													 * public static final int
+													 * POSTION_SELF_PRINCIPLE =
+													 * 4; public static final
+													 * int POSTION_SOME_TOOLS =
+													 * 5; public static final
+													 * int
+													 * POSTION_SYSTEM_SETTIONG =
+													 * 6;
+													 */
+	public static final int POSTION_SOME_TOOLS = 4;
+	public static final int POSTION_SYSTEM_SETTIONG = 5;
 	private DrawerLayout drawerLayout;
 	private ListView listView;
 	private ActionBarDrawerToggle drawerListener;
 	private OnItemClickListener menuItemCLickListener;
-	private BataanAdapter bataanAdapter;
+	private SystemMenuAdapter systemMenuAdapter;
 	private Button firstBtn;
 	private Button secondBtn;
 	private FrameLayout mainContentLayout;
 	private int[] mainViewIds = new int[] { R.layout.main_target_manage,
 			R.layout.main_affair_plan, R.layout.main_today_schedule,
-			R.layout.main_four_classes, R.layout.main_self_principle,
+			R.layout.main_four_classes, /* R.layout.main_self_principle, */
 			R.layout.main_some_tools, R.layout.main_system_setting };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		SysApplication.getInstance().addActivity(this);
 		mainContentLayout = (FrameLayout) findViewById(R.id.mainContent);
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
 		listView = (ListView) findViewById(R.id.drawerList);
 		firstBtn = (Button) findViewById(R.id.main_btn1);
 		secondBtn = (Button) findViewById(R.id.main_btn2);
-		bataanAdapter = new BataanAdapter(this);
-		listView.setAdapter(bataanAdapter);
+		systemMenuAdapter = new SystemMenuAdapter(this);
+		listView.setAdapter(systemMenuAdapter);
 		menuItemCLickListener = new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -158,7 +165,7 @@ public class MainActivity extends ActionBarActivity {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								System.exit(0);
+								SysApplication.getInstance().exit();
 							}
 						});
 				builder.setNegativeButton("取消",
@@ -229,9 +236,9 @@ public class MainActivity extends ActionBarActivity {
 		case POSTION_SYSTEM_SETTIONG:
 			initSystemSetting(v);
 			break;
-		case POSTION_SELF_PRINCIPLE:
-			initSelfPrinciple(v);
-			break;
+		/*
+		 * case POSTION_SELF_PRINCIPLE: initSelfPrinciple(v); break;
+		 */
 		case POSTION_TODAY_SCHEDULE:
 			initTodaySchedule(v);
 			break;
@@ -314,20 +321,23 @@ public class MainActivity extends ActionBarActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			Random r = new Random(System.currentTimeMillis());
 			Bundle b = getArguments();
 			View v = inflater.inflate(R.layout.main_four_classes_pager, null);
-			v.setBackgroundColor(r.nextInt() >> 8 | 0xFF << 24);
+			// Random r = new Random(System.currentTimeMillis());
+			// v.setBackgroundColor(r.nextInt() >> 8 | 0xFF << 24);
 			final ListView plan_listview = (ListView) v
 					.findViewById(R.id.main_four_classes_pager_list_view);
 			DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
 			String ui = b.getString("address");
+			final int colors[] = new int[] { Color.RED, Color.YELLOW,
+					Color.GREEN, Color.BLUE };
 			for (int i = 0; i < addresses.length; i++) {
 				if (addresses[i].equals(ui)) {// 00,01,10,11
 					ui = "" + (3 - i);
 					break;
 				}
 			}
+			v.setBackgroundColor(colors[Integer.valueOf(ui)]);
 			final List<Plan> planList = db.getList(context,
 					Plan.URGENCYIMPORTANT + "=?", new String[] { ui }, null);
 			MainAffairPlanAdapter planadapter = new MainAffairPlanAdapter(
@@ -723,6 +733,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 		});
 		calendar.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View arg0) {
 				Log.i(L.t, "calendar");
 				Intent intent = new Intent(MainActivity.this,
@@ -745,85 +756,86 @@ public class MainActivity extends ActionBarActivity {
 
 	}
 
-	private void initSelfPrinciple(View v) {
-
-		final ListView listView = (ListView) v
-				.findViewById(R.id.main_self_principle_listview);
-		listView.setAdapter(new SelfPrincipleListAdapter(this));
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				Intent i = new Intent(MainActivity.this,
-						SelfPrincipleOptionActivity.class);
-				i.putExtra("opt", "update");
-				i.putExtra("position", arg2);
-				MainActivity.this.startActivity(i);
-			}
-		});
-		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					final int position, long arg3) {
-				AlertDialog.Builder builder = new Builder(MainActivity.this);
-				builder.setMessage("确认删除吗？");
-				builder.setTitle("提示");
-				builder.setPositiveButton("确认",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								dialog.dismiss();
-								DemoDB<Principle> db = new DemoDB<Principle>(
-										new Principle());
-								List<Principle> list = db
-										.getList(MainActivity.this);
-								try {
-									DemoDB<CycleDetailsForPrinciple> db2 = new DemoDB<CycleDetailsForPrinciple>(
-											new CycleDetailsForPrinciple());
-									List<CycleDetailsForPrinciple> details = db2
-											.getList(
-													MainActivity.this,
-													CycleDetailsForPrinciple.CYLEFOR
-															+ "=?",
-													new String[] { ""
-															+ list.get(position)
-																	.get_id() },
-													null);
-									for (CycleDetailsForPrinciple c : details) {
-										db2.realRemove(c.get_id() + "",
-												MainActivity.this);
-									}
-									db.realRemove(list.get(position).get_id()
-											+ "", MainActivity.this);
-									Toast.makeText(
-											MainActivity.this,
-											"删除《"
-													+ list.get(position)
-															.getTitle()
-													+ "》成功！",
-											Toast.LENGTH_SHORT).show();
-									list.remove(position);
-									listView.setAdapter(new SelfPrincipleListAdapter(
-											MainActivity.this));
-								} catch (JSONException e) {
-									e.printStackTrace();
-								}
-							}
-						});
-				builder.setNegativeButton("取消",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								dialog.dismiss();
-							}
-						});
-				builder.create().show();
-				return true;
-			}
-		});
-	}
+	// private void initSelfPrinciple(View v) {
+	//
+	// final ListView listView = (ListView) v
+	// .findViewById(R.id.main_self_principle_listview);
+	// listView.setAdapter(new SelfPrincipleListAdapter(this));
+	// listView.setOnItemClickListener(new OnItemClickListener() {
+	// @Override
+	// public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+	// long arg3) {
+	// Intent i = new Intent(MainActivity.this,
+	// SelfPrincipleOptionActivity.class);
+	// i.putExtra("opt", "update");
+	// i.putExtra("position", arg2);
+	// MainActivity.this.startActivity(i);
+	// }
+	// });
+	// listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+	// @Override
+	// public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+	// final int position, long arg3) {
+	// AlertDialog.Builder builder = new Builder(MainActivity.this);
+	// builder.setMessage("确认删除吗？");
+	// builder.setTitle("提示");
+	// builder.setPositiveButton("确认",
+	// new DialogInterface.OnClickListener() {
+	// @Override
+	// public void onClick(DialogInterface dialog,
+	// int which) {
+	// dialog.dismiss();
+	// DemoDB<Principle> db = new DemoDB<Principle>(
+	// new Principle());
+	// List<Principle> list = db
+	// .getList(MainActivity.this);
+	// try {
+	// DemoDB<CycleDetailsForPrinciple> db2 = new
+	// DemoDB<CycleDetailsForPrinciple>(
+	// new CycleDetailsForPrinciple());
+	// List<CycleDetailsForPrinciple> details = db2
+	// .getList(
+	// MainActivity.this,
+	// CycleDetailsForPrinciple.CYLEFOR
+	// + "=?",
+	// new String[] { ""
+	// + list.get(position)
+	// .get_id() },
+	// null);
+	// for (CycleDetailsForPrinciple c : details) {
+	// db2.realRemove(c.get_id() + "",
+	// MainActivity.this);
+	// }
+	// db.realRemove(list.get(position).get_id()
+	// + "", MainActivity.this);
+	// Toast.makeText(
+	// MainActivity.this,
+	// "删除《"
+	// + list.get(position)
+	// .getTitle()
+	// + "》成功！",
+	// Toast.LENGTH_SHORT).show();
+	// list.remove(position);
+	// listView.setAdapter(new SelfPrincipleListAdapter(
+	// MainActivity.this));
+	// } catch (JSONException e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	// builder.setNegativeButton("取消",
+	// new DialogInterface.OnClickListener() {
+	// @Override
+	// public void onClick(DialogInterface dialog,
+	// int which) {
+	// dialog.dismiss();
+	// }
+	// });
+	// builder.create().show();
+	// return true;
+	// }
+	// });
+	// }
 
 	private void initSystemSetting(View v) {
 
@@ -918,9 +930,8 @@ public class MainActivity extends ActionBarActivity {
 		for (int i = 0; i < plans.size(); i++) {
 			planMap.put(plans.get(i).get_id(), plans.get(i));
 			pl = plans.get(i);
-			CycleEntity<CycleDetailsForPlan> ce = new CycleEntity<CycleDetailsForPlan>(
-					startTime, endTime, pl, pl.getCycleTypeObj(),
-					pl.getDetail());
+			PlanCycleUtil ce = new PlanCycleUtil(startTime, endTime, pl,
+					pl.getCycleTypeObj(), pl.getDetail(), pl.getHashTipCycle());
 			ds.addAll(ce.getTimes());
 		}
 		Collections.sort(ds);

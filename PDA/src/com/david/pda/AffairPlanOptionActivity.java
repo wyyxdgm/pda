@@ -26,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.david.pda.application.SysApplication;
 import com.david.pda.sqlite.model.CycleDetailsForPlan;
 import com.david.pda.sqlite.model.CycleType;
 import com.david.pda.sqlite.model.Plan;
@@ -75,6 +76,7 @@ public class AffairPlanOptionActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		SysApplication.getInstance().addActivity(this);
 		setContentView(R.layout.main_affair_plan_option);
 		backward = (ImageButton) findViewById(R.id.main_affair_plan_option_topbar_backward);
 		targetListSP = (Spinner) findViewById(R.id.main_affair_plan_option_target_list);
@@ -189,6 +191,7 @@ public class AffairPlanOptionActivity extends Activity {
 			if (detail.get_id() != null) {
 				DemoDB<Plan> db = new DemoDB<Plan>(new Plan());
 				try {
+					plan.setHashTipCycle(0l);
 					db.update(plan, AffairPlanOptionActivity.this);
 					DemoDB<CycleDetailsForPlan> db2 = new DemoDB<CycleDetailsForPlan>(
 							new CycleDetailsForPlan());
@@ -397,7 +400,6 @@ public class AffairPlanOptionActivity extends Activity {
 		detail.setDiscription(contentET.getText().toString());
 		detail.setAheadTime(getNumber(aheadTime.getText().toString()));
 		detail.setWeatherSensitivity(weatherSensitive.getText().toString());
-		this.detail = (CycleDetailsForPlan) detail;
 	}
 
 	private void fillCommonAttrViewFromPlan() {
@@ -421,6 +423,7 @@ public class AffairPlanOptionActivity extends Activity {
 		cycleTypeIndex = cycleTypeSP.getSelectedItemPosition();
 		plan.setTarget(targets.get(targetIndex).get_id().intValue());
 		plan.setCycleType(cycleTypes.get(cycleTypeIndex).get_id());
+		plan.setIsTip(isTip.isChecked() ? Model.IS_YES : Model.IS_NO);
 		plan.setStartTime(DateUtil.parsePT(
 				DateUtil.yyyy_MM_dd_HH_mm,
 				startDP.getText().toString()

@@ -26,8 +26,18 @@ public class Plan extends Model {
 	public final static String STARTTIME = "startTime";
 	public final static String ENDTIME = "endTime";
 	public final static String DOAFTERSUCCESS = "doAfterSuccess";
+	public final static String HASHTIPCYCLE = "hashTipCycle";
 	private CycleDetailsForPlan detail;
 	private CycleType cycleTypeObj;
+	private Long hashTipCycle;
+
+	public Long getHashTipCycle() {
+		return hashTipCycle;
+	}
+
+	public void setHashTipCycle(Long hashTipCycle) {
+		this.hashTipCycle = hashTipCycle;
+	}
 
 	public CycleType getCycleTypeObj() {
 		return cycleTypeObj;
@@ -60,16 +70,17 @@ public class Plan extends Model {
 		sb.append(_ID).append(" INTEGER primary key autoincrement,");
 		sb.append(TITLE).append(" TEXT,");
 		sb.append(URGENCYIMPORTANT).append(" INT,");
-		sb.append(CREATETIME).append(" LONG,");
+		sb.append(CREATETIME).append(" TEXT,");
 		sb.append(TARGET).append(" INT,");
 		sb.append(ISTIP).append(" INT,");
 		sb.append(WEATHERSENSITIVITY).append(" INT,");
-		sb.append(TOTALTIME).append(" LONG,");
-		sb.append(TOTALUSED).append(" LONG,");
+		sb.append(TOTALTIME).append(" TEXT,");
+		sb.append(TOTALUSED).append(" TEXT,");
 		sb.append(CYCLETYPE).append(" INT,");
-		sb.append(STARTTIME).append(" LONG,");
-		sb.append(ENDTIME).append(" LONG,");
+		sb.append(STARTTIME).append(" TEXT,");
+		sb.append(ENDTIME).append(" TEXT,");
 		sb.append(DOAFTERSUCCESS).append(" TEXT,");
+		sb.append(HASHTIPCYCLE).append(" TEXT,");
 		sb.append(DELFLAG).append(" INT)");
 		return sb.toString();
 	}
@@ -89,6 +100,7 @@ public class Plan extends Model {
 	private String doAfterSuccess;
 	private Integer delFlag;
 
+	@Override
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
 		if (_id != null)
@@ -124,6 +136,9 @@ public class Plan extends Model {
 		if (endTime != null) {
 			cv.put(ENDTIME, endTime);
 		}
+		if (hashTipCycle != null) {
+			cv.put(HASHTIPCYCLE, hashTipCycle);
+		}
 		if (!TextUtils.isEmpty(doAfterSuccess))
 			cv.put(DOAFTERSUCCESS, doAfterSuccess);
 		cv.put(DELFLAG, delFlag);
@@ -146,12 +161,14 @@ public class Plan extends Model {
 		this.endTime = c.getLong(c.getColumnIndex(ENDTIME));
 		this.doAfterSuccess = c.getString(c.getColumnIndex(DOAFTERSUCCESS));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
+		this.hashTipCycle = c.getLong(c.getColumnIndex(HASHTIPCYCLE));
 	}
 
 	public Plan() {
 		super();
 	}
 
+	@Override
 	public Long get_id() {
 		return _id;
 	}
@@ -248,10 +265,12 @@ public class Plan extends Model {
 		this.doAfterSuccess = doAfterSuccess;
 	}
 
+	@Override
 	public Integer getDelFlag() {
 		return delFlag;
 	}
 
+	@Override
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}

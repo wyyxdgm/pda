@@ -130,8 +130,8 @@ public class DateUtil {
 		}
 	}
 
-	public static int[] getDHM(long mi) {
-		if (mi == 0)
+	public static int[] getDHM(Long mi) {
+		if (mi == null)
 			return new int[] { 0, 0, 0 };
 		int[] a = new int[3];
 		long t = mi / (1000 * 60);// m is m

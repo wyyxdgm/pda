@@ -47,6 +47,7 @@ public class Alarm extends Model {
 	private Integer delFlag = Model.FLAG_EXISTS;
 	private Long createTime;
 
+	@Override
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
 		if (_id != null)
@@ -107,6 +108,7 @@ public class Alarm extends Model {
 		this.createTime = createTime;
 	}
 
+	@Override
 	public Long get_id() {
 		return _id;
 	}
@@ -147,10 +149,12 @@ public class Alarm extends Model {
 		this.cycleType = cycleType;
 	}
 
+	@Override
 	public Integer getDelFlag() {
 		return delFlag;
 	}
 
+	@Override
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}

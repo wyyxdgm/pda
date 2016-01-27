@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="15"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="20" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -146,14 +148,14 @@
                 <action android:name="com.david.pda.recevier.action.play" />
             </intent-filter>
         </activity>
-
-        <!--
-        <receiver android:name="com.david.pda.service.AlarmReceiver" >
+        <!-- android.intent.action.BOOT_COMPLETED -->
+        <receiver android:name="com.david.pda.receiver.BootReceiver" >
             <intent-filter>
-                <action android:name="com.david.pda.recevier.action.play" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.HOME" />
             </intent-filter>
-        </receiver>
-        -->
+        </receiver>
 
         <service
             android:name="com.david.pda.service.AlarmService"

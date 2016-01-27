@@ -44,6 +44,7 @@ public class Target extends Model {
 		this.delFlag = Model.FLAG_EXISTS;
 	}
 
+	@Override
 	public Target clone() {
 		Target t = new Target();
 		t.set_id(this._id);
@@ -76,6 +77,7 @@ public class Target extends Model {
 			this.scale = jo.getInt("scale");
 	}
 
+	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List getList(JSONArray ja) throws JSONException {
 		List<Target> li = new ArrayList<Target>();
@@ -93,6 +95,7 @@ public class Target extends Model {
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
 	}
 
+	@Override
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
 		if (_id != null)
@@ -118,6 +121,7 @@ public class Target extends Model {
 		return jo;
 	}
 
+	@Override
 	public Long get_id() {
 		return _id;
 	}
@@ -142,10 +146,12 @@ public class Target extends Model {
 		this.scale = scale;
 	}
 
+	@Override
 	public Integer getDelFlag() {
 		return delFlag;
 	}
 
+	@Override
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}

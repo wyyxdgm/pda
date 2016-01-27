@@ -20,6 +20,7 @@ public class CycleDetailsForPlan extends CycleDetails {
 	public final static String _ID = "_id";
 	public final static String CYLEFOR = "cycleFor";
 	public final static String STARTTIME = "startTime";
+	public final static String CYCLENUMBER = "cycleNumber";
 	public final static String ENDTIME = "endTime";
 	public final static String ISTIP = "isTip";
 	public final static String WEATHERSENSITIVITY = "weatherSensitivity";
@@ -41,6 +42,7 @@ public class CycleDetailsForPlan extends CycleDetails {
 		sb.append(ISAHEAD).append(" INT,");
 		sb.append(AHEADTIME).append(" TEXT,");
 		sb.append(DISCRIPTION).append(" TEXT,");
+		sb.append(CYCLENUMBER).append(" TEXT,");
 		sb.append(WEATHERSENSITIVITY).append(" TEXT,");
 		sb.append(STARTTIME).append(" LONG,");
 		sb.append(ENDTIME).append(" LONG,");
@@ -58,7 +60,9 @@ public class CycleDetailsForPlan extends CycleDetails {
 	private Long startTime;
 	private Long endTime;
 	private Integer delFlag;
+	private Long cycleNumber;
 
+	@Override
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
 		if (_id != null)
@@ -82,6 +86,9 @@ public class CycleDetailsForPlan extends CycleDetails {
 		if (endTime != null) {
 			cv.put(ENDTIME, endTime);
 		}
+		if (cycleNumber != null) {
+			cv.put(CYCLENUMBER, cycleNumber);
+		}
 		if (!TextUtils.isEmpty(discription))
 			cv.put(DISCRIPTION, discription);
 		if (delFlag != null)
@@ -101,84 +108,105 @@ public class CycleDetailsForPlan extends CycleDetails {
 		this.endTime = c.getLong(c.getColumnIndex(ENDTIME));
 		this.discription = c.getString(c.getColumnIndex(DISCRIPTION));
 		this.delFlag = c.getInt(c.getColumnIndex(DELFLAG));
+		this.cycleNumber = c.getLong(c.getColumnIndex(CYCLENUMBER));
 	}
 
+	@Override
 	public Long get_id() {
 		return _id;
 	}
 
+	@Override
 	public void set_id(Long _id) {
 		this._id = _id;
 	}
 
+	@Override
 	public Long getCycleFor() {
 		return cycleFor;
 	}
 
+	@Override
 	public void setCycleFor(Long cycleFor) {
 		this.cycleFor = cycleFor;
 	}
 
+	@Override
 	public Integer getIsTip() {
 		return isTip;
 	}
 
+	@Override
 	public void setIsTip(Integer isTip) {
 		this.isTip = isTip;
 	}
 
+	@Override
 	public Integer getIsAhead() {
 		return isAhead;
 	}
 
+	@Override
 	public void setIsAhead(Integer isAhead) {
 		this.isAhead = isAhead;
 	}
 
+	@Override
 	public Long getAheadTime() {
 		return aheadTime;
 	}
 
+	@Override
 	public void setAheadTime(Long aheadTime) {
 		this.aheadTime = aheadTime;
 	}
 
+	@Override
 	public String getDiscription() {
 		return discription;
 	}
 
+	@Override
 	public void setDiscription(String discription) {
 		this.discription = discription;
 	}
 
+	@Override
 	public String getWeatherSensitivity() {
 		return weatherSensitivity;
 	}
 
+	@Override
 	public void setWeatherSensitivity(String weatherSensitivity) {
 		this.weatherSensitivity = weatherSensitivity;
 	}
 
+	@Override
 	public Long getStartTime() {
 		return startTime;
 	}
 
+	@Override
 	public void setStartTime(Long startTime) {
 		this.startTime = startTime;
 	}
 
+	@Override
 	public Long getEndTime() {
 		return endTime;
 	}
 
+	@Override
 	public void setEndTime(Long endTime) {
 		this.endTime = endTime;
 	}
 
+	@Override
 	public Integer getDelFlag() {
 		return delFlag;
 	}
 
+	@Override
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}
@@ -205,7 +233,16 @@ public class CycleDetailsForPlan extends CycleDetails {
 		c.setIsTip(this.isTip);
 		c.setStartTime(this.startTime);
 		c.setWeatherSensitivity(this.weatherSensitivity);
+		c.setCycleNumber(this.cycleNumber);
 		return c;
+	}
+
+	public Long getCycleNumber() {
+		return cycleNumber;
+	}
+
+	public void setCycleNumber(Long cycleNumber) {
+		this.cycleNumber = cycleNumber;
 	}
 
 }

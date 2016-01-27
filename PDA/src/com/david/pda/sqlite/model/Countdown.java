@@ -80,6 +80,7 @@ public class Countdown extends Model {
 		return b;
 	}
 
+	@Override
 	public ContentValues toContentValues() {
 		ContentValues cv = new ContentValues();
 		if (_id != null)
@@ -111,6 +112,7 @@ public class Countdown extends Model {
 	public Countdown() {
 	}
 
+	@Override
 	public Long get_id() {
 		return _id;
 	}
@@ -143,10 +145,12 @@ public class Countdown extends Model {
 		this.endTime = endTime;
 	}
 
+	@Override
 	public Integer getDelFlag() {
 		return delFlag;
 	}
 
+	@Override
 	public void setDelFlag(Integer delFlag) {
 		this.delFlag = delFlag;
 	}

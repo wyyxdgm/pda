@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 
+import com.david.pda.application.SysApplication;
 import com.david.pda.util.other.DateUtil;
 import com.david.pda.weather.model.util.L;
 
@@ -37,6 +38,7 @@ public class DateTimePicker extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.time_layout);
+		SysApplication.getInstance().addActivity(this);
 		dateTimeEt = (EditText) findViewById(R.id.dateTimeEt);
 		confirmBtn = (Button) findViewById(R.id.date_time_confirm_btn);
 		DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
@@ -50,6 +52,7 @@ public class DateTimePicker extends Activity {
 		this.minute = calendar.get(Calendar.MINUTE);
 		initTimeToView();
 		datePicker.init(year, month, day, new OnDateChangedListener() {
+			@Override
 			public void onDateChanged(DatePicker view, int year,
 					int monthOfYear, int dayOfMonth) {
 				DateTimePicker.this.year = year;
@@ -61,6 +64,7 @@ public class DateTimePicker extends Activity {
 		oldBundle = getIntent().getExtras().getBundle("oldBundle");
 		timePicker.setIs24HourView(true);
 		timePicker.setOnTimeChangedListener(new OnTimeChangedListener() {
+			@Override
 			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 				hour = hourOfDay;
 				DateTimePicker.this.minute = minute;

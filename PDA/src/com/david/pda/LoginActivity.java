@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.david.pda.application.SysApplication;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -22,7 +24,7 @@ public class LoginActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
+		SysApplication.getInstance().addActivity(this);
 		mLoginButton = (Button) findViewById(R.id.loginButton);
 		mSignupButton = (Button) findViewById(R.id.signupButton);
 

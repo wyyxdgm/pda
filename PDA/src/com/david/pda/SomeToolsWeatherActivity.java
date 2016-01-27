@@ -33,6 +33,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.david.pda.application.SysApplication;
 import com.david.pda.util.io.LocalUtil;
 import com.david.pda.util.net.OnLoadImageListener;
 import com.david.pda.util.net.SyncDownload;
@@ -73,6 +74,7 @@ public class SomeToolsWeatherActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setContentView(R.layout.main_some_tools_weather_grid);
+		SysApplication.getInstance().addActivity(this);
 		// 详见StrictMode文档
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
 				.detectDiskReads().detectDiskWrites().detectNetwork() // or
@@ -264,6 +266,7 @@ public class SomeToolsWeatherActivity extends Activity {
 	}
 
 	class RefreshButtonOnClickListener implements OnClickListener {
+		@Override
 		public void onClick(View view) {
 			AnimationSet as = new AnimationSet(true);
 			RotateAnimation ra = new RotateAnimation(0, 360,
