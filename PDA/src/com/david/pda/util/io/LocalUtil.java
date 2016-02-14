@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 public class LocalUtil {
@@ -27,6 +28,7 @@ public class LocalUtil {
 		return sb.toString();
 	}
 
+	@SuppressLint("DefaultLocale") @SuppressWarnings("resource")
 	public static String getCity(Context ctx, String key) {
 		InputStream is = null;
 		BufferedReader in = null;
