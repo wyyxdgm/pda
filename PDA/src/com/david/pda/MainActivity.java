@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -42,6 +43,7 @@ import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -318,6 +320,7 @@ public class MainActivity extends ActionBarActivity {
 			return f;
 		}
 
+		@SuppressLint("InflateParams")
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
@@ -952,13 +955,18 @@ public class MainActivity extends ActionBarActivity {
 
 	}
 
+	public static int dip2px(Context context, float dpValue) {
+		final float scale = context.getResources().getDisplayMetrics().density;
+		return (int) (dpValue * scale + 0.5f);
+	}
+
 	private void initTargetManage(View v) {
 		ActionBar bar = super.getActionBar();
 		bar.setIcon(R.drawable.ziwaixian);
 		ImageView imageView = (ImageView) v
 				.findViewById(R.id.main_target_imageView);
 		Bitmap bm400 = BitmapFactory.decodeResource(getResources(),
-				R.drawable.s400).copy(Bitmap.Config.ARGB_8888, true);
+				R.drawable.s800).copy(Bitmap.Config.ARGB_8888, true);
 		Canvas c400 = new Canvas(bm400);
 		LinearLayout linearLayout = (LinearLayout) v
 				.findViewById(R.id.main_target_icon_group);
@@ -968,7 +976,12 @@ public class MainActivity extends ActionBarActivity {
 		ImageView icon;
 		Paint p;
 		Target t;
-		RectF rectf = new RectF(0, 0, 400, 400);
+		WindowManager wm = (WindowManager) this
+				.getSystemService(Context.WINDOW_SERVICE);
+		Point wh = new Point();
+		wm.getDefaultDisplay().getSize(wh);
+
+		RectF rectf = new RectF(0, 0, (int) (wh.x * 0.8), (int) (wh.x * 0.8));
 		DemoDB<Target> db = new DemoDB<Target>(new Target());
 		List<Target> targets = db.getList(MainActivity.this);
 		if (targets.size() == 0) {// tianjiayigedemo
