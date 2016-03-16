@@ -58,42 +58,42 @@
             android:minLines="3"
             android:textSize="15sp" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal" >
 
             <CheckBox
                 android:id="@+id/main_some_tools_alarm_option_flag_checkbox"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
                 android:checked="true"
                 android:text="@string/is_on" />
 
             <TextView
                 android:id="@+id/main_some_tools_alarm_option_cycle_type_spinner_label"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:layout_toRightOf="@id/main_some_tools_alarm_option_flag_checkbox"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
                 android:text="@string/cycle" />
 
             <Spinner
                 android:id="@+id/main_some_tools_alarm_option_cycle_type_spinner"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/main_some_tools_alarm_option_cycle_type_spinner_label" />
+                android:layout_height="40dp"
+                android:layout_margin="5dp" >
+            </Spinner>
 
             <Button
                 android:id="@+id/main_some_tools_alarm_option_addforlist"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
                 android:layout_marginRight="10dp"
                 android:text="@string/add" />
-        </RelativeLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"

@@ -38,7 +38,7 @@
             android:orientation="vertical" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
@@ -59,7 +59,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
@@ -77,7 +77,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
@@ -92,7 +92,14 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:editable="false" />
+                    android:inputType="date" >
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -105,7 +112,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:editable="false" />
+                    android:inputType="time" />
             </LinearLayout>
 
             <LinearLayout
@@ -124,7 +131,13 @@
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:editable="false" />
+                    android:inputType="date" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -137,7 +150,7 @@
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:editable="false" />
+                    android:inputType="time" />
             </LinearLayout>
 
             <LinearLayout
@@ -156,21 +169,21 @@
                         android:id="@+id/main_affair_plan_option_target_jj"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_margin="5dp"
                         android:text="紧急" />
 
                     <CheckBox
                         android:id="@+id/main_affair_plan_option_target_zy"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_margin="5dp"
                         android:text="重要" />
 
                     <CheckBox
                         android:id="@+id/main_affair_plan_option_istip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_margin="5dp"
                         android:text="是否提示" />
                 </LinearLayout>
             </LinearLayout>
@@ -218,7 +231,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal" >
+                        android:orientation="horizontal">
 
                         <EditText
                             android:id="@+id/main_affair_plan_option_starttime_day"
@@ -328,8 +341,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="2"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="3"
                     android:orientation="vertical" >
 
                     <!-- android:hint="提前时间，单位分钟" -->
@@ -337,22 +350,22 @@
                     <Spinner
                         android:id="@+id/main_affair_plan_option_cycle_type_spinner"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="42dp"
                         android:layout_marginLeft="10dp" />
 
                     <CheckBox
                         android:id="@+id/main_affair_plan_option_isaheadtime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:text="是否提前提醒" />
+                        android:layout_margin="5dp"
+                        android:text="提前提醒" />
 
                     <EditText
                         android:id="@+id/main_affair_plan_option_ahead_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:hint="提前时间，单位分钟"
+                        android:layout_margin="5dp"
+                        android:hint="提前(分钟)"
                         android:inputType="number"
                         android:maxLength="3"
                         android:textSize="15sp" >

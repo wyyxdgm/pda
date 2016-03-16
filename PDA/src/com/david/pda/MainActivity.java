@@ -22,7 +22,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -42,6 +41,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -77,6 +77,7 @@ import com.david.pda.sqlite.model.Plan;
 import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.DateUtil;
+import com.david.pda.util.other.DisplayUtil;
 import com.david.pda.util.other.DrawUtil;
 import com.david.pda.util.time.PlanCycleUtil;
 import com.david.pda.weather.model.util.L;
@@ -965,9 +966,10 @@ public class MainActivity extends ActionBarActivity {
 		bar.setIcon(R.drawable.ziwaixian);
 		ImageView imageView = (ImageView) v
 				.findViewById(R.id.main_target_imageView);
-		Bitmap bm400 = BitmapFactory.decodeResource(getResources(),
-				R.drawable.s800).copy(Bitmap.Config.ARGB_8888, true);
-		Canvas c400 = new Canvas(bm400);
+		int wh_main = DisplayUtil.dip2px(this, 250);
+		int wh = DisplayUtil.dip2px(this, 20);
+		Bitmap bm = DisplayUtil.genBitmap(this, 250);
+		Canvas c400 = new Canvas(bm);
 		LinearLayout linearLayout = (LinearLayout) v
 				.findViewById(R.id.main_target_icon_group);
 		Canvas c40;
@@ -976,12 +978,7 @@ public class MainActivity extends ActionBarActivity {
 		ImageView icon;
 		Paint p;
 		Target t;
-		WindowManager wm = (WindowManager) this
-				.getSystemService(Context.WINDOW_SERVICE);
-		Point wh = new Point();
-		wm.getDefaultDisplay().getSize(wh);
-
-		RectF rectf = new RectF(0, 0, (int) (wh.x * 0.8), (int) (wh.x * 0.8));
+		RectF rectf = new RectF(0, 0, wh_main, wh_main);
 		DemoDB<Target> db = new DemoDB<Target>(new Target());
 		List<Target> targets = db.getList(MainActivity.this);
 		if (targets.size() == 0) {// tianjiayigedemo
@@ -995,15 +992,15 @@ public class MainActivity extends ActionBarActivity {
 			c400.drawArc(rectf, startScale, t.getScale(), true, p);
 			LinearLayout l = new LinearLayout(this);
 			l.setOrientation(LinearLayout.HORIZONTAL);
-			bm40 = BitmapFactory.decodeResource(getResources(), R.drawable.s40)
-					.copy(Bitmap.Config.ARGB_8888, true);
+			bm40 = DisplayUtil.genBitmap(this, 20);
 			c40 = new Canvas(bm40);
-			c40.drawCircle(20, 20, 10, p);
+			c40.drawCircle(wh / 2, wh / 2, wh / 2, p);
 			icon = new ImageView(this);
+			LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(wh, wh);
+			ip.setMargins(0,0,10,0);
+			icon.setLayoutParams(ip);
 			icon.setImageBitmap(bm40);
 			icon.setScaleType(ScaleType.CENTER);
-			icon.setMaxHeight(10);
-			icon.setMaxWidth(10);
 			txt = new TextView(this);
 			txt.setText(targets.get(i).getName()
 					+ "("
@@ -1012,9 +1009,13 @@ public class MainActivity extends ActionBarActivity {
 					+ "%)");
 			l.addView(icon);
 			l.addView(txt);
+			LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+					LayoutParams.WRAP_CONTENT);
+			lp.setMargins(10, 20, 10, 20);
+			l.setLayoutParams(lp);
 			linearLayout.addView(l);
 		}
-		imageView.setImageBitmap(bm400);
+		imageView.setImageBitmap(bm);
 		imageView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {

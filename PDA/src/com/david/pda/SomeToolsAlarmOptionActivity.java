@@ -360,7 +360,7 @@ public class SomeToolsAlarmOptionActivity extends Activity {
 			// 创建一个PopuWidow对象
 			Point size = new Point();
 			getWindowManager().getDefaultDisplay().getSize(size);
-			popupWindow = new PopupWindow(popupView, size.x - 20, 450);
+			popupWindow = new PopupWindow(popupView, size.x - 20, 800);
 			initLayout();
 		}
 	}

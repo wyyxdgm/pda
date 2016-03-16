@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.json.JSONException;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
@@ -23,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -40,6 +41,7 @@ import com.david.pda.sqlite.model.Target;
 import com.david.pda.sqlite.model.base.Model;
 import com.david.pda.sqlite.model.util.DemoDB;
 import com.david.pda.util.other.Bind;
+import com.david.pda.util.other.DisplayUtil;
 import com.david.pda.util.other.DrawUtil;
 import com.david.pda.weather.model.util.L;
 
@@ -51,8 +53,9 @@ public class TargetManageOptionActivity extends Activity {
 	RelativeLayout topBar;
 	Canvas c;
 	Paint p;
-	RectF rectf = new RectF(0, 0, 400, 400);// 380/2=190
+	RectF rectf;
 	Bitmap currentBitmap;
+	int radius = 0;
 	private List<Target> targets = new ArrayList<Target>();
 	private Target startTarget;
 	private Target endTarget;
@@ -64,6 +67,9 @@ public class TargetManageOptionActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_target_manage_option);
 		SysApplication.getInstance().addActivity(this);
+		int wh = DisplayUtil.dip2px(this, 250);
+		radius = wh / 2;
+		rectf = new RectF(0, 0, wh, wh);
 		backward = (ImageButton) findViewById(R.id.main_target_manage_option_topbar_backward);
 		Bind.bindReturn(backward, TargetManageOptionActivity.this,
 				MainActivity.class, MainActivity.POSTION_TARGET_MANAGE);
@@ -90,13 +96,13 @@ public class TargetManageOptionActivity extends Activity {
 	}
 
 	private void refreshBitmap() {
-		currentBitmap = BitmapFactory.decodeResource(getResources(),
-				R.drawable.s400).copy(Bitmap.Config.ARGB_8888, true);
+		currentBitmap = DisplayUtil.genBitmap(this, 250);
 		imageView.setImageBitmap(currentBitmap);
 		c = new Canvas(currentBitmap);
 	}
 
 	class ImageOnTouchListener implements OnTouchListener {
+		@SuppressLint("ClickableViewAccessibility")
 		@Override
 		public boolean onTouch(View view, MotionEvent e) {
 			String text = e.getX() + "," + e.getY();
@@ -168,24 +174,24 @@ public class TargetManageOptionActivity extends Activity {
 	private int getScaleByXY(float x, float y) {
 		if (isInCircle(x, y)) {
 			Log.i(L.mo, "y");
-			if (x == 200) {
-				if (y > 200) {
+			if (x == radius) {
+				if (y > radius) {
 					return 270;
-				} else if (y < 200) {
+				} else if (y < radius) {
 					return 90;
 				} else {// y==0
 					return -1;
 				}
 			}
-			if (y == 200) {
-				if (x < 200) {
+			if (y == radius) {
+				if (x < radius) {
 					return 180;
-				} else if (x > 200) {
+				} else if (x > radius) {
 					return 0;
 				} else
 					return -1;
 			}
-			double scalePi = Math.atan2(y - 200, x - 200);
+			double scalePi = Math.atan2(y - radius, x - radius);
 			Log.i(L.mo, "scalePi:" + scalePi);
 			return (int) ((scalePi > 0 ? scalePi : (2 * Math.PI + scalePi))
 					/ Math.PI * 180);
@@ -196,7 +202,7 @@ public class TargetManageOptionActivity extends Activity {
 	}
 
 	private boolean isInCircle(float x, float y) {
-		return Math.pow(x - 200, 2) + Math.pow(y - 200, 2) < Math.pow(200, 2);
+		return Math.pow(x - radius, 2) + Math.pow(y - radius, 2) < Math.pow(radius, 2);
 	}
 
 	private void loadData() {
@@ -212,6 +218,7 @@ public class TargetManageOptionActivity extends Activity {
 		TextView txt;
 		ImageView icon;
 		Paint p;
+		int wh = DisplayUtil.dip2px(this, 20);
 		Target t;
 		for (int i = 0, startScale = 0; i < targets.size(); startScale += targets
 				.get(i).getScale(), i++) {
@@ -221,15 +228,15 @@ public class TargetManageOptionActivity extends Activity {
 			LinearLayout l = new LinearLayout(this);
 			l.setOrientation(LinearLayout.HORIZONTAL);
 
-			bm = BitmapFactory.decodeResource(getResources(), R.drawable.s40)
-					.copy(Bitmap.Config.ARGB_8888, true);
+			bm = DisplayUtil.genBitmap(this, 20);
 			cc = new Canvas(bm);
-			cc.drawCircle(20, 20, 10, p);
+			cc.drawCircle(wh / 2, wh / 2, wh / 2, p);
 			icon = new ImageView(this);
+			LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(wh, wh);
+			ip.setMargins(0,0,10,0);
+			icon.setLayoutParams(ip);
 			icon.setImageBitmap(bm);
 			icon.setScaleType(ScaleType.CENTER);
-			icon.setMaxHeight(10);
-			icon.setMaxWidth(10);
 			txt = new TextView(this);
 			txt.setText(targets.get(i).getName()
 					+ "-"
@@ -240,6 +247,10 @@ public class TargetManageOptionActivity extends Activity {
 					+ "%)");
 			l.addView(icon);
 			l.addView(txt);
+			LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+					LayoutParams.WRAP_CONTENT);
+			lp.setMargins(10, 20, 10, 20);
+			l.setLayoutParams(lp);
 			linearLayout.addView(l);
 		}
 	}
@@ -278,6 +289,7 @@ public class TargetManageOptionActivity extends Activity {
 		showWindow();
 	}
 
+	@SuppressLint("InflateParams")
 	private void initWindow() {
 		if (popupWindow == null) {
 			LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -291,7 +303,7 @@ public class TargetManageOptionActivity extends Activity {
 					.findViewById(R.id.main_target_manage_option_popup_add_layout);
 			Point size = new Point();
 			getWindowManager().getDefaultDisplay().getSize(size);
-			popupWindow = new PopupWindow(popupView, size.x - 20, 350);
+			popupWindow = new PopupWindow(popupView, size.x - 20, 700);
 			initLayout();
 			popupAddTitle.setText("添加分身");
 			popupUpdateTitle.setText("分身传输");
