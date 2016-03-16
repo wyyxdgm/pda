@@ -32,7 +32,8 @@ public class WeatherResultUtil {
 
 	public static String getWeatherStr(String cityName) {
 		String uri = getUrl(cityName);
-		return GetUtil.getForString(uri);
+		String s = GetUtil.getForString(uri);
+		return s;
 	}
 	public static WeatherResult getWeather(String cityName){
 		return convertBean(getWeatherStr(cityName));
